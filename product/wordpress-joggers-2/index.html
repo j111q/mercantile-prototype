@@ -524,56 +524,64 @@ var wc_single_product_params = {"i18n_required_rating_text":"Please select a rat
 			</a></li><li class="share-end"></li></ul></div></div></div></div></div><div data-block-name="woocommerce/product-details" data-hide-tab-title="true" class="wp-block-woocommerce-product-details alignwide">
 				<div style="">
 					
-	<div class="woocommerce-tabs wc-tabs-wrapper">
-		<ul class="tabs wc-tabs" role="tablist">
-							<li role="presentation" class="30566_tab" id="tab-title-30566">
-					<a href="../../index.html@p=30489.html#tab-30566" role="tab" aria-controls="tab-30566">
-						Size Chart					</a>
-				</li>
-							<li role="presentation" class="additional_information_tab" id="tab-title-additional_information">
-					<a href="../../index.html@p=30489.html#tab-additional_information" role="tab" aria-controls="tab-additional_information">
-						Additional information					</a>
-				</li>
-							<li role="presentation" class="wb_cptb_1_tab" id="tab-title-wb_cptb_1">
-					<a href="../../index.html@p=30489.html#tab-wb_cptb_1" role="tab" aria-controls="tab-wb_cptb_1">
-						Shipping Information					</a>
-				</li>
-					</ul>
-					<div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--30566 panel entry-content wc-tab" id="tab-30566" role="tabpanel" aria-labelledby="tab-title-30566">
-				<div class="chart-container" id="size-chart-id-30566">
-    <div class="chart-table scfw-tab-content " id="scfw_size-chart-tab-1">
-	    <table id='size-chart' class='scfw-chart-table default-style'><tr><th> </th><th>XS</th><th>SM</th><th>MD</th><th>LG</th><th>XL</th><th>2XL</th></tr><tr><td>Inseam</td><td>30.25in (77 cm)</td><td>30.75in (78 cm)</td><td>31.5in (80 cm)</td><td>32.625in (83 cm)</td><td>33.25in (84.5 cm)</td><td>33.325in (84.5 cm)</td></tr><tr><td>Waist Relaxed</td><td>12.5in (31.74 cm)</td><td>13.25in (33.5 cm)</td><td>15.25in (39 cm)</td><td>17.25in (44 cm)</td><td>19.25in (49 cm)</td><td>21.25in (54 cm)</td></tr></table>    </div>
-    </div>
-			</div>
-					<div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content wc-tab" id="tab-additional_information" role="tabpanel" aria-labelledby="tab-title-additional_information">
-				
-
-<table class="woocommerce-product-attributes shop_attributes" aria-label="Product Details">
-			<tr class="woocommerce-product-attributes-item woocommerce-product-attributes-item--weight">
-			<th class="woocommerce-product-attributes-item__label" scope="row">Weight</th>
-			<td class="woocommerce-product-attributes-item__value">14.7 oz</td>
-		</tr>
-			<tr class="woocommerce-product-attributes-item woocommerce-product-attributes-item--dimensions">
-			<th class="woocommerce-product-attributes-item__label" scope="row">Dimensions</th>
-			<td class="woocommerce-product-attributes-item__value">12 &times; 12 &times; 1 in</td>
-		</tr>
-			<tr class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_size">
-			<th class="woocommerce-product-attributes-item__label" scope="row">Size</th>
-			<td class="woocommerce-product-attributes-item__value"><p>Adult Unisex XS, Adult Unisex SM, Adult Unisex MD, Adult Unisex LG, Adult Unisex XL, Adult Unisex 2XL</p>
-</td>
-		</tr>
-	</table>
-			</div>
-					<div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--wb_cptb_1 panel entry-content wc-tab" id="tab-wb_cptb_1" role="tabpanel" aria-labelledby="tab-title-wb_cptb_1">
-							<h2 hidden="true" class="wb_cptb_title">Shipping Information</h2>
-					<div class="wb_cptb_content">
-			<p>U.S. Shipping: You can expect to receive your order within 3-7 business days once your order has shipped. Tracking information will be sent to the email provided at checkout.</p>
-<p>International Shipping: You can expect to receive your order within 1- 4 weeks depending on the destination country. Tracking information will be sent to the email provided at checkout. All international customers are subject to the customs laws, duties, and taxes of the destination country.</p>
-<p>You can view shipping times on the FAQ page here: <a href="https://mercantile.wordpress.org/faq">https://mercantile.wordpress.org/faq</a></p>
-		</div>
-					</div>
-		
-			</div>
+		<!-- ▼ PROTOTYPE REDESIGN: minimal PDP details (replaces WC tabs) ▼ -->
+		<style>
+		.pdp-details { max-width: 720px; margin: 56px auto 24px; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111; }
+		.pdp-details details { border-top: 1px solid #e8e6e1; padding: 20px 0; }
+		.pdp-details details:last-of-type { border-bottom: 1px solid #e8e6e1; }
+		.pdp-details summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 500; letter-spacing: 0.005em; color: #111; }
+		.pdp-details summary::-webkit-details-marker { display: none; }
+		.pdp-details summary::after { content: "+"; font-size: 20px; font-weight: 300; color: #999; line-height: 1; }
+		.pdp-details details[open] summary::after { content: "–"; }
+		.pdp-details__body { padding-top: 18px; color: #4a4a4a; font-size: 14px; line-height: 1.7; }
+		.pdp-details__body p { margin: 0 0 10px; }
+		.pdp-details__body p:last-child { margin-bottom: 0; }
+		.pdp-size-chart { width: 100%; border-collapse: collapse; font-size: 13px; color: #111; margin: 4px 0 12px; }
+		.pdp-size-chart thead th { font-weight: 500; color: #8a8a8a; text-align: center; padding: 8px 4px 12px; border-bottom: 1px solid #e8e6e1; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
+		.pdp-size-chart thead th:first-child { text-align: left; }
+		.pdp-size-chart tbody th { text-align: left; font-weight: 500; padding: 14px 12px 14px 0; color: #6a6a6a; white-space: nowrap; }
+		.pdp-size-chart tbody td { text-align: center; padding: 14px 4px; font-variant-numeric: tabular-nums; }
+		.pdp-size-chart tbody tr + tr th, .pdp-size-chart tbody tr + tr td { border-top: 1px solid #f3f1ec; }
+		.pdp-size-chart__note { margin-top: 14px; font-size: 12px; color: #8a8a8a; }
+		.pdp-attrs { display: grid; grid-template-columns: minmax(140px, 200px) 1fr; gap: 14px 32px; font-size: 14px; margin: 4px 0 0; }
+		.pdp-attrs dt { color: #8a8a8a; font-weight: 500; }
+		.pdp-attrs dd { margin: 0; color: #111; }
+		@media (max-width: 520px) { .pdp-attrs { grid-template-columns: 1fr; gap: 4px 0; } .pdp-attrs dd { margin-bottom: 8px; } .pdp-size-chart { font-size: 12px; } }
+		</style>
+		<section class="pdp-details" aria-label="Product details">
+			<details open>
+				<summary>Size chart</summary>
+				<div class="pdp-details__body">
+					<table class="pdp-size-chart">
+						<thead><tr><th>Size</th><th>XS</th><th>SM</th><th>MD</th><th>LG</th><th>XL</th><th>2XL</th></tr></thead>
+						<tbody>
+							<tr><th>Inseam</th><td>30.25″</td><td>30.75″</td><td>31.5″</td><td>32.6″</td><td>33.25″</td><td>33.3″</td></tr>
+							<tr><th>Waist (relaxed)</th><td>12.5″</td><td>13.25″</td><td>15.25″</td><td>17.25″</td><td>19.25″</td><td>21.25″</td></tr>
+						</tbody>
+					</table>
+					<p class="pdp-size-chart__note">Measurements in inches.</p>
+				</div>
+			</details>
+			<details>
+				<summary>Details</summary>
+				<div class="pdp-details__body">
+					<dl class="pdp-attrs">
+						<dt>Weight</dt><dd>14.7 oz</dd>
+						<dt>Dimensions</dt><dd>12 × 12 × 1 in</dd>
+						<dt>Available sizes</dt><dd>XS – 2XL, adult unisex</dd>
+					</dl>
+				</div>
+			</details>
+			<details>
+				<summary>Shipping</summary>
+				<div class="pdp-details__body">
+					<p><strong>U.S.</strong> — 3 to 7 business days after dispatch. Tracking emailed at checkout.</p>
+					<p><strong>International</strong> — 1 to 4 weeks, depending on destination. Customs duties and taxes are the recipient's responsibility.</p>
+					<p>Full details on the <a href="../../index.html">FAQ page</a>.</p>
+				</div>
+			</details>
+		</section>
+		<!-- ▲ END PROTOTYPE REDESIGN ▲ -->
 
 
 				</div>
