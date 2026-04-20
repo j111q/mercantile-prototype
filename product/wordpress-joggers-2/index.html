@@ -802,6 +802,16 @@ body.single-product .woocommerce-product-gallery__image img {
   height: 100% !important;
   object-fit: contain !important;
 }
+
+/* Force the gallery container to a square aspect — flexslider's JS set
+   height:0px inline once floats were removed. */
+body.single-product .wp-block-woocommerce-product-image-gallery,
+body.single-product .woocommerce-product-gallery,
+body.single-product .woocommerce-product-gallery .flex-viewport,
+body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-product-gallery__wrapper {
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+}
 </style>
 </head>
 
