@@ -502,23 +502,25 @@ body.single-product .entry-content > .sd-sharing-enabled {
   .pdp-callout { margin: 24px 16px 0; }
 }
 
-/* ═════════════ Featured Products — card-level only ═════════════
-   Preserving the brush-edge pattern, secondary-color background, and
-   Garamond/brushstroke heading for visual cohesion with wordpress.org.
-   Only modernizing the cards inside the grid. */
+/* ═════════════ Featured Products — Purple card match ═════════════
+   Section chrome (brush-edge, Garamond heading, secondary bg) preserved.
+   Cards restyled to mirror the Purple "Related Products" layout. */
 
 body.single-product .wc-block-grid__products,
 body.single-product ul.wc-block-grid__products {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
-  gap: 40px !important;
+  gap: 50px !important;
   list-style: none !important;
   padding: 0 !important;
   margin: 0 auto !important;
-  max-width: 1200px !important;
+  max-width: 1040px !important;
 }
 @media (max-width: 820px) {
-  body.single-product .wc-block-grid__products { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+  body.single-product .wc-block-grid__products { grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important; }
+}
+@media (max-width: 520px) {
+  body.single-product .wc-block-grid__products { grid-template-columns: 1fr !important; }
 }
 
 body.single-product .wc-block-grid__products > li.product {
@@ -530,11 +532,12 @@ body.single-product .wc-block-grid__products > li.product {
   box-shadow: none !important;
 }
 
+/* Portrait image frame (Purple uses ~3:4) in light gray */
 body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapper {
   background: var(--purple-tertiary) !important;
-  aspect-ratio: 1 / 1 !important;
+  aspect-ratio: 3 / 4 !important;
   overflow: hidden !important;
-  margin: 0 0 16px !important;
+  margin: 0 0 20px !important;
   position: relative !important;
 }
 body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapper img {
@@ -547,68 +550,102 @@ body.single-product .wc-block-grid__products .mercantile-second-thumbnail {
   display: none !important;
 }
 
+/* Title: Inter 22/26 medium */
 body.single-product .wc-block-grid__products .woocommerce-loop-product__title {
   font-family: var(--purple-font) !important;
-  font-size: 16px !important;
-  line-height: 24px !important;
+  font-size: 22px !important;
+  line-height: 26px !important;
   font-weight: 500 !important;
   color: var(--purple-primary) !important;
-  margin: 0 0 4px !important;
+  margin: 0 !important;
   padding: 0 !important;
   text-decoration: none !important;
   letter-spacing: 0 !important;
 }
 
+/* Price: Inter 22/34 regular, tight tracking, secondary gray */
+body.single-product .wc-block-grid__products .mercantile-product-info-wrapper .price,
+body.single-product .wc-block-grid__products .mercantile-product-info-wrapper .woocommerce-Price-amount {
+  font-family: var(--purple-font) !important;
+  font-size: 22px !important;
+  line-height: 34px !important;
+  color: var(--purple-secondary) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.22px !important;
+}
+
+/* Stack title + price (Purple layout, no inline button) */
+body.single-product .wc-block-grid__products .mercantile-product-info-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+}
+
+/* Hide the Select options button in cards (Purple cards are fully clickable) */
+body.single-product .wc-block-grid__products a.add_to_cart_button,
+body.single-product .wc-block-grid__products .button.add_to_cart_button,
+body.single-product .wc-block-grid__products .mercantile-product-share-buy-wrapper > a {
+  display: none !important;
+}
+
+/* Card link resets */
 body.single-product .wc-block-grid__products a.woocommerce-LoopProduct-link,
 body.single-product .wc-block-grid__products a.woocommerce-loop-product__link {
   text-decoration: none !important;
   color: inherit !important;
+  display: block;
 }
 
-body.single-product .mercantile-product-info-wrapper {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-}
-body.single-product .wc-block-grid__products .mercantile-product-info-wrapper .price,
-body.single-product .wc-block-grid__products .mercantile-product-info-wrapper .woocommerce-Price-amount {
-  font-family: var(--purple-font) !important;
-  font-size: 14px !important;
-  line-height: 22px !important;
-  color: var(--purple-secondary) !important;
-  font-weight: 400 !important;
-  letter-spacing: 0 !important;
-}
-
-body.single-product .wc-block-grid__products a.add_to_cart_button,
-body.single-product .wc-block-grid__products .button.add_to_cart_button {
-  background: #fff !important;
-  color: var(--purple-primary) !important;
-  border: 1px solid var(--purple-primary) !important;
-  border-radius: 0 !important;
-  font-family: var(--purple-font) !important;
-  font-size: 12px !important;
-  letter-spacing: 0.72px !important;
-  text-transform: uppercase !important;
-  padding: 8px 14px !important;
-  font-weight: 400 !important;
-  line-height: 16px !important;
-  text-shadow: none !important;
-  box-shadow: none !important;
-  transition: background 150ms ease, color 150ms ease;
-  display: inline-block !important;
-  white-space: nowrap !important;
-}
-body.single-product .wc-block-grid__products a.add_to_cart_button:hover {
-  background: var(--purple-primary) !important;
-  color: #fff !important;
-}
-
+/* Hide share noise inside cards */
 body.single-product .mercantile-product-share-buy-wrapper .sharedaddy,
 body.single-product .mercantile-product-share-buy-wrapper .sd-sharing-enabled {
   display: none !important;
 }
+
+/* ═════════════ PDP proportions — wider gallery, breathable details ═════════════ */
+
+/* Give the gallery ~60% and details ~40% with proper gap */
+@media (min-width: 782px) {
+  body.single-product .wp-block-columns.product-info {
+    gap: 80px !important;
+    align-items: flex-start !important;
+  }
+  body.single-product .wp-block-columns.product-info > .wp-block-column:first-child {
+    flex: 0 0 58% !important;
+    max-width: 58% !important;
+  }
+  body.single-product .wp-block-columns.product-info > .wp-block-column:last-child {
+    flex: 0 0 calc(42% - 80px) !important;
+    max-width: calc(42% - 80px) !important;
+    padding-top: 8px;
+  }
+}
+
+/* Let the gallery image fill its column */
+body.single-product .woocommerce-product-gallery,
+body.single-product .woocommerce-product-gallery__wrapper,
+body.single-product .woocommerce-product-gallery__image {
+  width: 100% !important;
+  max-width: none !important;
+}
+body.single-product .woocommerce-product-gallery__image img {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Vertical rhythm in the details column */
+body.single-product .wp-block-post-title { margin: 0 0 12px !important; }
+body.single-product .wp-block-woocommerce-product-price { margin: 0 0 24px !important; }
+body.single-product .wp-block-woocommerce-product-summary,
+body.single-product .wc-block-components-product-summary { margin: 0 0 32px !important; }
+body.single-product .wp-block-woocommerce-add-to-cart-form { margin-top: 32px !important; }
+body.single-product form.cart,
+body.single-product .wp-block-woocommerce-add-to-cart-form form { gap: 12px !important; }
+body.single-product table.variations { margin-bottom: 24px !important; }
+body.single-product table.variations th,
+body.single-product table.variations td { padding: 8px 0 !important; }
+
 </style>
 </head>
 
