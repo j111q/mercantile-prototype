@@ -22,11 +22,11 @@ ul.wc-block-grid__products {
   margin: 0 auto !important;
   max-width: 1280px !important;
 }
-@media (max-width: 820px) {
+@media (max-width: 1024px) {
   .wc-block-grid__products { grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important; }
 }
-@media (max-width: 520px) {
-  .wc-block-grid__products { grid-template-columns: 1fr !important; }
+@media (max-width: 767px) {
+  .wc-block-grid__products { grid-template-columns: 1fr !important; gap: 24px !important; }
 }
 
 .wc-block-grid__products > li.product,
@@ -170,11 +170,11 @@ body[class*="woocommerce"] .wc-block-product-template.wp-block-woocommerce-produ
   justify-content: stretch !important;
   flex-wrap: nowrap !important;
 }
-@media (max-width: 820px) {
+@media (max-width: 1024px) {
   body[class*="woocommerce"] ul.wc-block-product-template { grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important; row-gap: 30px !important; column-gap: 30px !important; }
 }
-@media (max-width: 520px) {
-  body[class*="woocommerce"] ul.wc-block-product-template { grid-template-columns: 1fr !important; }
+@media (max-width: 767px) {
+  body[class*="woocommerce"] ul.wc-block-product-template { grid-template-columns: 1fr !important; gap: 24px !important; row-gap: 24px !important; column-gap: 0 !important; }
 }
 
 /* Per-card container: stock sets display:grid + max-width:30%. Blow both away. */
