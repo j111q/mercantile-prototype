@@ -154,16 +154,6 @@ body[class*="woocommerce"] .wp-block-woocommerce-product-collection {
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  /* DEBUG: will be removed next commit once we confirm rules apply. */
-  outline: 6px solid red !important;
-}
-body[class*="woocommerce"] ul.wc-block-product-template {
-  /* DEBUG */
-  outline: 6px solid blue !important;
-}
-body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product {
-  /* DEBUG */
-  outline: 4px solid lime !important;
 }
 
 body[class*="woocommerce"] ul.wc-block-product-template,
@@ -205,16 +195,19 @@ body[class*="woocommerce"] ul.wc-block-product-template > li.wc-block-product {
   grid-template-columns: none !important;
 }
 
-/* Image frame: portrait, warm cream backdrop, 8px radius. */
+/* Image frame: white tile, 1:1 square, 8px radius, 24px padding.
+   Matches Featured Products tile look exactly so cards read consistently. */
 body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-image,
 body[class*="woocommerce"] .wc-block-product-template > li > .wc-block-components-product-image {
   display: block !important;
-  background: #F8F3EC !important;
-  background-color: #F8F3EC !important;
+  background: #fff !important;
+  background-color: #fff !important;
   border-radius: 8px !important;
   overflow: hidden !important;
-  aspect-ratio: 3 / 4 !important;
-  margin: 0 0 16px !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 0 0 20px !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
   position: relative !important;
   opacity: 1 !important;
   color: inherit !important;
@@ -239,7 +232,7 @@ body[class*="woocommerce"] .wc-block-product-template .wc-block-components-produ
   max-width: 100% !important;
   object-fit: contain !important;
   object-position: center !important;
-  padding: 24px !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
   background: transparent !important;
   border: 0 !important;
