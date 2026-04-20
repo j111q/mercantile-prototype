@@ -449,6 +449,34 @@ body.single-product .wp-block-woocommerce-add-to-cart-form button[type="submit"]
   background: var(--purple-accent) !important;
 }
 
+body.single-product .wp-block-woocommerce-product-image-gallery {
+  max-width: none !important;
+  width: 100% !important;
+}
+body.single-product .wp-block-woocommerce-product-image-gallery > .woocommerce-product-gallery {
+  max-width: none !important;
+  width: 100% !important;
+}
+body.single-product .woocommerce-product-gallery__wrapper {
+  max-width: none !important;
+  width: 100% !important;
+}
+body.single-product .woocommerce-product-gallery__image {
+  width: 100% !important;
+  max-width: none !important;
+  aspect-ratio: 1 / 1;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+body.single-product .woocommerce-product-gallery__image img.wp-post-image {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  padding: 40px !important;
+  box-sizing: border-box !important;
+}
 /* ── Gallery: remove any dated framing ─────────────── */
 body.single-product .woocommerce-product-gallery__image,
 body.single-product .woocommerce-product-gallery__wrapper {
@@ -532,13 +560,20 @@ body.single-product ul.wc-block-grid__products {
   body.single-product .wc-block-grid__products { grid-template-columns: 1fr !important; }
 }
 
-body.single-product .wc-block-grid__products > li.product {
+body.single-product .wc-block-grid__products > li.product,
+body.single-product .wc-block-grid__products > li.wc-block-grid__product {
   padding: 0 !important;
   margin: 0 !important;
   list-style: none !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  max-width: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  display: block !important;
+  grid-template-columns: none !important;
+  flex: 1 1 auto !important;
 }
 
 /* Portrait image frame (Purple uses ~3:4) in light gray */
