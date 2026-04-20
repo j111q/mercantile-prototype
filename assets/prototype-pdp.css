@@ -591,3 +591,52 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
   aspect-ratio: 1 / 1 !important;
   height: auto !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PDP details accordion (replaces stock WC tabs via prototype-pdp.js)
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-details { max-width: 720px; margin: 56px auto 24px; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111; }
+.pdp-details details { border-top: 1px solid #e8e6e1; padding: 20px 0; }
+.pdp-details details:last-of-type { border-bottom: 1px solid #e8e6e1; }
+.pdp-details summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 500; letter-spacing: 0.005em; color: #111; }
+.pdp-details summary::-webkit-details-marker { display: none; }
+.pdp-details summary::after { content: "+"; font-size: 20px; font-weight: 300; color: #999; line-height: 1; }
+.pdp-details details[open] summary::after { content: "–"; }
+.pdp-details__body { padding-top: 18px; color: #4a4a4a; font-size: 14px; line-height: 1.7; }
+.pdp-details__body p { margin: 0 0 10px; }
+.pdp-details__body p:last-child { margin-bottom: 0; }
+
+/* Tables inside the accordion (WC attribute table + scfw size chart). */
+.pdp-details__body table { width: 100%; border-collapse: collapse; font-size: 13px; color: #111; margin: 4px 0 12px; }
+.pdp-details__body thead th,
+.pdp-details__body table > tbody > tr:first-child > th,
+.pdp-details__body table > tr:first-child > th {
+  font-weight: 500; color: #8a8a8a; text-align: center;
+  padding: 8px 4px 12px; border-bottom: 1px solid #e8e6e1;
+  letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px;
+  background: transparent !important;
+}
+.pdp-details__body tbody th,
+.pdp-details__body table > tbody > tr > td:first-child,
+.pdp-details__body table > tr > td:first-child {
+  text-align: left; font-weight: 500; padding: 14px 12px 14px 0;
+  color: #6a6a6a; white-space: nowrap;
+}
+.pdp-details__body tbody td,
+.pdp-details__body table td {
+  text-align: center; padding: 14px 4px; font-variant-numeric: tabular-nums;
+  background: transparent !important;
+}
+.pdp-details__body table tr + tr th,
+.pdp-details__body table tr + tr td { border-top: 1px solid #f3f1ec; }
+
+/* WC attribute table overrides — strip the stock card look. */
+.pdp-details__body .woocommerce-product-attributes { border: 0 !important; }
+.pdp-details__body .woocommerce-product-attributes th,
+.pdp-details__body .woocommerce-product-attributes td {
+  border: 0 !important; background: transparent !important;
+  text-transform: none !important; letter-spacing: 0 !important;
+  font-size: 14px !important; color: #111 !important;
+  padding: 10px 12px 10px 0 !important;
+}
+.pdp-details__body .woocommerce-product-attributes th { color: #8a8a8a !important; font-weight: 500 !important; text-align: left !important; }
