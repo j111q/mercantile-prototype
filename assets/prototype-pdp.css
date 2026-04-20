@@ -606,37 +606,79 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
 .pdp-details__body p { margin: 0 0 10px; }
 .pdp-details__body p:last-child { margin-bottom: 0; }
 
-/* Tables inside the accordion (WC attribute table + scfw size chart). */
-.pdp-details__body table { width: 100%; border-collapse: collapse; font-size: 13px; color: #111; margin: 4px 0 12px; }
+/* Kill font inheritance — body text inside the accordion should be Inter. */
+.pdp-details, .pdp-details * { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; }
+
+/* Unwrap the scfw/chart-table wrapper — it ships with float, overflow, scrollbar. */
+.pdp-details__body .chart-container,
+.pdp-details__body .chart-table,
+.pdp-details__body .scfw-tab-content {
+  display: block !important; float: none !important;
+  overflow: visible !important; width: 100% !important;
+  margin: 0 !important; padding: 0 !important;
+  animation: none !important;
+}
+
+/* Universal accordion table (size chart + attribute table + anything else). */
+.pdp-details__body table {
+  width: 100% !important; border-collapse: collapse !important;
+  border: 0 !important; table-layout: auto !important;
+  font-size: 13px !important; color: #111 !important;
+  margin: 4px 0 12px !important; white-space: normal !important;
+  background: transparent !important;
+}
+.pdp-details__body table tr,
+.pdp-details__body table th,
+.pdp-details__body table td {
+  border: 0 !important; background: transparent !important;
+  min-width: 0 !important; white-space: normal !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* First row of any table = column headers (uppercase, muted). */
 .pdp-details__body thead th,
 .pdp-details__body table > tbody > tr:first-child > th,
 .pdp-details__body table > tr:first-child > th {
-  font-weight: 500; color: #8a8a8a; text-align: center;
-  padding: 8px 4px 12px; border-bottom: 1px solid #e8e6e1;
-  letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px;
-  background: transparent !important;
+  font-weight: 500 !important; color: #8a8a8a !important;
+  text-align: center !important;
+  padding: 8px 6px 12px !important;
+  border-bottom: 1px solid #e8e6e1 !important;
+  letter-spacing: 0.08em !important; text-transform: uppercase !important;
+  font-size: 11px !important;
 }
+
+/* First column = row labels (left-aligned, muted). Covers th OR td in slot 1. */
 .pdp-details__body tbody th,
+.pdp-details__body table > tbody > tr > th:first-child,
+.pdp-details__body table > tr > th:first-child,
 .pdp-details__body table > tbody > tr > td:first-child,
 .pdp-details__body table > tr > td:first-child {
-  text-align: left; font-weight: 500; padding: 14px 12px 14px 0;
-  color: #6a6a6a; white-space: nowrap;
+  text-align: left !important; font-weight: 500 !important;
+  padding: 14px 16px 14px 0 !important;
+  color: #6a6a6a !important;
+  text-transform: none !important; letter-spacing: 0 !important;
+  font-size: 13px !important;
 }
+
+/* Data cells — centered, tabular. */
 .pdp-details__body tbody td,
 .pdp-details__body table td {
-  text-align: center; padding: 14px 4px; font-variant-numeric: tabular-nums;
-  background: transparent !important;
+  text-align: center !important;
+  padding: 14px 6px !important;
+  color: #111 !important;
+  font-size: 13px !important;
 }
-.pdp-details__body table tr + tr th,
-.pdp-details__body table tr + tr td { border-top: 1px solid #f3f1ec; }
 
-/* WC attribute table overrides — strip the stock card look. */
-.pdp-details__body .woocommerce-product-attributes { border: 0 !important; }
+/* Hairline rows between data rows (not between header and first data row). */
+.pdp-details__body table tr + tr > th,
+.pdp-details__body table tr + tr > td { border-top: 1px solid #f3f1ec !important; }
+
+/* WC attribute table (Additional information tab) — read as a dl, not a table. */
 .pdp-details__body .woocommerce-product-attributes th,
 .pdp-details__body .woocommerce-product-attributes td {
-  border: 0 !important; background: transparent !important;
-  text-transform: none !important; letter-spacing: 0 !important;
-  font-size: 14px !important; color: #111 !important;
-  padding: 10px 12px 10px 0 !important;
+  padding: 10px 16px 10px 0 !important;
+  font-size: 14px !important;
+  text-align: left !important;
 }
-.pdp-details__body .woocommerce-product-attributes th { color: #8a8a8a !important; font-weight: 500 !important; text-align: left !important; }
+.pdp-details__body .woocommerce-product-attributes th { color: #8a8a8a !important; font-weight: 500 !important; }
+.pdp-details__body .woocommerce-product-attributes td { color: #111 !important; }
