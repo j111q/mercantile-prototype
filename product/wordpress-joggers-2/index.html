@@ -2020,6 +2020,40 @@ const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(
   const obs = new MutationObserver(updateIndicator);
   slides.forEach(s => obs.observe(s, { attributes: true, attributeFilter: ['class'] }));
 
+  // Force-style arrows + indicator inline. Beats every stylesheet
+  // (including any prefers-color-scheme: dark rule Mercantile may have).
+  function forceStyle() {
+    document.querySelectorAll('.flex-direction-nav a').forEach(a => {
+      const isPrev = a.classList.contains('flex-prev');
+      a.textContent = isPrev ? '\u2039' : '\u203A';
+      a.style.cssText = [
+        'background: #ffffff', 'color: #111111',
+        'border: 1px solid rgba(0,0,0,0.08)', 'border-radius: 50%',
+        'width: 38px', 'height: 38px',
+        'display: flex', 'align-items: center', 'justify-content: center',
+        'font-family: -apple-system, BlinkMacSystemFont, sans-serif',
+        'font-size: 22px', 'line-height: 1', 'font-weight: 400',
+        'text-decoration: none', 'text-indent: 0',
+        'box-shadow: 0 2px 12px rgba(0,0,0,0.18)',
+        'z-index: 10', 'cursor: pointer',
+      ].map(s => s + ' !important').join('; ') + ';';
+    });
+    const ind = document.querySelector('.mercantile-slider-indicator');
+    if (ind) {
+      ind.style.cssText = [
+        'background: #ffffff', 'color: #111111',
+        'padding: 4px 10px', 'border-radius: 4px',
+        'font-size: 12px',
+        'font-family: -apple-system, BlinkMacSystemFont, sans-serif',
+        'border: 1px solid rgba(0,0,0,0.08)',
+        'box-shadow: 0 1px 4px rgba(0,0,0,0.08)',
+      ].map(s => s + ' !important').join('; ') + ';';
+    }
+  }
+  forceStyle();
+  setTimeout(forceStyle, 300);
+  setTimeout(forceStyle, 1000);
+  new MutationObserver(forceStyle).observe(gallery, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
 </body>
