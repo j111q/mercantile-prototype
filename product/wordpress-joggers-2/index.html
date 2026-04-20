@@ -788,12 +788,6 @@ body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product
 body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image { opacity: 0; z-index: 1; pointer-events: none; }
 body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image.proto-active { opacity: 1; z-index: 2; pointer-events: auto; }
 
-/* Zoom on hover — transform driven entirely by JS; CSS only sets transition + cursor */
-body.single-product .woocommerce-product-gallery__image img.wp-post-image {
-  transition: transform 120ms ease-out !important;
-  cursor: zoom-in;
-}
-
 /* Arrows + 1/2 counter need z-index above slides (slides are z:2) and dark color */
 body.single-product .flex-direction-nav,
 body.single-product .flex-control-nav,
@@ -804,26 +798,33 @@ body.single-product .woocommerce-product-gallery__trigger {
 }
 body.single-product .mercantile-slider-indicator {
   color: var(--purple-primary) !important;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  background: #fff !important;
+  padding: 4px 10px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
   letter-spacing: 0.04em;
 }
 body.single-product .flex-direction-nav a {
   z-index: 5 !important;
-  opacity: 0.7;
+  opacity: 1 !important;
   color: var(--purple-primary) !important;
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: #fff !important;
   border-radius: 50% !important;
   width: 36px !important;
   height: 36px !important;
   line-height: 36px !important;
   text-align: center;
-  transition: opacity 150ms ease, background 150ms ease;
+  transition: background 150ms ease;
 }
-body.single-product .flex-direction-nav a:hover { opacity: 1; background: #fff !important; }
-body.single-product .flex-direction-nav a.flex-disabled { opacity: 0.2; pointer-events: none; }
+body.single-product .flex-direction-nav a:hover { background: var(--merc-cream) !important; }
+body.single-product .flex-direction-nav a.flex-disabled { display: none !important; }
+
+/* Re-pin 8px radius on the gallery — has to be on flex-viewport, since
+   slides are absolutely positioned children of the wrapper inside it. */
+body.single-product .woocommerce-product-gallery .flex-viewport {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
 
 /* Image fill within slide */
 body.single-product .woocommerce-product-gallery__image > a {
@@ -2003,26 +2004,6 @@ const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(
     a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); if (activeIdx < slides.length - 1) setActive(activeIdx + 1); }, true);
   });
 
-  // Zoom on hover — fully JS-driven, transform + origin set together
-  slides.forEach(slide => {
-    const img = slide.querySelector('img.wp-post-image');
-    if (!img) return;
-    function applyZoom(e) {
-      const r = slide.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width) * 100;
-      const y = ((e.clientY - r.top) / r.height) * 100;
-      img.style.transformOrigin = Math.max(0, Math.min(100, x)) + '% ' + Math.max(0, Math.min(100, y)) + '%';
-      img.style.transform = 'scale(2)';
-    }
-    function clearZoom() {
-      img.style.transform = '';
-      // delay clearing origin so the scale-down transition uses the same origin
-      setTimeout(() => { img.style.transformOrigin = ''; }, 130);
-    }
-    slide.addEventListener('mouseenter', applyZoom);
-    slide.addEventListener('mousemove', applyZoom);
-    slide.addEventListener('mouseleave', clearZoom);
-  });
 })();
 </script>
 </body>
