@@ -502,48 +502,11 @@ body.single-product .entry-content > .sd-sharing-enabled {
   .pdp-callout { margin: 24px 16px 0; }
 }
 
-/* ═════════════ Featured Products (cross-sells below PDP) ═════════════ */
-body.single-product .wp-block-group.is-style-mercantile-brush-edge-3.featured-products-pattern,
-body.single-product .featured-products-pattern {
-  background: #fff !important;
-  background-color: #fff !important;
-  background-image: none !important;
-  border: 0 !important;
-  padding: 80px 50px 60px !important;
-  margin-top: 40px !important;
-}
-body.single-product .featured-products-pattern::before,
-body.single-product .featured-products-pattern::after,
-body.single-product .is-style-mercantile-brush-edge-3::before,
-body.single-product .is-style-mercantile-brush-edge-3::after {
-  display: none !important;
-  content: none !important;
-  background-image: none !important;
-}
+/* ═════════════ Featured Products — card-level only ═════════════
+   Preserving the brush-edge pattern, secondary-color background, and
+   Garamond/brushstroke heading for visual cohesion with wordpress.org.
+   Only modernizing the cards inside the grid. */
 
-/* Section heading */
-body.single-product .featured-products-pattern > h2.wp-block-heading,
-body.single-product .featured-products-pattern > h2.is-style-brushstroke-gray {
-  font-family: var(--purple-font) !important;
-  font-size: 28px !important;
-  line-height: 34px !important;
-  font-weight: 500 !important;
-  color: var(--purple-primary) !important;
-  letter-spacing: -0.01em !important;
-  background: none !important;
-  background-image: none !important;
-  padding: 0 !important;
-  margin: 0 0 40px !important;
-  text-align: center !important;
-  font-style: normal !important;
-}
-body.single-product .featured-products-pattern > h2.wp-block-heading::before,
-body.single-product .featured-products-pattern > h2.wp-block-heading::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* Product grid container */
 body.single-product .wc-block-grid__products,
 body.single-product ul.wc-block-grid__products {
   display: grid !important;
@@ -556,10 +519,8 @@ body.single-product ul.wc-block-grid__products {
 }
 @media (max-width: 820px) {
   body.single-product .wc-block-grid__products { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
-  body.single-product .featured-products-pattern { padding: 48px 24px !important; }
 }
 
-/* Individual card */
 body.single-product .wc-block-grid__products > li.product {
   padding: 0 !important;
   margin: 0 !important;
@@ -569,9 +530,7 @@ body.single-product .wc-block-grid__products > li.product {
   box-shadow: none !important;
 }
 
-/* Card image wrapper — light gray frame, square */
-body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapper,
-body.single-product .wc-block-grid__products .woocommerce-LoopProduct-link .mercantile-product-thumbnail-wrapper {
+body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapper {
   background: var(--purple-tertiary) !important;
   aspect-ratio: 1 / 1 !important;
   overflow: hidden !important;
@@ -584,14 +543,11 @@ body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapp
   object-fit: cover !important;
   display: block !important;
 }
-/* Kill the second "hover" thumbnail */
 body.single-product .wc-block-grid__products .mercantile-second-thumbnail {
   display: none !important;
 }
 
-/* Card title */
-body.single-product .wc-block-grid__products .woocommerce-loop-product__title,
-body.single-product .wc-block-grid__products a.woocommerce-LoopProduct-link .woocommerce-loop-product__title {
+body.single-product .wc-block-grid__products .woocommerce-loop-product__title {
   font-family: var(--purple-font) !important;
   font-size: 16px !important;
   line-height: 24px !important;
@@ -603,14 +559,12 @@ body.single-product .wc-block-grid__products a.woocommerce-LoopProduct-link .woo
   letter-spacing: 0 !important;
 }
 
-/* Card link resets */
 body.single-product .wc-block-grid__products a.woocommerce-LoopProduct-link,
 body.single-product .wc-block-grid__products a.woocommerce-loop-product__link {
   text-decoration: none !important;
   color: inherit !important;
 }
 
-/* Card price */
 body.single-product .mercantile-product-info-wrapper {
   display: flex !important;
   align-items: center !important;
@@ -627,11 +581,9 @@ body.single-product .wc-block-grid__products .mercantile-product-info-wrapper .w
   letter-spacing: 0 !important;
 }
 
-/* Card "Select options" button — outlined secondary variant */
 body.single-product .wc-block-grid__products a.add_to_cart_button,
 body.single-product .wc-block-grid__products .button.add_to_cart_button {
   background: #fff !important;
-  background-color: #fff !important;
   color: var(--purple-primary) !important;
   border: 1px solid var(--purple-primary) !important;
   border-radius: 0 !important;
@@ -653,57 +605,10 @@ body.single-product .wc-block-grid__products a.add_to_cart_button:hover {
   color: #fff !important;
 }
 
-/* Hide share noise inside cards */
 body.single-product .mercantile-product-share-buy-wrapper .sharedaddy,
 body.single-product .mercantile-product-share-buy-wrapper .sd-sharing-enabled {
   display: none !important;
 }
-
-/* ═════════════ Footer — tame the giant "Browse the Store" ═════════════ */
-body.single-product footer.wp-block-template-part .footer-block {
-  background: var(--purple-primary) !important;
-  background-color: var(--purple-primary) !important;
-}
-body.single-product footer.wp-block-template-part h2.wp-block-heading.is-style-mercantile-arrow {
-  font-family: var(--purple-font) !important;
-  font-size: 28px !important;
-  line-height: 34px !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
-  margin: 0 0 32px !important;
-  padding: 0 !important;
-  text-align: left !important;
-  background: none !important;
-  background-image: none !important;
-}
-body.single-product footer.wp-block-template-part h2.wp-block-heading.is-style-mercantile-arrow::before,
-body.single-product footer.wp-block-template-part h2.wp-block-heading.is-style-mercantile-arrow::after {
-  display: none !important;
-  content: none !important;
-  background-image: none !important;
-}
-body.single-product footer.wp-block-template-part h2.wp-block-heading.is-style-mercantile-arrow a {
-  color: #fff !important;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
-  padding-bottom: 4px;
-  transition: border-color 150ms ease;
-}
-body.single-product footer.wp-block-template-part h2.wp-block-heading.is-style-mercantile-arrow a:hover {
-  border-bottom-color: #fff;
-}
-body.single-product footer.wp-block-template-part p,
-body.single-product footer.wp-block-template-part a {
-  font-family: var(--purple-font) !important;
-  font-size: 14px !important;
-  line-height: 24px !important;
-}
-body.single-product footer.wp-block-template-part .wp-element-caption {
-  font-family: var(--purple-font) !important;
-  font-size: 12px !important;
-  letter-spacing: 0.04em;
-}
-
 </style>
 </head>
 
