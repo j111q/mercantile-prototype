@@ -300,6 +300,208 @@ var wc_single_product_params = {"i18n_required_rating_text":"Please select a rat
 <link rel="icon" href="../../wp-content/uploads/2018/04/cropped-wordpress-logotype-wmark21.png@w=192" sizes="192x192" />
 <link rel="apple-touch-icon" href="../../wp-content/uploads/2018/04/cropped-wordpress-logotype-wmark21.png@w=180" />
 <meta name="msapplication-TileImage" content="https://mercantile.wordpress.org/wp-content/uploads/2018/04/cropped-wordpress-logotype-wmark21.png?w=270" />
+<style id="prototype-purple-overrides">
+/* ═══════════════════════════════════════════════════════════════════
+   PROTOTYPE: Purple Woo Starter Theme overrides (PDP)
+   Figma: https://www.figma.com/design/Gum9XNWccPKfkVRFk1Whsp/
+   Tokens: #111 primary · #686868 secondary · #F7F7F7 tertiary
+           · #243DC8 accent · rgba(17,17,17,0.2) hairline
+   ═══════════════════════════════════════════════════════════════════ */
+body.single-product {
+  --purple-primary: #111;
+  --purple-secondary: #686868;
+  --purple-accent: #243DC8;
+  --purple-tertiary: #F7F7F7;
+  --purple-border: rgba(17,17,17,0.2);
+  --purple-font: "Inter Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Kill rounded corners and heavy shadows across the PDP */
+body.single-product .wc-block-components-product-image img,
+body.single-product .woocommerce-product-gallery img,
+body.single-product .button,
+body.single-product input,
+body.single-product select,
+body.single-product textarea,
+body.single-product .quantity,
+body.single-product .wc-block-components-quantity-selector,
+body.single-product .wp-block-button__link,
+body.single-product .single_add_to_cart_button {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ── Title ─────────────────────────────────────────── */
+body.single-product .wp-block-post-title {
+  font-family: var(--purple-font) !important;
+  font-size: 28px !important;
+  line-height: 34px !important;
+  font-weight: 500 !important;
+  color: var(--purple-primary) !important;
+  letter-spacing: -0.01em !important;
+  margin: 0 0 8px !important;
+}
+
+/* ── Price ─────────────────────────────────────────── */
+body.single-product .wp-block-woocommerce-product-price,
+body.single-product .wc-block-components-product-price,
+body.single-product .price,
+body.single-product .woocommerce-Price-amount {
+  font-family: var(--purple-font) !important;
+  font-size: 22px !important;
+  line-height: 34px !important;
+  font-weight: 400 !important;
+  color: var(--purple-primary) !important;
+  letter-spacing: -0.22px !important;
+}
+
+/* ── Description / summary ─────────────────────────── */
+body.single-product .wp-block-woocommerce-product-summary,
+body.single-product .wc-block-components-product-summary,
+body.single-product .wc-block-components-product-summary p {
+  font-family: var(--purple-font) !important;
+  font-size: 16px !important;
+  line-height: 25px !important;
+  color: var(--purple-secondary) !important;
+  font-weight: 400 !important;
+}
+
+/* ── Variant selector labels & dropdowns ───────────── */
+body.single-product table.variations th,
+body.single-product .variations label,
+body.single-product .variations-label {
+  font-family: var(--purple-font) !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
+  color: var(--purple-secondary) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  padding-bottom: 6px !important;
+}
+body.single-product .variations select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  border: 1px solid var(--purple-border) !important;
+  background-color: #fff !important;
+  color: var(--purple-primary) !important;
+  font-family: var(--purple-font) !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  letter-spacing: 0.84px !important;
+  text-transform: uppercase !important;
+  padding: 10px 40px 10px 18px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23111' stroke-width='1.5' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+}
+body.single-product .reset_variations {
+  font-size: 13px !important;
+  color: var(--purple-secondary) !important;
+  text-decoration: underline !important;
+}
+
+/* ── Quantity selector ─────────────────────────────── */
+body.single-product .wc-block-components-quantity-selector,
+body.single-product form.cart .quantity {
+  border: 1px solid var(--purple-border) !important;
+  background: #fff !important;
+  height: auto !important;
+}
+body.single-product .wc-block-components-quantity-selector input.qty,
+body.single-product .wc-block-components-quantity-selector .wc-block-components-quantity-selector__input,
+body.single-product form.cart .quantity input.qty {
+  font-family: var(--purple-font) !important;
+  font-size: 16px !important;
+  color: var(--purple-primary) !important;
+  padding: 12px 0 !important;
+}
+body.single-product .wc-block-components-quantity-selector__button {
+  color: var(--purple-primary) !important;
+  opacity: 0.7 !important;
+}
+
+/* ── Add to Cart button ────────────────────────────── */
+body.single-product .single_add_to_cart_button,
+body.single-product .wp-block-woocommerce-add-to-cart-form button[type="submit"],
+body.single-product button.alt[name="add-to-cart"],
+body.single-product .wc-block-add-to-cart-form button.single_add_to_cart_button {
+  background: var(--purple-accent) !important;
+  background-color: var(--purple-accent) !important;
+  color: #fff !important;
+  border: 0 !important;
+  padding: 12px 24px !important;
+  font-family: var(--purple-font) !important;
+  font-size: 16px !important;
+  line-height: 25px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  transition: opacity 150ms ease;
+}
+body.single-product .single_add_to_cart_button:hover,
+body.single-product .wp-block-woocommerce-add-to-cart-form button[type="submit"]:hover {
+  opacity: 0.88 !important;
+  background: var(--purple-accent) !important;
+}
+
+/* ── Gallery: remove any dated framing ─────────────── */
+body.single-product .woocommerce-product-gallery__image { background: #fff !important; }
+body.single-product .woocommerce-product-gallery img { border: 0 !important; }
+
+/* ── Hide Share social buttons (noisy) ─────────────── */
+body.single-product .sharedaddy,
+body.single-product .sd-sharing-enabled,
+body.single-product .sd-social,
+body.single-product .entry-content > .sd-sharing-enabled {
+  display: none !important;
+}
+
+/* ── Retune the accordion I built to Purple tokens ─── */
+.pdp-details { font-family: var(--purple-font, "Inter Variable", Inter, sans-serif) !important; color: #111 !important; max-width: 720px; margin: 48px auto 0; }
+.pdp-details details { border-top: 1px solid rgba(17,17,17,0.2) !important; padding: 12px 4px 12px 0 !important; }
+.pdp-details details:last-of-type { border-bottom: 1px solid rgba(17,17,17,0.2) !important; }
+.pdp-details summary { font-size: 16px !important; line-height: 25px !important; color: #111 !important; font-weight: 400 !important; padding: 6px 0; }
+.pdp-details summary::after {
+  content: "" !important;
+  display: inline-block;
+  width: 14px; height: 9px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23111' stroke-width='1.5' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E") center/contain no-repeat;
+  transition: transform 180ms ease;
+}
+.pdp-details details[open] summary::after { transform: rotate(180deg); content: "" !important; }
+.pdp-details__body { padding-top: 12px !important; color: #686868 !important; font-size: 14px !important; line-height: 24px !important; }
+.pdp-size-chart thead th { color: #686868 !important; border-bottom-color: rgba(17,17,17,0.2) !important; }
+.pdp-size-chart tbody th { color: #686868 !important; }
+.pdp-size-chart tbody tr + tr th, .pdp-size-chart tbody tr + tr td { border-top-color: rgba(17,17,17,0.08) !important; }
+.pdp-attrs dt { color: #686868 !important; }
+
+/* ── Shipping / returns callout panel ─────────────── */
+.pdp-callout {
+  background: #F7F7F7;
+  padding: 30px 50px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0 0;
+  font-family: var(--purple-font, "Inter Variable", Inter, sans-serif);
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pdp-callout__item { display: flex; gap: 20px; align-items: center; flex: 1; }
+.pdp-callout__icon { width: 32px; height: 32px; flex: 0 0 32px; color: #111; display: grid; place-items: center; }
+.pdp-callout__icon svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.pdp-callout__title { font-size: 16px; font-weight: 600; line-height: 24px; color: #111; margin: 0 0 2px; }
+.pdp-callout__desc { font-size: 14px; color: #686868; line-height: 24px; margin: 0; }
+@media (max-width: 720px) {
+  .pdp-callout { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px; }
+  .pdp-details { margin: 32px 16px 0; }
+  .pdp-callout { margin: 24px 16px 0; }
+}
+</style>
 </head>
 
 <body class="wp-singular product-template-default single single-product postid-30489 wp-custom-logo wp-embed-responsive wp-theme-mercantile-2025 theme-mercantile-2025 woocommerce woocommerce-page woocommerce-uses-block-theme woocommerce-block-theme-has-button-styles woocommerce-no-js product type-product post-30489 status-publish last instock product_cat-apparel product_cat-unisex has-post-thumbnail featured taxable shipping-taxable purchasable product-type-variable first">
@@ -581,6 +783,26 @@ var wc_single_product_params = {"i18n_required_rating_text":"Please select a rat
 				</div>
 			</details>
 		</section>
+		<aside class="pdp-callout" aria-label="Shipping and returns">
+			<div class="pdp-callout__item">
+				<div class="pdp-callout__icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24"><path d="M1 5h13v10H1z" stroke-linejoin="round"/><path d="M14 8h4l3 3v4h-7" stroke-linejoin="round"/><circle cx="5.5" cy="17.5" r="2.2"/><circle cx="17.5" cy="17.5" r="2.2"/></svg>
+				</div>
+				<div>
+					<p class="pdp-callout__title">Free shipping</p>
+					<p class="pdp-callout__desc">On all U.S. orders over $100</p>
+				</div>
+			</div>
+			<div class="pdp-callout__item">
+				<div class="pdp-callout__icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7" stroke-linecap="round"/><path d="M21 4v5h-5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+				</div>
+				<div>
+					<p class="pdp-callout__title">Easy returns</p>
+					<p class="pdp-callout__desc">30-day no-questions returns</p>
+				</div>
+			</div>
+		</aside>
 		<!-- ▲ END PROTOTYPE REDESIGN ▲ -->
 
 
