@@ -786,7 +786,7 @@ body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product
   transition: opacity 220ms ease !important;
 }
 body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image { opacity: 0; z-index: 1; pointer-events: none; }
-body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image.proto-active { opacity: 1; z-index: 2; pointer-events: auto; }
+body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image.flex-active-slide { opacity: 1; z-index: 2; pointer-events: auto; }
 
 /* Arrows + 1/2 counter need z-index above slides (slides are z:2) and dark color */
 body.single-product .flex-direction-nav,
@@ -807,21 +807,37 @@ body.single-product .mercantile-slider-indicator {
 body.single-product .flex-direction-nav a {
   z-index: 5 !important;
   opacity: 1 !important;
-  color: var(--purple-primary) !important;
+  color: transparent !important;
   background: #fff !important;
   border-radius: 50% !important;
   width: 36px !important;
   height: 36px !important;
-  line-height: 36px !important;
   text-align: center !important;
-  text-indent: 0 !important;
-  font-size: 18px !important;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif !important;
-  font-weight: 500 !important;
+  text-indent: -9999px !important;
+  text-decoration: none !important;
   text-shadow: none !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   transition: background 150ms ease;
+  position: relative;
+  font-size: 0 !important;
 }
+body.single-product .flex-direction-nav a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-indent: 0 !important;
+  color: var(--purple-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 22px !important;
+  line-height: 1;
+  font-weight: 400;
+  text-decoration: none !important;
+}
+body.single-product .flex-prev::before { content: "‹"; }
+body.single-product .flex-next::before { content: "›"; }
 body.single-product .flex-direction-nav a:hover { background: var(--merc-cream) !important; }
 body.single-product .flex-direction-nav a.flex-disabled { display: none !important; }
 
@@ -1990,25 +2006,18 @@ const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(
   const slides = Array.from(gallery.querySelectorAll('.woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image'));
   if (!slides.length) return;
 
-  let activeIdx = 0;
-  function setActive(i) {
-    activeIdx = (i + slides.length) % slides.length;
-    slides.forEach((s, idx) => s.classList.toggle('proto-active', idx === activeIdx));
-    // Update arrow disabled state
-    const prev = gallery.querySelector('.flex-prev');
-    const next = gallery.querySelector('.flex-next');
-    if (prev) prev.classList.toggle('flex-disabled', activeIdx === 0);
-    if (next) next.classList.toggle('flex-disabled', activeIdx === slides.length - 1);
+  // Watch flex-active-slide changes (driven by Mercantile's flexslider) and
+  // sync the 1/2 indicator text. CSS handles slide visibility via .flex-active-slide.
+  const indicator = document.querySelector('.mercantile-slider-indicator');
+  function updateIndicator() {
+    const activeIdx = slides.findIndex(s => s.classList.contains('flex-active-slide'));
+    if (indicator && activeIdx >= 0) {
+      indicator.textContent = (activeIdx + 1) + '/' + slides.length;
+    }
   }
-  setActive(0);
-
-  // Wire arrows — intercept clicks (replaces flexslider's broken handler)
-  gallery.querySelectorAll('.flex-prev').forEach(a => {
-    a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); if (activeIdx > 0) setActive(activeIdx - 1); }, true);
-  });
-  gallery.querySelectorAll('.flex-next').forEach(a => {
-    a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); if (activeIdx < slides.length - 1) setActive(activeIdx + 1); }, true);
-  });
+  updateIndicator();
+  const obs = new MutationObserver(updateIndicator);
+  slides.forEach(s => obs.observe(s, { attributes: true, attributeFilter: ['class'] }));
 
 })();
 </script>
