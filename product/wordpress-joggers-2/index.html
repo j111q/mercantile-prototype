@@ -785,10 +785,26 @@ body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product
   float: none !important;
   transition: opacity 220ms ease !important;
 }
-body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:nth-child(1) { opacity: 1; z-index: 1; }
-body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:nth-child(2) { opacity: 0; z-index: 2; }
-body.single-product .woocommerce-product-gallery:hover > .flex-viewport > .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:nth-child(1) { opacity: 0; }
-body.single-product .woocommerce-product-gallery:hover > .flex-viewport > .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:nth-child(2) { opacity: 1; }
+body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image { opacity: 0; z-index: 1; pointer-events: none; }
+body.single-product .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image.proto-active { opacity: 1; z-index: 2; pointer-events: auto; }
+
+/* Zoom on hover — image scales with cursor-following transform-origin (set via JS) */
+body.single-product .woocommerce-product-gallery__image img.wp-post-image {
+  transition: transform 200ms ease-out !important;
+  transform-origin: center center;
+  cursor: zoom-in;
+}
+body.single-product .woocommerce-product-gallery__image.proto-zooming img.wp-post-image {
+  transform: scale(2);
+}
+
+/* Make the prev/next arrows feel like proper buttons */
+body.single-product .flex-direction-nav a {
+  opacity: 0.7;
+  transition: opacity 150ms ease;
+}
+body.single-product .flex-direction-nav a:hover { opacity: 1; }
+body.single-product .flex-direction-nav a.flex-disabled { opacity: 0.2; pointer-events: none; }
 
 /* Image fill within slide */
 body.single-product .woocommerce-product-gallery__image > a {
@@ -1941,5 +1957,50 @@ const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(
 				};
 			})();
 		</script>
-		</body>
+		<script id="prototype-gallery-js">
+(function() {
+  const gallery = document.querySelector('.woocommerce-product-gallery');
+  if (!gallery) return;
+  const slides = Array.from(gallery.querySelectorAll('.woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image'));
+  if (!slides.length) return;
+
+  let activeIdx = 0;
+  function setActive(i) {
+    activeIdx = (i + slides.length) % slides.length;
+    slides.forEach((s, idx) => s.classList.toggle('proto-active', idx === activeIdx));
+    // Update arrow disabled state
+    const prev = gallery.querySelector('.flex-prev');
+    const next = gallery.querySelector('.flex-next');
+    if (prev) prev.classList.toggle('flex-disabled', activeIdx === 0);
+    if (next) next.classList.toggle('flex-disabled', activeIdx === slides.length - 1);
+  }
+  setActive(0);
+
+  // Wire arrows — intercept clicks (replaces flexslider's broken handler)
+  gallery.querySelectorAll('.flex-prev').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); if (activeIdx > 0) setActive(activeIdx - 1); }, true);
+  });
+  gallery.querySelectorAll('.flex-next').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); if (activeIdx < slides.length - 1) setActive(activeIdx + 1); }, true);
+  });
+
+  // Zoom on hover — cursor-following origin
+  slides.forEach(slide => {
+    const img = slide.querySelector('img.wp-post-image');
+    if (!img) return;
+    slide.addEventListener('mouseenter', () => slide.classList.add('proto-zooming'));
+    slide.addEventListener('mouseleave', () => {
+      slide.classList.remove('proto-zooming');
+      img.style.transformOrigin = 'center center';
+    });
+    slide.addEventListener('mousemove', e => {
+      const r = slide.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      img.style.transformOrigin = x + '% ' + y + '%';
+    });
+  });
+})();
+</script>
+</body>
 </html>
