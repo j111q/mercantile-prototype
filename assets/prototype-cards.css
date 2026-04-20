@@ -141,26 +141,36 @@ ul.wc-block-grid__products {
    Featured Products block above. Same visual target: warm cream tile, clean
    title + price, fully clickable. */
 
-/* Force grid layout (stock is is-product-collection-layout-list = full-width rows). */
-ul.wc-block-product-template,
-.wc-block-product-template.wp-block-woocommerce-product-template {
+/* Stock rules to beat (specificity in parens):
+     .wc-block-product-template { display:flex; flex-wrap:wrap; column-gap:5% } (0,1,0)
+     .wc-block-product-template > li { display:grid; grid-template-rows:auto 1fr auto; max-width:30% } (0,1,2)
+     body[class*=woocommerce] .wc-block-grid__products > li { max-width:48% } (0,2,2)
+   All prefixed with body[class*="woocommerce"] to guarantee we beat them. */
+
+body[class*="woocommerce"] ul.wc-block-product-template,
+body[class*="woocommerce"] .wc-block-product-template.wp-block-woocommerce-product-template {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
   gap: 50px !important;
+  row-gap: 50px !important;
+  column-gap: 50px !important;
   list-style: none !important;
   padding: 0 !important;
   margin: 0 auto !important;
   max-width: 1280px !important;
+  justify-content: stretch !important;
+  flex-wrap: nowrap !important;
 }
 @media (max-width: 820px) {
-  ul.wc-block-product-template { grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important; }
+  body[class*="woocommerce"] ul.wc-block-product-template { grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important; row-gap: 30px !important; column-gap: 30px !important; }
 }
 @media (max-width: 520px) {
-  ul.wc-block-product-template { grid-template-columns: 1fr !important; }
+  body[class*="woocommerce"] ul.wc-block-product-template { grid-template-columns: 1fr !important; }
 }
 
-/* Reset per-card container styling. */
-.wc-block-product-template > li.wc-block-product {
+/* Per-card container: stock sets display:grid + max-width:30%. Blow both away. */
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product,
+body[class*="woocommerce"] ul.wc-block-product-template > li.wc-block-product {
   list-style: none !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -168,43 +178,64 @@ ul.wc-block-product-template,
   border: 0 !important;
   box-shadow: none !important;
   max-width: none !important;
-  width: 100% !important;
+  width: auto !important;
   min-width: 0 !important;
   flex: none !important;
   display: block !important;
+  grid-template-rows: none !important;
+  grid-template-columns: none !important;
 }
 
 /* Image frame: portrait, warm cream backdrop, 8px radius. */
-.wc-block-product-template .wc-block-components-product-image {
+body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-image,
+body[class*="woocommerce"] .wc-block-product-template > li > .wc-block-components-product-image {
   display: block !important;
   background: #F8F3EC !important;
+  background-color: #F8F3EC !important;
   border-radius: 8px !important;
   overflow: hidden !important;
   aspect-ratio: 3 / 4 !important;
   margin: 0 0 16px !important;
   position: relative !important;
+  opacity: 1 !important;
+  color: inherit !important;
+  max-width: 100% !important;
+  width: 100% !important;
 }
-.wc-block-product-template .wc-block-components-product-image a {
+/* Kill the loading-state ::after animation overlay. */
+body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-image::after {
+  display: none !important;
+  content: none !important;
+}
+body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-image a {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
   text-decoration: none !important;
+  border-radius: inherit !important;
 }
-.wc-block-product-template .wc-block-components-product-image img {
+body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-image img {
   width: 100% !important;
   height: 100% !important;
+  max-width: 100% !important;
   object-fit: contain !important;
+  object-position: center !important;
   padding: 24px !important;
   box-sizing: border-box !important;
   background: transparent !important;
   border: 0 !important;
   border-radius: 0 !important;
   mix-blend-mode: normal !important;
+  aspect-ratio: auto !important;
+}
+body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-image__inner-container {
+  display: none !important;
 }
 
-/* Title: match Featured card. */
-.wc-block-product-template > li.wc-block-product .wp-block-post-title,
-.wc-block-product-template > li.wc-block-product h3.wp-block-post-title {
+/* Title: match Featured card — kill stock's has-text-align-center. */
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product .wp-block-post-title,
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product h3.wp-block-post-title,
+body[class*="woocommerce"] .wc-block-product-template h3.wp-block-post-title.has-text-align-center {
   font-family: var(--purple-font) !important;
   font-size: 22px !important;
   line-height: 26px !important;
@@ -214,15 +245,15 @@ ul.wc-block-product-template,
   text-align: left !important;
   margin: 0 0 6px !important;
 }
-.wc-block-product-template > li.wc-block-product .wp-block-post-title a {
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product .wp-block-post-title a {
   color: inherit !important;
   text-decoration: none !important;
 }
 
 /* Price: match Featured card. */
-.wc-block-product-template > li.wc-block-product .wp-block-woocommerce-product-price,
-.wc-block-product-template > li.wc-block-product .wc-block-components-product-price,
-.wc-block-product-template > li.wc-block-product .woocommerce-Price-amount {
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product .wp-block-woocommerce-product-price,
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product .wc-block-components-product-price,
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product .woocommerce-Price-amount {
   font-family: var(--purple-font) !important;
   font-size: 18px !important;
   line-height: 30px !important;
@@ -230,16 +261,18 @@ ul.wc-block-product-template,
   color: var(--purple-secondary) !important;
   letter-spacing: -0.18px !important;
   text-align: left !important;
+  justify-content: flex-start !important;
 }
 
-/* Price + button row: stack as left-aligned column, hide the button. */
-.wc-block-product-template > li.wc-block-product > .wp-block-group {
+/* Price + button row: stack left-aligned, hide the add-to-cart button. */
+body[class*="woocommerce"] .wc-block-product-template > li.wc-block-product > .wp-block-group {
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
+  justify-content: flex-start !important;
   gap: 2px !important;
 }
-.wc-block-product-template .wc-block-components-product-button,
-.wc-block-product-template .wp-block-button.wc-block-components-product-button {
+body[class*="woocommerce"] .wc-block-product-template .wc-block-components-product-button,
+body[class*="woocommerce"] .wc-block-product-template .wp-block-button.wc-block-components-product-button {
   display: none !important;
 }
