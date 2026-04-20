@@ -312,6 +312,9 @@ body.single-product {
   --purple-secondary: #686868;
   --purple-accent: #243DC8;
   --purple-tertiary: #F7F7F7;
+  /* Mercantile-warm photo backdrops — pulled from theme palette */
+  --merc-cream: #F8F3EC;       /* secondary section bg */
+  --merc-warm-gray: #E4DDD4;   /* 'gray' token, tan-warm */
   --purple-border: rgba(17,17,17,0.2);
   --purple-font: "Inter Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -447,7 +450,13 @@ body.single-product .wp-block-woocommerce-add-to-cart-form button[type="submit"]
 }
 
 /* ── Gallery: remove any dated framing ─────────────── */
-body.single-product .woocommerce-product-gallery__image { background: #fff !important; }
+body.single-product .woocommerce-product-gallery__image,
+body.single-product .woocommerce-product-gallery__wrapper {
+  background: var(--merc-cream) !important;
+}
+body.single-product .woocommerce-product-gallery__image img {
+  background: var(--merc-cream) !important;
+}
 body.single-product .woocommerce-product-gallery img { border: 0 !important; }
 
 /* ── Hide Share social buttons (noisy) ─────────────── */
@@ -534,7 +543,7 @@ body.single-product .wc-block-grid__products > li.product {
 
 /* Portrait image frame (Purple uses ~3:4) in light gray */
 body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapper {
-  background: var(--purple-tertiary) !important;
+  background: var(--merc-warm-gray) !important;
   aspect-ratio: 3 / 4 !important;
   overflow: hidden !important;
   margin: 0 0 20px !important;
