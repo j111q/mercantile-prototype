@@ -436,9 +436,13 @@ body.single-product .mercantile-slider-indicator {
   mix-blend-mode: normal !important;
 }
 
-/* Re-pin 8px radius on the gallery — has to be on flex-viewport, since
-   slides are absolutely positioned children of the wrapper inside it. */
-body.single-product .woocommerce-product-gallery .flex-viewport {
+/* Re-pin 8px radius on every possible gallery wrapper. Not all pages have
+   .flex-viewport (flexslider may not run on the static mirror), so also
+   round the outer gallery block, the gallery itself, and the wrapper. */
+body.single-product .wp-block-woocommerce-product-image-gallery,
+body.single-product .woocommerce-product-gallery,
+body.single-product .woocommerce-product-gallery .flex-viewport,
+body.single-product .woocommerce-product-gallery__wrapper {
   border-radius: 8px !important;
   overflow: hidden !important;
 }
