@@ -842,6 +842,25 @@ body.single-product .flex-direction-nav a.flex-next::before { content: "›" !im
 body.single-product .flex-direction-nav a:hover { background: var(--merc-cream) !important; }
 body.single-product .flex-direction-nav a.flex-disabled { display: none !important; }
 
+/* Mercantile's bundle mirrors the prev LI via scaleX(-1) on the parent and
+   paints an SVG arrow as the LI background. That flips OUR ::before glyph
+   (‹ → ›) and layers an SVG arrow behind it. Kill both, keep vertical
+   centering. */
+body.single-product .flex-direction-nav .flex-nav-prev,
+body.single-product .flex-direction-nav .flex-nav-next {
+  transform: translateY(-50%) !important;
+  background-image: none !important;
+}
+
+/* Mercantile sets mix-blend-mode: difference on the indicator + nav, which
+   inverts our white/dark colors against the cream page → dark pill w/ white
+   text. Force normal blending. */
+body.single-product .flex-direction-nav,
+body.single-product .flex-direction-nav *,
+body.single-product .mercantile-slider-indicator {
+  mix-blend-mode: normal !important;
+}
+
 /* Re-pin 8px radius on the gallery — has to be on flex-viewport, since
    slides are absolutely positioned children of the wrapper inside it. */
 body.single-product .woocommerce-product-gallery .flex-viewport {
@@ -2004,6 +2023,9 @@ const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(
 (function() {
   const gallery = document.querySelector('.woocommerce-product-gallery');
   if (!gallery) return;
+  // WooCommerce sets inline opacity:0 on the gallery until flexslider fires
+  // its init event. Flexslider may not run on this static mirror, so clear it.
+  gallery.style.opacity = '1';
   const slides = Array.from(gallery.querySelectorAll('.woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image'));
   if (!slides.length) return;
 
