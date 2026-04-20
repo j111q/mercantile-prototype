@@ -141,11 +141,20 @@ ul.wc-block-grid__products {
    Featured Products block above. Same visual target: warm cream tile, clean
    title + price, fully clickable. */
 
-/* Stock rules to beat (specificity in parens):
-     .wc-block-product-template { display:flex; flex-wrap:wrap; column-gap:5% } (0,1,0)
-     .wc-block-product-template > li { display:grid; grid-template-rows:auto 1fr auto; max-width:30% } (0,1,2)
-     body[class*=woocommerce] .wc-block-grid__products > li { max-width:48% } (0,2,2)
-   All prefixed with body[class*="woocommerce"] to guarantee we beat them. */
+/* The real culprit on the live shop/category pages:
+     .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+       max-width: var(--wp--style--global--content-size);  /* ~620px */
+       margin-left: auto !important; margin-right: auto !important;
+     }
+   The .wp-block-woocommerce-product-collection wrapper is constrained to
+   content-size by its parent, squeezing any grid inside to ~620px total.
+   We have to widen the wrapper itself. */
+body[class*="woocommerce"] .wp-block-woocommerce-product-collection {
+  max-width: 1280px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 
 body[class*="woocommerce"] ul.wc-block-product-template,
 body[class*="woocommerce"] .wc-block-product-template.wp-block-woocommerce-product-template {
