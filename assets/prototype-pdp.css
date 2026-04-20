@@ -621,9 +621,24 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
 }
 .pdp-details__body .chart-table {
   display: block !important; float: none !important;
-  width: 100% !important; margin: 0 !important; padding: 0 !important;
+  width: 100% !important; margin: 0 !important; padding: 0 0 4px !important;
   overflow-x: auto !important; overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox: hidden by default */
+}
+.pdp-details__body .chart-table::-webkit-scrollbar {
+  height: 0;
+  background: transparent;
+  transition: height 120ms ease;
+}
+.pdp-details__body .chart-table:hover { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.25) transparent; }
+.pdp-details__body .chart-table:hover::-webkit-scrollbar { height: 6px; }
+.pdp-details__body .chart-table:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.22);
+  border-radius: 3px;
+}
+.pdp-details__body .chart-table:hover::-webkit-scrollbar-track {
+  background: transparent;
 }
 /* Size charts with many columns: force comfortable min-widths so the
    table overflows rather than wraps cell text. */
@@ -693,9 +708,10 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
   font-size: 13px !important;
 }
 
-/* Hairline rows between data rows (not between header and first data row). */
-.pdp-details__body table tr + tr > th,
-.pdp-details__body table tr + tr > td { border-top: 1px solid #f3f1ec !important; }
+/* Hairline rows between data rows on the size chart only (attribute table
+   reads better as a plain dl-style list without row dividers). */
+.pdp-details__body #size-chart tr + tr > th,
+.pdp-details__body #size-chart tr + tr > td { border-top: 1px solid #f3f1ec !important; }
 
 /* WC attribute table (Additional information tab) — read as a dl, not a table. */
 .pdp-details__body .woocommerce-product-attributes th,
