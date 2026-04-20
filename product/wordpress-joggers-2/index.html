@@ -308,6 +308,7 @@ var wc_single_product_params = {"i18n_required_rating_text":"Please select a rat
            · #243DC8 accent · rgba(17,17,17,0.2) hairline
    ═══════════════════════════════════════════════════════════════════ */
 body.single-product {
+  background-color: #F8F3EC !important;
   --purple-primary: #111;
   --purple-secondary: #686868;
   --purple-accent: #243DC8;
@@ -480,10 +481,10 @@ body.single-product .woocommerce-product-gallery__image img.wp-post-image {
 /* ── Gallery: remove any dated framing ─────────────── */
 body.single-product .woocommerce-product-gallery__image,
 body.single-product .woocommerce-product-gallery__wrapper {
-  background: var(--merc-cream) !important;
+  background: #fff !important;
 }
 body.single-product .woocommerce-product-gallery__image img {
-  background: var(--merc-cream) !important;
+  background: #fff !important;
 }
 body.single-product .woocommerce-product-gallery img { border: 0 !important; }
 
@@ -578,7 +579,7 @@ body.single-product .wc-block-grid__products > li.wc-block-grid__product {
 
 /* Portrait image frame (Purple uses ~3:4) in light gray */
 body.single-product .wc-block-grid__products .mercantile-product-thumbnail-wrapper {
-  background: var(--merc-warm-gray) !important;
+  background: #fff !important;
   aspect-ratio: 3 / 4 !important;
   overflow: hidden !important;
   margin: 0 0 20px !important;
@@ -690,6 +691,12 @@ body.single-product table.variations { margin-bottom: 24px !important; }
 body.single-product table.variations th,
 body.single-product table.variations td { padding: 8px 0 !important; }
 
+
+/* Center 'Featured Products' heading */
+body.single-product .featured-products-pattern > h2.wp-block-heading,
+body.single-product .featured-products-pattern > h2.is-style-brushstroke-gray {
+  text-align: center !important;
+}
 </style>
 </head>
 
