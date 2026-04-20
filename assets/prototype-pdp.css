@@ -720,19 +720,30 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
 .pdp-details__body #size-chart tr + tr > td { border-top: 1px solid #f3f1ec !important; }
 
 /* WC attribute table (Additional information tab) — read as a dl, not a table.
-   Stock .shop_attributes ships with border-top/bottom, per-cell border-bottom,
-   and an nth-child(even) cream background stripe. Zero all of that out. */
-.pdp-details__body .woocommerce-product-attributes,
-.pdp-details__body .shop_attributes,
-.pdp-details__body .woocommerce-product-attributes tr,
-.pdp-details__body .shop_attributes tr,
-.pdp-details__body .woocommerce-product-attributes th,
-.pdp-details__body .shop_attributes th,
-.pdp-details__body .woocommerce-product-attributes td,
-.pdp-details__body .shop_attributes td {
-  border: 0 !important;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
+   Stock .shop_attributes ships with border-top/bottom, per-cell dotted
+   border-bottom, and an nth-child(even) cream background stripe. Zero all
+   that out. Extra-specific selectors + long-hand border-width/style so the
+   shorthand can't be re-filled by more-specific stock rules. */
+body.single-product .pdp-details__body table.woocommerce-product-attributes,
+body.single-product .pdp-details__body table.shop_attributes,
+body.single-product .pdp-details__body .woocommerce-product-attributes tr,
+body.single-product .pdp-details__body .shop_attributes tr,
+body.single-product .pdp-details__body .woocommerce-product-attributes th,
+body.single-product .pdp-details__body .shop_attributes th,
+body.single-product .pdp-details__body .woocommerce-product-attributes td,
+body.single-product .pdp-details__body .shop_attributes td {
+  border-width: 0 !important;
+  border-style: none !important;
+  border-top-width: 0 !important;
+  border-bottom-width: 0 !important;
+  border-left-width: 0 !important;
+  border-right-width: 0 !important;
+  border-top-style: none !important;
+  border-bottom-style: none !important;
+  border-left-style: none !important;
+  border-right-style: none !important;
+  box-shadow: none !important;
+  outline: 0 !important;
   background: transparent !important;
   background-color: transparent !important;
 }
