@@ -609,14 +609,38 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
 /* Kill font inheritance — body text inside the accordion should be Inter. */
 .pdp-details, .pdp-details * { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; }
 
-/* Unwrap the scfw/chart-table wrapper — it ships with float, overflow, scrollbar. */
+/* Unwrap the scfw/chart-table wrappers (they ship with float + weird height),
+   but keep horizontal scroll on the innermost wrapper so wide size charts
+   stay readable without crushing columns. */
 .pdp-details__body .chart-container,
-.pdp-details__body .chart-table,
 .pdp-details__body .scfw-tab-content {
   display: block !important; float: none !important;
   overflow: visible !important; width: 100% !important;
   margin: 0 !important; padding: 0 !important;
   animation: none !important;
+}
+.pdp-details__body .chart-table {
+  display: block !important; float: none !important;
+  width: 100% !important; margin: 0 !important; padding: 0 !important;
+  overflow-x: auto !important; overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+/* Size charts with many columns: force comfortable min-widths so the
+   table overflows rather than wraps cell text. */
+.pdp-details__body #size-chart {
+  min-width: 640px !important;
+}
+.pdp-details__body #size-chart th,
+.pdp-details__body #size-chart td {
+  min-width: 64px !important;
+  white-space: nowrap !important;
+}
+.pdp-details__body #size-chart > tr > td:first-child,
+.pdp-details__body #size-chart > tbody > tr > td:first-child,
+.pdp-details__body #size-chart > tr > th:first-child,
+.pdp-details__body #size-chart > tbody > tr > th:first-child {
+  min-width: 140px !important;
+  white-space: normal !important;
 }
 
 /* Universal accordion table (size chart + attribute table + anything else). */
