@@ -625,5 +625,59 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
+
+<style>
+  /* Cursor rain — tiny Ws fall from wherever the cursor is. */
+  .wp-rain {
+    position: fixed;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 22px;
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+    line-height: 1;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.25);
+    animation: wp-fall 1.3s cubic-bezier(.25,.45,.45,1) forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes wp-fall {
+    0%   { transform: translate(-50%, -50%) scale(0.3) rotate(0); opacity: 0; }
+    12%  { transform: translate(-50%, -50%) scale(1)   rotate(0); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.9) rotate(var(--rot)); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wp-rain { display: none !important; }
+  }
+</style>
+
+<script>
+  (function() {
+    const colors = ['#ffe066', '#ff7aa8', '#7df2c4', '#fff6a8', '#f7f3e3'];
+    let last = 0;
+    const THROTTLE = 45; // ms between spawns
+    function spawn(x, y) {
+      const el = document.createElement('div');
+      el.className = 'wp-rain';
+      el.textContent = 'W';
+      el.style.left = x + 'px';
+      el.style.top  = y + 'px';
+      el.style.color = colors[(Math.random() * colors.length) | 0];
+      el.style.fontSize = (16 + Math.random() * 18) + 'px';
+      el.style.setProperty('--dx',  ((Math.random() - 0.5) * 160) + 'px');
+      el.style.setProperty('--dy',  (90 + Math.random() * 180) + 'px');
+      el.style.setProperty('--rot', ((Math.random() - 0.5) * 540) + 'deg');
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1400);
+    }
+    document.addEventListener('mousemove', (e) => {
+      const now = performance.now();
+      if (now - last < THROTTLE) return;
+      last = now;
+      spawn(e.clientX, e.clientY);
+    }, { passive: true });
+  })();
+</script>
 </body>
 </html>
