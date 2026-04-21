@@ -110,11 +110,10 @@
   }
   .card:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 var(--ink); rotate: -1deg; }
   @keyframes pt-pop {
-    0%   { opacity: 0; transform: scale(0.72) translateY(24px); }
-    70%  { opacity: 1; transform: scale(1.04) translateY(0); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
+    from { opacity: 0; transform: scale(0.94) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
   }
-  .grid .card { animation: pt-pop 520ms cubic-bezier(.25,.9,.4,1.25) both; animation-delay: calc(var(--i, 0) * 50ms); }
+  .grid .card { animation: pt-pop 380ms cubic-bezier(.25,.7,.3,1) both; animation-delay: calc(var(--i, 0) * 35ms); }
   @media (prefers-reduced-motion: reduce) { .grid .card { animation: none; } }
   .card:nth-child(3n) { background: var(--yellow); }
   .card:nth-child(5n) { background: #e2e8ff; }
@@ -379,7 +378,7 @@ function ProductCard({ p, onAdd, i }) {
   const tagMap = { heritage: 'heritage', 'tie-dye': 'limited', wapuu: 'wapuu ✿', pride: 'pride', cozy: 'cozy' };
   const tag = Object.keys(tagMap).find(k => p.tags.includes(k));
   return (
-    <a className="card" href={`#/p/${p.id}`} style={{animationDelay: `${i*0.05}s`}}>
+    <a className="card" href={`#/p/${p.id}`} style={{animationDelay: `${i*0.035}s`}}>
       {tag && <span className="tag">{tagMap[tag]}</span>}
       <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: 'rgba(255,255,255,0.6)', fg: '#0d0d14', variant: 'playful' })}}/>
       <h3>{p.name}</h3>
