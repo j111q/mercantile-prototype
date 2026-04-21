@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Codex · Mercantile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../shared/catalog.js"></script>
+<script src="../shared/product-art.js"></script>
+<style>
+  :root {
+    --wp: #3858e9;
+    --ink: #111116;
+    --paper: #f4f1ea;
+    --paper-2: #ebe7dc;
+    --rule: rgba(0,0,0,0.14);
+    --muted: #6a665c;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--paper); color: var(--ink); font-family: Inter, system-ui, sans-serif; font-size: 15px; }
+  ::selection { background: var(--wp); color: white; }
+  button { font: inherit; border: 0; background: none; cursor: pointer; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  .serif { font-family: 'EB Garamond', serif; }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+
+  /* ---- marquee ---- */
+  .marquee { background: var(--ink); color: var(--paper); padding: 10px 0; overflow: hidden; border-bottom: 1px solid var(--rule); }
+  .marquee .track { display:flex; gap: 48px; white-space: nowrap; animation: marq 38s linear infinite; font-family: 'EB Garamond', serif; font-style: italic; font-size: 18px; font-weight: 500; }
+  @keyframes marq { to { transform: translateX(-50%); } }
+  .marquee .track span { display:inline-flex; align-items:center; gap: 48px; }
+  .marquee .dot { display:inline-block; width: 6px; height: 6px; background: var(--wp); border-radius: 50%; }
+
+  /* ---- related ---- */
+  .related { border-top: 1px solid var(--rule); padding: 48px 64px 80px; background: var(--paper); }
+  .related .hd { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 32px; }
+  .related h2 { font-family: 'EB Garamond', serif; font-weight: 500; font-size: 34px; margin: 0; letter-spacing: -0.01em; }
+  .related .row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .related .r { display:flex; flex-direction: column; gap: 10px; cursor: pointer; }
+  .related .r .img { aspect-ratio: 1; background: var(--paper-2); border-radius: 10px; overflow:hidden; transition: transform 0.35s ease; }
+  .related .r:hover .img { transform: translateY(-3px); }
+  .related .r .img svg { width:100%; height:100%; display:block; }
+  .related .r h4 { font-family: 'EB Garamond', serif; font-size: 17px; font-weight: 500; margin: 0; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; }
+  .related .r .pr { font-family: 'EB Garamond', serif; font-size: 15px; color: var(--muted); }
+  @media (max-width: 900px) { .related { padding: 40px; } .related .row { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---- nav ---- */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: 18px 40px; border-bottom: 1px solid var(--rule);
+    background: color-mix(in oklab, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  nav.top .left, nav.top .right { display:flex; gap: 24px; align-items:center; }
+  nav.top .right { justify-content: flex-end; }
+  nav.top .brand { font-family: 'EB Garamond', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
+  nav.top .brand em { color: var(--wp); font-style: italic; }
+  nav.top a, nav.top button { font-size: 13px; position: relative; }
+  nav.top a:hover, nav.top button:hover { color: var(--wp); }
+  nav.top .cart-btn { border: 1px solid var(--rule); border-radius: 999px; padding: 6px 14px; transition: all 0.2s; }
+  nav.top .cart-btn:hover { background: var(--wp); color: white; border-color: var(--wp); }
+
+  /* ---- hero ---- */
+  .hero { padding: 120px 40px 80px; max-width: 1200px; margin: 0 auto; }
+  .hero .kicker { display:flex; align-items:center; gap: 12px; margin-bottom: 32px; }
+  .hero .kicker .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--wp); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(1);} 50% { opacity: 1; transform: scale(1.3);} }
+  .hero h1 {
+    font-family: 'EB Garamond', serif; font-size: clamp(56px, 10vw, 132px);
+    font-weight: 500; line-height: 0.92; letter-spacing: -0.03em; margin: 0 0 32px;
+  }
+  .hero h1 em { color: var(--wp); }
+  .hero .lede {
+    max-width: 560px; font-size: 18px; line-height: 1.55; color: #333;
+  }
+  .hero .cta { margin-top: 40px; display:flex; gap: 16px; }
+  .hero .cta a { padding: 14px 24px; border: 1px solid var(--ink); border-radius: 999px; font-size: 14px; transition: all 0.25s; }
+  .hero .cta a.primary { background: var(--ink); color: var(--paper); }
+  .hero .cta a:hover { transform: translateY(-2px); }
+  .hero .cta a.primary:hover { background: var(--wp); border-color: var(--wp); }
+
+  /* ---- featured object ---- */
+  .featured { padding: 60px 40px 120px; max-width: 1200px; margin: 0 auto; }
+  .featured .head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 40px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .featured .head h2 { font-family: 'EB Garamond', serif; font-size: 32px; font-weight: 500; margin: 0; }
+  .featured .obj { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+  .featured .obj .img { aspect-ratio: 1; background: var(--paper-2); border: 1px solid var(--rule); overflow: hidden; }
+  .featured .obj .img svg { width: 100%; height: 100%; }
+  .featured .obj .copy h3 { font-family: 'EB Garamond', serif; font-size: 56px; font-weight: 500; line-height: 1; margin: 16px 0; letter-spacing: -0.02em; }
+  .featured .obj .copy p { font-size: 16px; line-height: 1.6; color: #333; max-width: 420px; }
+  .featured .obj .price { font-family: 'EB Garamond', serif; font-size: 24px; margin-top: 32px; }
+  .featured .obj .buy { margin-top: 24px; padding: 14px 28px; background: var(--ink); color: var(--paper); border-radius: 999px; display:inline-block; font-size: 14px; transition: all 0.25s; }
+  .featured .obj .buy:hover { background: var(--wp); }
+
+  /* ---- catalog (on shop view) ---- */
+  .shop-head { padding: 80px 40px 24px; max-width: 1400px; margin: 0 auto; }
+  .shop-head h1 { font-family: 'EB Garamond', serif; font-size: clamp(48px, 7vw, 80px); font-weight: 500; letter-spacing: -0.02em; margin: 0 0 16px; line-height: 1; }
+  .shop-head p { max-width: 520px; color: #333; font-size: 16px; line-height: 1.55; }
+  .filters { display:flex; gap: 8px; padding: 24px 40px; max-width: 1400px; margin: 0 auto; border-bottom: 1px solid var(--rule); flex-wrap: wrap; align-items:center; }
+  .filters .chip { padding: 8px 16px; border: 1px solid var(--rule); border-radius: 999px; font-size: 13px; transition: all 0.2s; }
+  .filters .chip:hover { border-color: var(--ink); }
+  .filters .chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .filters .count { margin-left: auto; color: var(--muted); }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); padding: 1px; max-width: 1400px; margin: 0 auto; }
+  .card { background: var(--paper); padding: 32px; cursor: pointer; transition: background 0.3s; position: relative; display:flex; flex-direction:column; gap: 16px; }
+  .card:hover { background: var(--paper-2); }
+  .card .img { aspect-ratio: 1; background: #fff; overflow:hidden; border: 1px solid var(--rule); transition: transform 0.4s cubic-bezier(.2,.9,.3,1.2); }
+  .card:hover .img { transform: translateY(-4px); }
+  .card .img svg { width: 100%; height: 100%; display:block; }
+  .card .meta { display:flex; justify-content:space-between; align-items:baseline; }
+  .card h3 { font-family: 'EB Garamond', serif; font-size: 22px; font-weight: 500; margin: 0; line-height: 1.1; letter-spacing: -0.01em; max-width: 260px; text-wrap: balance; }
+  .card .price { font-family: 'EB Garamond', serif; font-size: 18px; }
+  .card .blurb { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .card .n { position:absolute; top: 32px; right: 32px; font-family: ui-monospace, monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* ---- pdp ---- */
+  .pdp { display:grid; grid-template-columns: 1.3fr 1fr; gap: 0; min-height: calc(100vh - 66px); }
+  .pdp .gallery { background: var(--paper-2); padding: 64px; display:flex; align-items:center; justify-content:center; border-right: 1px solid var(--rule); position: sticky; top: 66px; height: calc(100vh - 66px); }
+  .pdp .gallery svg { width: 100%; max-width: 540px; }
+  .pdp .info { padding: 80px 64px; }
+  .pdp .crumbs { font-family: ui-monospace, monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 32px; }
+  .pdp h1 { font-family: 'EB Garamond', serif; font-size: 72px; font-weight: 500; line-height: 1; margin: 0 0 16px; letter-spacing: -0.02em; text-wrap: balance; }
+  .pdp .price { font-family: 'EB Garamond', serif; font-size: 28px; margin: 32px 0; padding-bottom: 24px; border-bottom: 1px solid var(--rule); }
+  .pdp .desc { font-size: 16px; line-height: 1.65; color: #333; max-width: 440px; margin-bottom: 40px; }
+  .pdp .spec { display: grid; grid-template-columns: 120px 1fr; gap: 8px 24px; font-size: 14px; padding: 24px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .pdp .spec dt { color: var(--muted); font-family: ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding-top: 2px; }
+  .pdp .spec dd { margin: 0; }
+  .pdp .size { margin: 32px 0 16px; display:flex; gap: 8px; flex-wrap: wrap; }
+  .pdp .size button { padding: 10px 16px; border: 1px solid var(--rule); border-radius: 6px; font-size: 13px; transition: all 0.2s; }
+  .pdp .size button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .pdp .size button:hover { border-color: var(--ink); }
+  .pdp .addbtn { margin-top: 24px; width: 100%; max-width: 440px; padding: 18px; background: var(--ink); color: var(--paper); border-radius: 999px; font-size: 15px; transition: all 0.25s; }
+  .pdp .addbtn:hover { background: var(--wp); }
+  .pdp .addbtn.added { background: var(--wp); }
+
+  /* ---- cart drawer ---- */
+  .drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 60; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .drawer-backdrop.on { opacity: 1; pointer-events: auto; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; max-width: 95vw; background: var(--paper); z-index: 61; transform: translateX(100%); transition: transform 0.35s cubic-bezier(.2,.9,.3,1); display:flex; flex-direction:column; border-left: 1px solid var(--rule); }
+  .drawer.on { transform: translateX(0); }
+  .drawer header { padding: 24px 32px; border-bottom: 1px solid var(--rule); display:flex; justify-content:space-between; align-items:center; }
+  .drawer header h2 { font-family: 'EB Garamond', serif; font-size: 28px; font-weight: 500; margin: 0; }
+  .drawer .items { flex: 1; overflow-y: auto; padding: 16px 32px; }
+  .drawer .item { display:grid; grid-template-columns: 60px 1fr auto; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items:center; }
+  .drawer .item .img { width: 60px; height: 60px; background: var(--paper-2); }
+  .drawer .item .img svg { width:100%; height:100%; }
+  .drawer .item h4 { font-family: 'EB Garamond', serif; font-size: 17px; font-weight: 500; margin: 0; }
+  .drawer .item .qty { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .drawer .item .x { font-size: 12px; color: var(--muted); cursor: pointer; }
+  .drawer .item .x:hover { color: var(--wp); }
+  .drawer .empty { color: var(--muted); text-align: center; padding: 40px 0; font-style: italic; font-family: 'EB Garamond', serif; font-size: 18px; }
+  .drawer footer { padding: 24px 32px; border-top: 1px solid var(--rule); }
+  .drawer footer .row { display:flex; justify-content:space-between; margin-bottom: 16px; font-family: 'EB Garamond', serif; font-size: 22px; }
+  .drawer footer button { width: 100%; padding: 16px; background: var(--ink); color: var(--paper); border-radius: 999px; font-size: 14px; transition: all 0.25s; }
+  .drawer footer button:hover { background: var(--wp); }
+
+  /* footer */
+  footer.page { padding: 100px 40px 40px; max-width: 1400px; margin: 80px auto 0; border-top: 1px solid var(--rule); }
+  footer.page .row { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; align-items: start; }
+  footer.page h3 { font-family: 'EB Garamond', serif; font-size: 56px; font-weight: 500; margin: 0 0 24px; line-height: 1; letter-spacing: -0.02em; }
+  footer.page ul { list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 2; color: #555; }
+  footer.page ul li a:hover { color: var(--wp); }
+  footer.page .fine { margin-top: 80px; display:flex; justify-content:space-between; font-size: 11px; color: var(--muted); font-family: ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* toast */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120%); background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 999px; font-size: 13px; z-index: 80; transition: transform 0.3s; }
+  .toast.on { transform: translateX(-50%) translateY(0); }
+
+  /* tweaks panel */
+  .tweaks { position: fixed; bottom: 24px; right: 24px; background: var(--ink); color: var(--paper); border-radius: 14px; padding: 16px; z-index: 70; width: 260px; font-size: 13px; display: none; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .tweaks.on { display: block; }
+  .tweaks h4 { margin: 0 0 12px; font-family: 'EB Garamond', serif; font-size: 20px; font-weight: 500; }
+  .tweaks label { display:block; margin: 8px 0; font-size: 11px; font-family: ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; }
+  .tweaks .swatches { display:flex; gap:8px; margin-bottom: 8px; }
+  .tweaks .swatches button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+  .tweaks .swatches button.on { border-color: white; }
+  .tweaks select { width: 100%; padding: 6px 8px; background: #222; color: white; border: 1px solid #333; border-radius: 6px; font: inherit; }
+
+  @media (max-width: 900px) {
+    nav.top { grid-template-columns: 1fr auto; padding: 14px 20px; }
+    nav.top .center { display:none; }
+    .hero { padding: 60px 20px 40px; }
+    .featured .obj { grid-template-columns: 1fr; gap: 32px; }
+    .grid { grid-template-columns: 1fr; }
+    .pdp { grid-template-columns: 1fr; }
+    .pdp .gallery { position: static; height: auto; padding: 40px; }
+    .pdp .info { padding: 40px; }
+    footer.page .row { grid-template-columns: 1fr; gap: 24px; }
+  }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "wp",
+  "paper": "bone",
+  "density": "roomy"
+}/*EDITMODE-END*/;
+
+const ACCENTS = {
+  wp: '#3858e9', plum: '#6b2f9f', forest: '#2a6b3e', rust: '#b14a1e'
+};
+const PAPERS = {
+  cream: ['#f4f1ea', '#ebe7dc'],
+  bone:  ['#f5f2ed', '#ece7df'],
+  mist:  ['#eef0ef', '#e4e7e5'],
+};
+
+function useTweaks() {
+  const [t, setT] = useState(TWEAK_DEFAULTS);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const handler = (e) => {
+      if (!e.data || typeof e.data !== 'object') return;
+      if (e.data.type === '__activate_edit_mode') setVisible(true);
+      if (e.data.type === '__deactivate_edit_mode') setVisible(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+  useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty('--wp', ACCENTS[t.accent] || ACCENTS.wp);
+    r.setProperty('--paper', PAPERS[t.paper]?.[0] || PAPERS.cream[0]);
+    r.setProperty('--paper-2', PAPERS[t.paper]?.[1] || PAPERS.cream[1]);
+  }, [t]);
+  const set = (edits) => {
+    const next = { ...t, ...edits };
+    setT(next);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  };
+  return { t, set, visible };
+}
+
+function useCart() {
+  const [items, setItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('codex_cart') || '[]'); } catch { return []; }
+  });
+  useEffect(() => {
+    localStorage.setItem('codex_cart', JSON.stringify(items));
+  }, [items]);
+  const add = (p, size = 'M') => setItems(prev => {
+    const key = p.id + '@' + size;
+    const existing = prev.find(x => x.key === key);
+    if (existing) return prev.map(x => x.key === key ? { ...x, qty: x.qty + 1 } : x);
+    return [...prev, { key, id: p.id, name: p.name, price: p.price, size, qty: 1 }];
+  });
+  const remove = (key) => setItems(prev => prev.filter(x => x.key !== key));
+  const total = items.reduce((s, x) => s + x.price * x.qty, 0);
+  const count = items.reduce((s, x) => s + x.qty, 0);
+  return { items, add, remove, total, count };
+}
+
+function useRoute() {
+  const parse = () => {
+    const h = location.hash.slice(1) || '/';
+    const parts = h.split('/').filter(Boolean);
+    if (parts[0] === 'shop') return { page: 'shop', cat: parts[1] };
+    if (parts[0] === 'p') return { page: 'pdp', id: parts[1] };
+    return { page: 'home' };
+  };
+  const [r, setR] = useState(parse);
+  useEffect(() => {
+    const h = () => { setR(parse()); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', h);
+    return () => window.removeEventListener('hashchange', h);
+  }, []);
+  return r;
+}
+
+function Marquee() {
+  const line = <>
+    <span>Issue 01 · Spring 2026</span><i className="dot"/>
+    <span>Shipping on Thursdays</span><i className="dot"/>
+    <span>Free patch with every pull request*</span><i className="dot"/>
+    <span>*we're kidding · mostly</span><i className="dot"/>
+    <span>Made slowly, in limited runs</span><i className="dot"/>
+    <span>Packed in tissue paper by a real human</span><i className="dot"/>
+  </>;
+  return (
+    <div className="marquee">
+      <div className="track"><span>{line}</span><span>{line}</span><span>{line}</span></div>
+    </div>
+  );
+}
+
+function Nav({ cart, openCart }) {
+  return (
+    <nav className="top">
+      <div className="left">
+        <a href="#/shop" className="mono">Shop</a>
+        <a href="#/shop/apparel" className="mono">Apparel</a>
+        <a href="#/shop/accessories" className="mono">Accessories</a>
+      </div>
+      <a className="center brand" href="#/">Mercantile <em>Codex</em></a>
+      <div className="right">
+        <a className="mono" href="#/">Journal</a>
+        <button className="cart-btn mono" onClick={openCart}>Cart · {cart.count}</button>
+      </div>
+    </nav>
+  );
+}
+
+function Home({ onNav }) {
+  const cat = window.MERCANTILE_CATALOG;
+  const featured = cat.find(p => p.id === 'tackle-twill');
+  return (
+    <>
+      <section className="hero">
+        <div className="kicker"><span className="dot"/><span className="mono">Issue 01 · Spring 2026</span></div>
+        <h1>Objects for<br/>people who<br/>ship the <em>web</em>.</h1>
+        <p className="lede">A small, opinionated shop for WordPress.org. Built goods, considered typography, and absolutely zero drop-shipping. Made slowly, in limited runs.</p>
+        <div className="cta">
+          <a href="#/shop" className="primary">Browse the catalog</a>
+          <a href="#/p/tackle-twill">See the tackle twill</a>
+        </div>
+      </section>
+
+      <section className="featured">
+        <div className="head">
+          <h2>Object of the week</h2>
+          <div className="mono" style={{color:'var(--muted)'}}>№ 014 · from the apparel file</div>
+        </div>
+        <div className="obj">
+          <a className="img" href={`#/p/${featured.id}`} dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(featured.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
+          <div className="copy">
+            <div className="mono" style={{color:'var(--muted)'}}>Apparel / Sweatshirts</div>
+            <h3>{featured.name}</h3>
+            <p>{featured.blurb} Heavyweight fleece, stitched tackle-twill letters, a small fold at the neck that survives five hundred washes. A garment for the long contribution arc.</p>
+            <div className="price">${featured.price}</div>
+            <a className="buy" href={`#/p/${featured.id}`}>Open the object →</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="featured" style={{paddingTop: 0}}>
+        <div className="head">
+          <h2>New arrivals</h2>
+          <a href="#/shop" className="mono" style={{color:'var(--wp)'}}>View all →</a>
+        </div>
+        <div className="grid">
+          {cat.slice(0, 6).map((p, i) => (
+            <a key={p.id} className="card" href={`#/p/${p.id}`}>
+              <span className="n">№ {String(i+1).padStart(3,'0')}</span>
+              <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
+              <div className="meta">
+                <h3>{p.name}</h3>
+                <div className="price">${p.price}</div>
+              </div>
+              <div className="blurb">{p.blurb}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function Shop({ cat }) {
+  const all = window.MERCANTILE_CATALOG;
+  const cats = window.MERCANTILE_CATS;
+  const [active, setActive] = useState(cat || 'all');
+  useEffect(() => setActive(cat || 'all'), [cat]);
+  const items = active === 'all' ? all : all.filter(p => p.cat === active);
+  return (
+    <>
+      <section className="shop-head">
+        <div className="mono" style={{color:'var(--muted)', marginBottom: 16}}>The Catalog · {items.length} objects</div>
+        <h1>Everything,<br/>in order.</h1>
+        <p>Filed alphabetically, categorically, and — where it feels right — poetically. Nothing here was hurried into existence.</p>
+      </section>
+      <div className="filters">
+        <button className={`chip mono ${active==='all'?'active':''}`} onClick={() => setActive('all')}>All</button>
+        {cats.map(c => (
+          <button key={c.id} className={`chip mono ${active===c.id?'active':''}`} onClick={() => setActive(c.id)}>{c.label}</button>
+        ))}
+        <span className="count mono">{items.length} items</span>
+      </div>
+      <div className="grid">
+        {items.map((p, i) => (
+          <a key={p.id} className="card" href={`#/p/${p.id}`}>
+            <span className="n">№ {String(i+1).padStart(3,'0')}</span>
+            <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
+            <div className="meta">
+              <h3>{p.name}</h3>
+              <div className="price">${p.price}</div>
+            </div>
+            <div className="blurb">{p.blurb}</div>
+          </a>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function PDP({ id, cart, toast }) {
+  const p = window.MERCANTILE_CATALOG.find(x => x.id === id);
+  const [size, setSize] = useState('M');
+  const [added, setAdded] = useState(false);
+  if (!p) return <div style={{padding:80}}><a href="#/shop" className="serif" style={{fontSize:32}}>← back to shop</a></div>;
+  const isApparel = p.cat === 'apparel';
+  const sizes = isApparel ? ['XS','S','M','L','XL','XXL'] : null;
+  const add = () => {
+    cart.add(p, sizes ? size : '—');
+    setAdded(true);
+    toast(`Added ${p.name}`);
+    setTimeout(() => setAdded(false), 1400);
+  };
+  return (
+    <div className="pdp">
+      <div className="gallery" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
+      <div className="info">
+        <div className="crumbs">Catalog / {p.cat} / № {p.id}</div>
+        <h1>{p.name}</h1>
+        <p className="mono" style={{color:'var(--muted)'}}>{p.tags.join(' · ')}</p>
+        <div className="price">${p.price}</div>
+        <p className="desc">{p.blurb} Printed on heavy stock, finished by hand, and dispatched from the kind of warehouse where the lights are off by seven.</p>
+        <dl className="spec">
+          <dt>Composition</dt><dd>{isApparel ? '100% ring-spun cotton, 220gsm' : 'Mixed materials, see tag'}</dd>
+          <dt>Made in</dt><dd>Wherever the code is</dd>
+          <dt>Edition</dt><dd>Open. Re-run quarterly.</dd>
+          <dt>Care</dt><dd>Cold wash, line dry, review pull requests</dd>
+        </dl>
+        {sizes && (
+          <>
+            <div className="mono" style={{marginTop:24, color:'var(--muted)'}}>Size</div>
+            <div className="size">
+              {sizes.map(s => <button key={s} className={size===s?'on':''} onClick={() => setSize(s)}>{s}</button>)}
+            </div>
+          </>
+        )}
+        <button className={`addbtn ${added?'added':''}`} onClick={add}>{added ? '✓ In your cart' : 'Add to cart'}</button>
+      </div>
+      <RelatedC current={p.id} onGo={(nid) => { window.location.hash = `#/product/${nid}`; window.scrollTo(0,0); }}/>
+    </div>
+  );
+}
+
+function RelatedC({ current, onGo }) {
+  const items = window.MERCANTILE_CATALOG.filter(x => x.id !== current).slice(0, 4);
+  return (
+    <div className="related" style={{gridColumn:'1 / -1'}}>
+      <div className="hd">
+        <div className="mono" style={{color:'var(--muted)'}}>— Also from the catalog</div>
+        <a href="#/shop" className="mono" style={{color:'var(--wp)'}}>Everything →</a>
+      </div>
+      <h2>Other objects worth the fold</h2>
+      <div className="row">
+        {items.map(p => (
+          <div key={p.id} className="r" onClick={() => onGo(p.id)}>
+            <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: 'var(--paper-2)', fg: 'var(--wp)' })}}/>
+            <h4>{p.name}</h4>
+            <div className="pr">${p.price}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CartDrawer({ open, onClose, cart }) {
+  return (
+    <>
+      <div className={`drawer-backdrop ${open?'on':''}`} onClick={onClose}/>
+      <aside className={`drawer ${open?'on':''}`}>
+        <header>
+          <h2>Your cart</h2>
+          <button className="mono" onClick={onClose}>Close</button>
+        </header>
+        <div className="items">
+          {cart.items.length === 0 && <div className="empty">Empty. A quiet thing is a beautiful thing.</div>}
+          {cart.items.map(it => (
+            <div key={it.key} className="item">
+              <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(it.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
+              <div>
+                <h4>{it.name}</h4>
+                <div className="qty mono">Size {it.size} · qty {it.qty}</div>
+              </div>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6}}>
+                <div className="serif">${it.price*it.qty}</div>
+                <span className="x mono" onClick={() => cart.remove(it.key)}>Remove</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <footer>
+          <div className="row"><span>Total</span><span>${cart.total}</span></div>
+          <button>Check out</button>
+        </footer>
+      </aside>
+    </>
+  );
+}
+
+function Tweaks({ t, set, visible }) {
+  return (
+    <div className={`tweaks ${visible?'on':''}`}>
+      <h4>Tweaks · Codex</h4>
+      <label>Accent</label>
+      <div className="swatches">
+        {Object.entries(ACCENTS).map(([k,v]) => (
+          <button key={k} className={t.accent===k?'on':''} style={{background:v}} onClick={() => set({accent:k})}/>
+        ))}
+      </div>
+      <label>Paper</label>
+      <select value={t.paper} onChange={e => set({paper: e.target.value})}>
+        <option value="cream">Cream</option>
+        <option value="bone">Bone</option>
+        <option value="mist">Mist</option>
+      </select>
+    </div>
+  );
+}
+
+function App() {
+  const { t, set, visible } = useTweaks();
+  const route = useRoute();
+  const cart = useCart();
+  const [drawer, setDrawer] = useState(false);
+  const [toast, setToast] = useState('');
+  const toastFn = (msg) => { setToast(msg); setTimeout(() => setToast(''), 1800); };
+  return (
+    <>
+      <Nav cart={cart} openCart={() => setDrawer(true)}/>
+      <Marquee/>
+      {route.page === 'home' && <Home/>}
+      {route.page === 'shop' && <Shop cat={route.cat}/>}
+      {route.page === 'pdp' && <PDP id={route.id} cart={cart} toast={toastFn}/>}
+      <footer className="page">
+        <div className="row">
+          <div>
+            <h3>A shop,<br/>slowly.</h3>
+            <p style={{maxWidth:360, color:'#555'}}>Codex is a small operation. We ship every Thursday and answer every email.</p>
+          </div>
+          <div>
+            <div className="mono" style={{color:'var(--muted)', marginBottom:12}}>Shop</div>
+            <ul>
+              <li><a href="#/shop">All</a></li>
+              <li><a href="#/shop/apparel">Apparel</a></li>
+              <li><a href="#/shop/drinkware">Drinkware</a></li>
+              <li><a href="#/shop/accessories">Accessories</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="mono" style={{color:'var(--muted)', marginBottom:12}}>About</div>
+            <ul>
+              <li><a href="#">Our story</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Shipping</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="mono" style={{color:'var(--muted)', marginBottom:12}}>Post</div>
+            <ul>
+              <li><a href="https://wordpress.org">wordpress.org ↗</a></li>
+              <li><a href="#">Newsletter</a></li>
+              <li><a href="#">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="fine">
+          <span>© Mercantile Codex · 2026</span>
+          <span>Made with WordPress</span>
+        </div>
+      </footer>
+      <CartDrawer open={drawer} onClose={() => setDrawer(false)} cart={cart}/>
+      <Tweaks t={t} set={set} visible={visible}/>
+      <div className={`toast ${toast?'on':''}`}>{toast}</div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

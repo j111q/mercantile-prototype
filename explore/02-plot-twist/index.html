@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Plot Twist · Mercantile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700;1,9..144,900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../shared/catalog.js"></script>
+<script src="../shared/product-art.js"></script>
+<style>
+  :root {
+    --wp: #3858e9;
+    --wp-deep: #1c2db5;
+    --ink: #0d0d14;
+    --paper: #0d0d14;
+    --fg: #f7f3e3;
+    --yellow: #ffe066;
+    --pink: #ff7aa8;
+    --mint: #7df2c4;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--wp); color: var(--fg); font-family: 'Space Grotesk', system-ui, sans-serif; overflow-x: hidden; }
+  ::selection { background: var(--yellow); color: var(--ink); }
+  button { font: inherit; border: 0; background: none; cursor: pointer; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  .serif { font-family: 'Fraunces', serif; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ---------- NAV (sticky, goofy) ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 14px 24px;
+    background: var(--wp); border-bottom: 2px solid var(--ink);
+  }
+  .nav .brand { font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; display:flex; align-items:center; gap: 8px; }
+  .nav .brand .spin { display:inline-block; width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); animation: spin 6s linear infinite; position:relative; }
+  .nav .brand .spin::after { content:''; position:absolute; top: 4px; left: 4px; width: 5px; height: 5px; background: var(--ink); border-radius: 50%; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .nav .links { display:flex; gap: 4px; }
+  .nav .links a { padding: 8px 14px; border-radius: 999px; border: 2px solid transparent; transition: all 0.2s; font-weight: 500; font-size: 14px; }
+  .nav .links a:hover { border-color: var(--ink); background: var(--yellow); color: var(--ink); }
+  .nav .cart { padding: 10px 18px; background: var(--yellow); color: var(--ink); border-radius: 999px; border: 2px solid var(--ink); font-weight: 700; font-size: 14px; transition: all 0.2s; box-shadow: 3px 3px 0 var(--ink); }
+  .nav .cart:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
+  .nav .cart:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee { background: var(--ink); color: var(--yellow); padding: 10px 0; overflow: hidden; border-bottom: 2px solid var(--ink); }
+  .marquee .track { display:flex; gap: 40px; white-space: nowrap; animation: marq 30s linear infinite; font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: 20px; }
+  @keyframes marq { to { transform: translateX(-50%); } }
+  .marquee .track span { display: inline-flex; align-items:center; gap: 40px; }
+  .marquee .dot { width: 10px; height: 10px; background: var(--pink); border-radius: 50%; display:inline-block; }
+
+  /* ---------- HERO ---------- */
+  .hero { padding: 60px 24px 80px; position: relative; min-height: 85vh; display:flex; flex-direction:column; justify-content:center; }
+  .hero h1 {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: clamp(72px, 18vw, 280px);
+    line-height: 0.82; font-weight: 700; letter-spacing: -0.04em;
+    margin: 0; color: var(--yellow); mix-blend-mode: screen;
+    text-wrap: balance;
+  }
+  .hero h1 em { font-style: normal; color: var(--fg); }
+  .hero h1 .strike { position: relative; display: inline-block; }
+  .hero h1 .strike::after { content:''; position:absolute; top: 50%; left: -2%; width: 104%; height: 8%; background: var(--pink); transform: rotate(-2deg); animation: draw 1.2s 0.4s ease-out both; transform-origin: left; }
+  @keyframes draw { from { transform: scaleX(0) rotate(-2deg); } to { transform: scaleX(1) rotate(-2deg); } }
+  .hero .sub { margin-top: 32px; display:flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+  .hero .sub p { font-family: 'Fraunces', serif; font-size: 22px; max-width: 480px; margin: 0; line-height: 1.3; }
+  .hero .big-cta {
+    padding: 20px 32px; background: var(--yellow); color: var(--ink);
+    border-radius: 999px; font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 22px;
+    border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); transition: all 0.2s;
+    display:inline-flex; align-items:center; gap: 10px;
+  }
+  .hero .big-cta:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--ink); }
+  .hero .big-cta:active { transform: translate(3px,3px); box-shadow: 3px 3px 0 var(--ink); }
+  .hero .float { position: absolute; font-family: 'Fraunces', serif; font-style: italic; color: var(--mint); pointer-events: none; }
+  .hero .f1 { top: 8%; right: 6%; font-size: 56px; animation: bob 4s ease-in-out infinite; }
+  .hero .f2 { bottom: 18%; right: 14%; font-size: 36px; color: var(--pink); animation: bob 5s ease-in-out infinite 1s; }
+  @keyframes bob { 0%,100% { transform: translateY(0) rotate(-4deg);} 50% { transform: translateY(-14px) rotate(3deg);} }
+  .hero .star { position:absolute; color: var(--yellow); pointer-events:none; }
+  .hero .s1 { top: 12%; left: 8%; font-size: 48px; animation: twirl 8s linear infinite; }
+  .hero .s2 { bottom: 12%; left: 22%; font-size: 32px; animation: twirl 6s linear infinite reverse; }
+  @keyframes twirl { to { transform: rotate(360deg);} }
+
+  /* ---------- MOOD STRIP ---------- */
+  .moods { background: var(--fg); color: var(--ink); padding: 40px 24px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+  .moods h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 48px; margin: 0 0 20px; line-height: 1; }
+  .moods .row { display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
+  .moods .chip { padding: 10px 18px; border: 2px solid var(--ink); border-radius: 999px; font-size: 14px; font-weight: 500; background: transparent; transition: all 0.2s; cursor: pointer; }
+  .moods .chip:hover { background: var(--wp); color: white; transform: rotate(-2deg); }
+  .moods .chip.on { background: var(--ink); color: var(--yellow); }
+
+  /* ---------- GRID ---------- */
+  .section-head { padding: 60px 24px 24px; display:flex; justify-content: space-between; align-items: flex-end; }
+  .section-head h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: clamp(40px, 7vw, 96px); line-height: 0.9; margin: 0; letter-spacing: -0.02em; color: var(--yellow); }
+  .section-head .meta { text-align: right; font-size: 12px; color: var(--fg); opacity: 0.7; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 0 24px 80px; }
+  .card {
+    background: var(--fg); color: var(--ink); border-radius: 24px; padding: 16px;
+    position: relative; overflow: hidden; border: 2px solid var(--ink);
+    transition: transform 0.35s cubic-bezier(.2,.9,.3,1.3), box-shadow 0.25s, rotate 0.3s;
+    cursor: pointer; display:flex; flex-direction: column; gap: 12px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .card:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 var(--ink); rotate: -1deg; }
+  .card:nth-child(3n) { background: var(--yellow); }
+  .card:nth-child(5n) { background: var(--mint); }
+  .card .img { aspect-ratio: 1; background: rgba(0,0,0,0.05); border-radius: 14px; overflow: hidden; }
+  .card .img svg { width:100%; height:100%; display:block; }
+  .card h3 { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 500; font-size: 18px; line-height: 1.15; margin: 0; letter-spacing: -0.01em; text-transform: none; text-wrap: balance; }
+  .card .price-row { display:flex; justify-content: space-between; align-items:center; }
+  .card .price { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; }
+  .card .add { padding: 8px 14px; background: var(--ink); color: var(--fg); border-radius: 999px; font-size: 12px; font-weight: 500; transition: all 0.2s; }
+  .card .add:hover { background: var(--wp); }
+  .card .tag { position: absolute; top: 16px; right: 16px; background: var(--ink); color: var(--yellow); padding: 4px 10px; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+
+  /* ---------- SHOP ---------- */
+  .shop-head { padding: 80px 24px 30px; }
+  .shop-head h1 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 900; font-size: clamp(72px, 16vw, 200px); line-height: 0.85; margin: 0; color: var(--yellow); letter-spacing: -0.03em; }
+  .shop-head h1 em { font-style: normal; color: var(--fg); }
+  .shop-head p { font-family: 'Fraunces', serif; font-size: 22px; max-width: 540px; margin-top: 48px; line-height: 1.3; }
+
+  /* ---------- RELATED ---------- */
+  .related { padding: 60px 24px 40px; max-width: 1400px; margin: 0 auto; border-top: 2px solid rgba(255,255,255,0.15); }
+  .related .hd { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 24px; }
+  .related h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 900; font-size: clamp(36px, 5vw, 64px); color: var(--yellow); margin: 0; letter-spacing: -0.02em; }
+  .related .row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .related .r { background: var(--fg); border-radius: 16px; padding: 12px; box-shadow: 5px 5px 0 var(--ink); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display:flex; flex-direction: column; gap: 8px; }
+  .related .r:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--ink); }
+  .related .r:nth-child(2n) { background: var(--pink); }
+  .related .r:nth-child(3n) { background: var(--yellow); }
+  .related .r .img { aspect-ratio: 1; background: rgba(255,255,255,0.5); border-radius: 10px; overflow: hidden; }
+  .related .r .img svg { width: 100%; height: 100%; }
+  .related .r h4 { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 500; font-size: 13px; margin: 0; line-height: 1.3; color: var(--ink); text-wrap: balance; }
+  .related .r .pr { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
+  @media (max-width: 800px) { .related .row { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- PDP ---------- */
+  .pdp { padding: 40px 24px 80px; max-width: 1400px; margin: 0 auto; }
+  .pdp .back { display:inline-flex; align-items:center; gap: 6px; padding: 8px 14px; background: var(--fg); color: var(--ink); border-radius: 999px; margin-bottom: 24px; font-size: 13px; font-weight:500; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); transition: all 0.2s; }
+  .pdp .back:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
+  .pdp .wrap { display:grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+  .pdp .gallery { background: var(--fg); border-radius: 32px; border: 2px solid var(--ink); padding: 40px; box-shadow: 8px 8px 0 var(--ink); aspect-ratio: 1; display:flex; align-items:center; justify-content:center; position: relative; overflow:hidden; }
+  .pdp .gallery svg { width: 88%; }
+  .pdp .gallery .sticker { position: absolute; top: 24px; left: 24px; background: var(--pink); color: var(--ink); padding: 8px 16px; border-radius: 999px; font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 18px; transform: rotate(-6deg); border: 2px solid var(--ink); }
+  .pdp .info h1 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 900; font-size: clamp(48px, 7vw, 88px); line-height: 0.9; margin: 0 0 16px; color: var(--yellow); letter-spacing: -0.02em; text-wrap: balance; }
+  .pdp .info .price { font-family: 'Fraunces', serif; font-size: 42px; font-weight: 700; margin: 8px 0 20px; }
+  .pdp .info .desc { font-family: 'Fraunces', serif; font-size: 22px; line-height: 1.35; margin: 0 0 32px; max-width: 440px; }
+  .pdp .sizes { display:flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 24px; }
+  .pdp .sizes button { padding: 10px 16px; border-radius: 999px; border: 2px solid var(--fg); color: var(--fg); font-weight: 500; transition: all 0.2s; }
+  .pdp .sizes button.on { background: var(--yellow); color: var(--ink); border-color: var(--yellow); transform: rotate(-2deg); }
+  .pdp .sizes button:hover:not(.on) { background: rgba(255,255,255,0.08); }
+  .pdp .buy {
+    padding: 18px 28px; background: var(--yellow); color: var(--ink); border-radius: 999px;
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 20px;
+    border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); transition: all 0.2s;
+    display: inline-flex; align-items:center; gap: 10px;
+  }
+  .pdp .buy:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--ink); }
+  .pdp .buy.added { background: var(--mint); }
+  .pdp .info .specs { margin-top: 40px; border-top: 2px solid rgba(255,255,255,0.2); padding-top: 24px; font-size: 14px; line-height: 1.8; }
+  .pdp .info .specs dt { color: var(--yellow); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .pdp .info .specs dd { margin: 0 0 12px; }
+
+  /* ---------- CART ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgba(13,13,20,0.6); z-index: 60; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .backdrop.on { opacity: 1; pointer-events: auto; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 460px; max-width: 95vw; background: var(--fg); color: var(--ink); z-index: 61; transform: translateX(100%); transition: transform 0.4s cubic-bezier(.2,.9,.3,1.1); display:flex; flex-direction:column; border-left: 3px solid var(--ink); }
+  .drawer.on { transform: translateX(0); }
+  .drawer header { padding: 24px; background: var(--yellow); border-bottom: 2px solid var(--ink); display:flex; justify-content:space-between; align-items:center; }
+  .drawer header h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 900; font-size: 36px; margin: 0; }
+  .drawer header .x { font-size: 24px; cursor: pointer; }
+  .drawer .items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+  .drawer .item { display:grid; grid-template-columns: 72px 1fr auto; gap: 12px; padding: 14px 0; border-bottom: 1px dashed rgba(0,0,0,0.2); align-items:center; }
+  .drawer .item .img { width: 72px; height: 72px; background: var(--wp); border-radius: 12px; overflow:hidden; border: 2px solid var(--ink); }
+  .drawer .item .img svg { width:100%; height:100%; }
+  .drawer .item h4 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 20px; margin: 0 0 4px; line-height: 1; }
+  .drawer .item .qty { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #555; }
+  .drawer .item .x { font-size: 11px; cursor: pointer; font-family: 'JetBrains Mono', monospace; color: #555; }
+  .drawer .item .x:hover { color: var(--wp); }
+  .drawer .empty { text-align: center; padding: 60px 20px; font-family: 'Fraunces', serif; font-style: italic; font-size: 24px; }
+  .drawer footer { padding: 24px; border-top: 2px solid var(--ink); background: var(--mint); }
+  .drawer footer .row { display:flex; justify-content:space-between; align-items:center; font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 30px; margin-bottom: 16px; }
+  .drawer footer .go { width: 100%; padding: 18px; background: var(--ink); color: var(--yellow); border-radius: 999px; font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 20px; border: 2px solid var(--ink); transition: all 0.2s; }
+  .drawer footer .go:hover { background: var(--wp); color: var(--yellow); }
+
+  /* ---------- FOOTER ---------- */
+  .pg-footer { padding: 80px 24px 40px; background: var(--fg); color: var(--ink); border-top: 2px solid var(--ink); position: relative; overflow: hidden; }
+  .pg-footer .big { font-family: 'Fraunces', serif; font-style: italic; font-weight: 900; font-size: clamp(80px, 20vw, 280px); line-height: 0.82; margin: 0; color: var(--wp); letter-spacing: -0.04em; }
+  .pg-footer .row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 60px; }
+  .pg-footer h3 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px; color: #666; }
+  .pg-footer ul { list-style: none; padding: 0; margin: 0; font-size: 14px; line-height: 2; }
+  .pg-footer ul li a:hover { color: var(--wp); }
+  .pg-footer .fine { margin-top: 40px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #666; display:flex; justify-content:space-between; }
+
+  /* ---------- TOAST ---------- */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(150%); background: var(--yellow); color: var(--ink); padding: 14px 24px; border-radius: 999px; font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 18px; z-index: 80; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transition: transform 0.35s cubic-bezier(.2,.9,.3,1.3); }
+  .toast.on { transform: translateX(-50%) translateY(0); }
+
+  /* ---------- TWEAKS ---------- */
+  .tweaks { position: fixed; bottom: 24px; right: 24px; background: var(--fg); color: var(--ink); border: 2px solid var(--ink); border-radius: 20px; padding: 16px; z-index: 70; width: 260px; font-size: 13px; display:none; box-shadow: 6px 6px 0 var(--ink); }
+  .tweaks.on { display: block; }
+  .tweaks h4 { margin: 0 0 12px; font-family: 'Fraunces', serif; font-style: italic; font-weight: 700; font-size: 22px; }
+  .tweaks label { display:block; margin: 8px 0 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #555; }
+  .tweaks .swatches { display:flex; gap: 6px; }
+  .tweaks .swatches button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); cursor: pointer; }
+  .tweaks .swatches button.on { box-shadow: 0 0 0 2px var(--ink); transform: scale(1.15); }
+  .tweaks select { width: 100%; padding: 6px 8px; background: #fff; color: var(--ink); border: 2px solid var(--ink); border-radius: 8px; font: inherit; }
+
+  @media (max-width: 900px) {
+    .pdp .wrap { grid-template-columns: 1fr; }
+    .pg-footer .row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "bg": "deep",
+  "accent": "yellow",
+  "intensity": "full"
+}/*EDITMODE-END*/;
+
+const BGS = { wp: '#3858e9', deep: '#1c2db5', ink: '#0d0d14', magenta: '#b6386e' };
+const ACCENTS = { yellow: '#ffe066', mint: '#7df2c4', pink: '#ff7aa8', paper: '#f7f3e3' };
+
+function useTweaks() {
+  const [t, setT] = useState(TWEAK_DEFAULTS);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const h = (e) => {
+      if (!e.data?.type) return;
+      if (e.data.type === '__activate_edit_mode') setVisible(true);
+      if (e.data.type === '__deactivate_edit_mode') setVisible(false);
+    };
+    window.addEventListener('message', h);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', h);
+  }, []);
+  useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty('--wp', BGS[t.bg] || BGS.wp);
+    r.setProperty('--yellow', ACCENTS[t.accent] || ACCENTS.yellow);
+  }, [t]);
+  const set = (edits) => {
+    const next = { ...t, ...edits };
+    setT(next);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  };
+  return { t, set, visible };
+}
+
+function useCart() {
+  const [items, setItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('plottwist_cart') || '[]'); } catch { return []; }
+  });
+  useEffect(() => localStorage.setItem('plottwist_cart', JSON.stringify(items)), [items]);
+  const add = (p, size='M') => setItems(prev => {
+    const k = p.id + '@' + size;
+    const ex = prev.find(x => x.key === k);
+    if (ex) return prev.map(x => x.key === k ? { ...x, qty: x.qty + 1 } : x);
+    return [...prev, { key: k, id: p.id, name: p.name, price: p.price, size, qty: 1 }];
+  });
+  const remove = (k) => setItems(prev => prev.filter(x => x.key !== k));
+  const total = items.reduce((s,x) => s + x.price*x.qty, 0);
+  const count = items.reduce((s,x) => s + x.qty, 0);
+  return { items, add, remove, total, count };
+}
+
+function useRoute() {
+  const parse = () => {
+    const h = location.hash.slice(1) || '/';
+    const parts = h.split('/').filter(Boolean);
+    if (parts[0] === 'shop') return { page: 'shop', cat: parts[1] };
+    if (parts[0] === 'p') return { page: 'pdp', id: parts[1] };
+    return { page: 'home' };
+  };
+  const [r, setR] = useState(parse);
+  useEffect(() => {
+    const h = () => { setR(parse()); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', h);
+    return () => window.removeEventListener('hashchange', h);
+  }, []);
+  return r;
+}
+
+function Nav({ cart, openCart }) {
+  return (
+    <div className="nav">
+      <a href="#/" className="brand"><span className="spin"/> Mercantile<em style={{fontStyle:'italic', color:'var(--yellow)'}}>!</em></a>
+      <div className="links">
+        <a href="#/shop">Shop</a>
+        <a href="#/shop/apparel">Wear</a>
+        <a href="#/shop/drinkware">Sip</a>
+        <a href="#/shop/accessories">Stick</a>
+      </div>
+      <button className="cart" onClick={openCart}>◎ Bag · {cart.count}</button>
+    </div>
+  );
+}
+
+function Marquee() {
+  const line = <>
+    <span>Ship outside</span><i className="dot"/>
+    <span>Wear your stack</span><i className="dot"/>
+    <span>Code is poetry · merch is proof</span><i className="dot"/>
+    <span>Free patch with every pull request*</span><i className="dot"/>
+    <span>*not really</span><i className="dot"/>
+  </>;
+  return (
+    <div className="marquee">
+      <div className="track">
+        <span>{line}</span><span>{line}</span><span>{line}</span>
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="hero">
+      <span className="star s1">✦</span>
+      <span className="star s2">✴</span>
+      <span className="float f1">~ limited ~</span>
+      <span className="float f2">no algorithms</span>
+      <h1>
+        code is <em>poetry.</em><br/>
+        <span className="strike">merch is proof.</span>
+      </h1>
+      <div className="sub">
+        <p>A little shop that sells the feeling of shipping. Owned by the web, priced like a friend, wrapped in tissue paper.</p>
+        <a href="#/shop" className="big-cta">Open the shop →</a>
+      </div>
+    </section>
+  );
+}
+
+function Moods({ active, setActive }) {
+  const moods = [
+    { id: 'all', label: 'Everything' },
+    { id: 'cozy', label: 'Cozy-core' },
+    { id: 'summer', label: 'Summer of OSS' },
+    { id: 'pride', label: 'Loud + proud' },
+    { id: 'staple', label: 'Staples' },
+    { id: 'wapuu', label: 'Wapuu corner' },
+    { id: 'heritage', label: 'Heritage' },
+  ];
+  return (
+    <div className="moods">
+      <h2>Shop by mood.</h2>
+      <div className="row">
+        {moods.map(m => (
+          <button key={m.id} className={`chip ${active===m.id?'on':''}`} onClick={() => setActive(m.id)}>{m.label}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProductCard({ p, onAdd, i }) {
+  const tagMap = { heritage: 'heritage', 'tie-dye': 'limited', wapuu: 'wapuu ✿', pride: 'pride', cozy: 'cozy' };
+  const tag = Object.keys(tagMap).find(k => p.tags.includes(k));
+  return (
+    <a className="card" href={`#/p/${p.id}`} style={{animationDelay: `${i*0.05}s`}}>
+      {tag && <span className="tag">{tagMap[tag]}</span>}
+      <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: 'rgba(255,255,255,0.6)', fg: '#0d0d14', variant: 'playful' })}}/>
+      <h3>{p.name}</h3>
+      <div className="price-row">
+        <span className="price">${p.price}</span>
+        <button className="add" onClick={(e) => { e.preventDefault(); onAdd(p); }}>+ Bag it</button>
+      </div>
+    </a>
+  );
+}
+
+function Home({ onAdd }) {
+  const all = window.MERCANTILE_CATALOG;
+  const [mood, setMood] = useState('all');
+  const items = mood === 'all' ? all : all.filter(p => p.tags.includes(mood));
+  return (
+    <>
+      <Hero/>
+      <Moods active={mood} setActive={setMood}/>
+      <div className="section-head">
+        <h2>Fresh drops.</h2>
+        <div className="meta mono">{items.length} things · restocked Thursdays</div>
+      </div>
+      <div className="grid">
+        {items.slice(0, 12).map((p, i) => <ProductCard key={p.id} p={p} onAdd={onAdd} i={i}/>)}
+      </div>
+    </>
+  );
+}
+
+function Shop({ cat, onAdd }) {
+  const all = window.MERCANTILE_CATALOG;
+  const cats = window.MERCANTILE_CATS;
+  const [active, setActive] = useState(cat || 'all');
+  useEffect(() => setActive(cat || 'all'), [cat]);
+  const items = active === 'all' ? all : all.filter(p => p.cat === active);
+  return (
+    <>
+      <div className="shop-head">
+        <div className="mono" style={{marginBottom:20, opacity:0.7}}>The Everything Page</div>
+        <h1>buy <em>anything</em>.</h1>
+        <p>Apparel, drinkware, the occasional sticker. Every single thing printed on this site, on a grid, with zero algorithmic reordering. Scroll like it's 2005.</p>
+      </div>
+      <div className="moods">
+        <h2>Filter.</h2>
+        <div className="row">
+          <button className={`chip ${active==='all'?'on':''}`} onClick={() => setActive('all')}>Everything</button>
+          {cats.map(c => (
+            <button key={c.id} className={`chip ${active===c.id?'on':''}`} onClick={() => setActive(c.id)}>{c.label}</button>
+          ))}
+          <span style={{marginLeft:'auto', fontFamily:'JetBrains Mono, monospace', fontSize:12}}>{items.length} items</span>
+        </div>
+      </div>
+      <div className="grid" style={{paddingTop:40}}>
+        {items.map((p, i) => <ProductCard key={p.id} p={p} onAdd={onAdd} i={i}/>)}
+      </div>
+    </>
+  );
+}
+
+function PDP({ id, onAdd }) {
+  const p = window.MERCANTILE_CATALOG.find(x => x.id === id);
+  const [size, setSize] = useState('M');
+  const [added, setAdded] = useState(false);
+  if (!p) return <div className="pdp"><a className="back" href="#/shop">← back</a><h1 className="serif" style={{fontSize:40}}>Can't find that one.</h1></div>;
+  const apparel = p.cat === 'apparel';
+  const sizes = apparel ? ['XS','S','M','L','XL','XXL'] : null;
+  const add = () => { onAdd(p, sizes ? size : '—'); setAdded(true); setTimeout(() => setAdded(false), 1400); };
+  return (
+    <div className="pdp">
+      <a className="back" href="#/shop">← back to everything</a>
+      <div className="wrap">
+        <div className="gallery" dangerouslySetInnerHTML={{__html: (() => {
+          const sticker = `<div class="sticker">#${p.id.slice(0,4)}</div>`;
+          return window.MERCANTILE_ART(p.id, { bg: '#f7f3e3', fg: '#3858e9', variant: 'playful' });
+        })()}}/>
+        <div className="info">
+          <div className="mono" style={{color:'var(--yellow)', marginBottom:12}}>{p.cat} · {p.tags.join(' · ')}</div>
+          <h1>{p.name}</h1>
+          <div className="price">${p.price}</div>
+          <p className="desc">{p.blurb}</p>
+          {sizes && (
+            <>
+              <div className="mono" style={{opacity:0.8}}>Size</div>
+              <div className="sizes">
+                {sizes.map(s => <button key={s} className={size===s?'on':''} onClick={() => setSize(s)}>{s}</button>)}
+              </div>
+            </>
+          )}
+          <button className={`buy ${added?'added':''}`} onClick={add}>{added ? '✓ in the bag' : 'Throw it in the bag ↝'}</button>
+          <dl className="specs">
+            <dt>Vibe check</dt><dd>Immaculate.</dd>
+            <dt>Ships in</dt><dd>3–5 days, packed by a human.</dd>
+            <dt>Guarantee</dt><dd>If it's weird, we'll take it back.</dd>
+            <dt>Run size</dt><dd>Limited. Like, actually limited.</dd>
+          </dl>
+        </div>
+      </div>
+      <RelatedP current={p.id}/>
+    </div>
+  );
+}
+
+function RelatedP({ current }) {
+  const items = window.MERCANTILE_CATALOG.filter(x => x.id !== current).slice(0, 4);
+  return (
+    <div className="related">
+      <div className="hd">
+        <h2>while you're here.</h2>
+        <a href="#/shop" className="mono" style={{color:'var(--yellow)'}}>shop all →</a>
+      </div>
+      <div className="row">
+        {items.map(p => (
+          <a key={p.id} href={`#/product/${p.id}`} className="r" onClick={() => window.scrollTo(0,0)}>
+            <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f7f3e3', fg: '#3858e9', variant: 'playful' })}}/>
+            <h4>{p.name}</h4>
+            <div className="pr">${p.price}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CartDrawer({ open, onClose, cart }) {
+  return (
+    <>
+      <div className={`backdrop ${open?'on':''}`} onClick={onClose}/>
+      <aside className={`drawer ${open?'on':''}`}>
+        <header>
+          <h2>the bag</h2>
+          <button className="x" onClick={onClose}>×</button>
+        </header>
+        <div className="items">
+          {cart.items.length === 0 && <div className="empty">nothin' in here. yet.</div>}
+          {cart.items.map(it => (
+            <div key={it.key} className="item">
+              <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(it.id, { bg: '#ffe066', fg: '#0d0d14' })}}/>
+              <div>
+                <h4>{it.name}</h4>
+                <div className="qty">size {it.size} · qty {it.qty}</div>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:4}}>
+                <div className="serif" style={{fontStyle:'italic', fontWeight:700, fontSize:20}}>${it.price*it.qty}</div>
+                <span className="x" onClick={() => cart.remove(it.key)}>remove</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <footer>
+          <div className="row"><span>Total</span><span>${cart.total}</span></div>
+          <button className="go">Check out ↝</button>
+        </footer>
+      </aside>
+    </>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="pg-footer">
+      <div className="big">ship<br/>it.</div>
+      <div className="row">
+        <div>
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="#/shop">Everything</a></li>
+            <li><a href="#/shop/apparel">Apparel</a></li>
+            <li><a href="#/shop/drinkware">Drinkware</a></li>
+            <li><a href="#/shop/accessories">Stickers et al.</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Help</h3>
+          <ul>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Also</h3>
+          <ul>
+            <li><a href="https://wordpress.org">wordpress.org ↗</a></li>
+            <li><a href="#">Newsletter</a></li>
+            <li><a href="#">Lookbook</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Follow</h3>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Mastodon</a></li>
+            <li><a href="#">Email the shop</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="fine">
+        <span>© 2026 · a wild cousin operation</span>
+        <span>made with <em style={{color:'var(--wp)', fontStyle:'italic'}}>WordPress</em></span>
+      </div>
+    </footer>
+  );
+}
+
+function Tweaks({ t, set, visible }) {
+  return (
+    <div className={`tweaks ${visible?'on':''}`}>
+      <h4>Tweaks · Plot Twist</h4>
+      <label>Background</label>
+      <div className="swatches">
+        {Object.entries(BGS).map(([k,v]) => (
+          <button key={k} className={t.bg===k?'on':''} style={{background:v}} onClick={() => set({bg:k})}/>
+        ))}
+      </div>
+      <label>Accent</label>
+      <div className="swatches">
+        {Object.entries(ACCENTS).map(([k,v]) => (
+          <button key={k} className={t.accent===k?'on':''} style={{background:v}} onClick={() => set({accent:k})}/>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const { t, set, visible } = useTweaks();
+  const route = useRoute();
+  const cart = useCart();
+  const [drawer, setDrawer] = useState(false);
+  const [toast, setToast] = useState('');
+  const onAdd = (p, size='M') => {
+    cart.add(p, size);
+    setToast(`✦ ${p.name} — in the bag`);
+    setTimeout(() => setToast(''), 1800);
+  };
+  return (
+    <>
+      <Nav cart={cart} openCart={() => setDrawer(true)}/>
+      <Marquee/>
+      {route.page === 'home' && <Home onAdd={onAdd}/>}
+      {route.page === 'shop' && <Shop cat={route.cat} onAdd={onAdd}/>}
+      {route.page === 'pdp' && <PDP id={route.id} onAdd={onAdd}/>}
+      <Footer/>
+      <CartDrawer open={drawer} onClose={() => setDrawer(false)} cart={cart}/>
+      <Tweaks t={t} set={set} visible={visible}/>
+      <div className={`toast ${toast?'on':''}`}>{toast}</div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

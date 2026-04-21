@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mercantile · Three Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root { --wp: #3858e9; --ink:#0d0d14; --paper:#f7f7f4; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--paper); color: var(--ink); font-family: Inter, system-ui, sans-serif; }
+  header { padding: 64px 64px 32px; display:flex; align-items:baseline; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.08); }
+  header h1 { font-family: 'EB Garamond', serif; font-size: 48px; font-weight: 500; margin: 0; letter-spacing: -0.02em; }
+  header p { max-width: 540px; font-size: 14px; line-height: 1.55; color: #555; margin: 0; }
+  header .wp { color: var(--wp); }
+  .dirs { display:grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); }
+  .dir { background: #fff; padding: 32px; min-height: 520px; display:flex; flex-direction:column; gap: 20px; text-decoration:none; color:inherit; position:relative; overflow:hidden; transition: transform 0.3s cubic-bezier(.2,.9,.3,1.2); }
+  .dir:hover { z-index: 2; }
+  .dir:hover .preview { transform: translateY(-6px) rotate(-1deg); }
+  .num { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; color: #888; }
+  .dir h2 { font-family: 'EB Garamond', serif; font-size: 34px; font-weight: 500; margin: 0; letter-spacing: -0.02em; line-height:1; }
+  .dir .tag { font-family: ui-monospace, monospace; font-size: 11px; color: #666; letter-spacing: 0.08em; text-transform: uppercase; }
+  .dir p { font-size: 14px; line-height: 1.6; color: #333; margin: 0; }
+  .preview { margin-top:auto; aspect-ratio: 4/3; border-radius: 8px; transition: transform 0.4s cubic-bezier(.2,.9,.3,1.2); overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+
+  /* direction 0 preview — current prototype */
+  .p0 { background: linear-gradient(135deg, #f0f3ff 0%, #e8ecff 100%); position:relative; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; padding: 18px; overflow:hidden; }
+  .p0 .bar { display:flex; gap: 4px; margin-bottom: 14px; }
+  .p0 .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(56,88,233,0.3); }
+  .p0 .ln1 { width: 75%; height: 14px; background: var(--wp); border-radius: 3px; margin-bottom: 8px; }
+  .p0 .ln2 { width: 55%; height: 8px; background: rgba(0,0,0,0.35); border-radius: 3px; margin-bottom: 20px; }
+  .p0 .grid4 { display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
+  .p0 .tile { aspect-ratio: 1; background: #fff; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+  .p0 .badge { position:absolute; top: 12px; right: 14px; font-size: 10px; font-family: ui-monospace, monospace; color: var(--wp); letter-spacing: 0.1em; }
+
+  /* direction 1 preview — editorial */
+  .p1 { background: #f7f7f4; display:flex; align-items:flex-end; justify-content:center; padding: 24px; }
+  .p1 svg { width:60%; }
+
+  /* direction 2 preview — plot twist */
+  .p2 { background: var(--wp); color: white; position: relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .p2 .huge { font-family: 'EB Garamond', serif; font-style: italic; font-size: 80px; line-height: 0.9; font-weight: 500; color: #fff6a8; mix-blend-mode: screen; transform: rotate(-4deg); }
+  .p2::after { content:'★'; position:absolute; top: 12px; right: 18px; font-size: 40px; color: #fff6a8; }
+
+  /* direction 3 preview — Wapuu */
+  .p3 { background: #fff3d6; position:relative; display:flex; align-items:center; justify-content:center; }
+  .p3 .wapuu { width: 120px; height: 120px; border-radius: 50%; background: #6dc77a; border: 3px solid #111; position:relative; }
+  .p3 .wapuu::before, .p3 .wapuu::after { content:''; position:absolute; top: 40px; width: 10px; height: 10px; background: #111; border-radius:50%; }
+  .p3 .wapuu::before { left: 35px; }
+  .p3 .wapuu::after { right: 35px; }
+  .p3 .bubble { position:absolute; top: 30px; left: 30px; background: #fff; border: 2px solid #111; border-radius: 20px; padding: 8px 14px; font-size: 12px; font-family: ui-monospace, monospace; transform: rotate(-3deg); }
+
+  .open { font-size: 13px; font-family: ui-monospace, monospace; color: var(--wp); }
+  .dir:hover .open { text-decoration: underline; }
+
+  footer { padding: 40px 64px; font-size: 12px; color: #888; font-family: ui-monospace, monospace; }
+
+  @media (max-width: 1200px) {
+    .dirs { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .dirs { grid-template-columns: 1fr; }
+    header { padding: 32px; flex-direction:column; gap: 16px; }
+    header h1 { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Three directions for<br/><span class="wp">mercantile.wordpress.org</span></h1>
+    <p>The fun wild cousin of the main site. Three swings — editorial &amp; quiet, playful &amp; loud, and a mascot-forward little world. All share a single tie to the rest of wordpress.org: the blue.</p>
+  </header>
+  <div class="dirs">
+
+    <a class="dir" href="https://j111q.github.io/mercantile-prototype/" target="_blank" rel="noopener">
+      <div class="num">DIRECTION 00 · EXISTING</div>
+      <h2>Current with tweaks</h2>
+      <div class="tag">Baseline · the one we have ↗</div>
+      <p>The current prototype, as-is. The starting point everything else departs from. Opens in a new tab.</p>
+      <div class="preview p0">
+        <span class="badge">LIVE ↗</span>
+        <div class="bar"><div class="dot"/><div class="dot"/><div class="dot"/></div>
+        <div class="ln1"/><div class="ln2"/>
+        <div class="grid4">
+          <div class="tile"/><div class="tile"/><div class="tile"/>
+          <div class="tile"/><div class="tile"/><div class="tile"/>
+        </div>
+      </div>
+      <span class="open">→ open existing</span>
+    </a>
+
+    <a class="dir" href="01-codex/index.html">
+      <div class="num">DIRECTION 01</div>
+      <h2>Codex</h2>
+      <div class="tag">Editorial · quiet · Supply-ish</div>
+      <p>Objects treated like museum pieces. Single-column storytelling. EB&nbsp;Garamond on cream paper. Confidence in restraint.</p>
+      <div class="preview p1">
+        <svg viewBox="0 0 400 400"><path d="M100 120 L160 90 L180 110 L200 100 L220 110 L240 90 L300 120 L290 160 L260 150 L260 320 L140 320 L140 150 L110 160 Z" fill="#3858e9" opacity="0.88"/></svg>
+      </div>
+      <span class="open">→ open</span>
+    </a>
+
+    <a class="dir" href="02-plot-twist/index.html">
+      <div class="num">DIRECTION 02</div>
+      <h2>Plot Twist</h2>
+      <div class="tag">Playful · motion · Cash-ish</div>
+      <p>Soaked in WP blue. Big italic display type, draggable cart, scroll-driven choreography. Copy that flirts with chaos.</p>
+      <div class="preview p2">
+        <div class="huge">code is<br/><em>proof.</em></div>
+      </div>
+      <span class="open">→ open</span>
+    </a>
+
+    <a class="dir" href="03-wapuus-world/index.html">
+      <div class="num">DIRECTION 03</div>
+      <h2>Wapuu's World</h2>
+      <div class="tag">Weirdest swing · mascot-forward</div>
+      <p>Wapuu is a character in the UI — cursor companion, shopkeeper, guide. Layout breaks grid. Map-as-menu. Zine energy.</p>
+      <div class="preview p3">
+        <div class="bubble">welcome friend</div>
+        <div class="wapuu"></div>
+      </div>
+      <span class="open">→ open</span>
+    </a>
+  </div>
+  <footer>mercantile.wordpress.org · exploration · v2 — 3 new directions + current baseline</footer>
+</body>
+</html>
