@@ -155,10 +155,13 @@
   .pdp .back:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
   .pdp .wrap { display:grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
   .pdp .info { align-self: start; }
-  /* gallery-wrap fills the row height (default grid stretch), giving sticky
-     real runway inside it. No flex on this wrapper — flex was stretching the
-     gallery tile vertically and fighting the aspect-ratio. */
+  /* Gallery is now a direct grid item (no wrapper div). The grid cell it
+     sits in fills the row height (max of gallery-540 and info-column),
+     which is the containing block sticky needs to have room to stick
+     within. align-self:start on the tile keeps it hugging the top of the
+     cell so sticky has room below. */
   .pdp .gallery {
+    align-self: start;
     background: var(--fg); border-radius: 32px; border: 2px solid var(--ink);
     padding: 40px; box-shadow: 8px 8px 0 var(--ink);
     aspect-ratio: 1; width: 100%; max-width: 540px;
@@ -561,9 +564,7 @@ function PDP({ id, onAdd }) {
     <div className="pdp">
       <a className="back" href="#/shop">← back to everything</a>
       <div className="wrap">
-        <div className="gallery-wrap">
-          <Gallery images={(window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[p.id]) || []}/>
-        </div>
+        <Gallery images={(window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[p.id]) || []}/>
         <div className="info">
           <div className="mono" style={{color:'var(--yellow)', marginBottom:12}}>{p.cat} · {p.tags.join(' · ')}</div>
           <h1>{p.name}</h1>
