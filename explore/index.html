@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Mercantile · Four Directions</title>
+<title>Mercantile · Three Directions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
@@ -15,7 +15,7 @@
   header h1 { font-family: 'EB Garamond', serif; font-size: 48px; font-weight: 500; margin: 0; letter-spacing: -0.02em; }
   header p { max-width: 540px; font-size: 14px; line-height: 1.55; color: #555; margin: 0; }
   header .wp { color: var(--wp); }
-  .dirs { display:grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); }
+  .dirs { display:grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); }
   .dir { background: #fff; padding: 32px; min-height: 520px; display:flex; flex-direction:column; gap: 20px; text-decoration:none; color:inherit; position:relative; overflow:hidden; transition: transform 0.3s cubic-bezier(.2,.9,.3,1.2); }
   .dir:hover { z-index: 2; }
   .dir:hover .preview { transform: translateY(-6px) rotate(-1deg); }
@@ -44,14 +44,6 @@
   .p2 .huge { font-family: 'EB Garamond', serif; font-style: italic; font-size: 80px; line-height: 0.9; font-weight: 500; color: #fff6a8; mix-blend-mode: screen; transform: rotate(-4deg); }
   .p2::after { content:'★'; position:absolute; top: 12px; right: 18px; font-size: 40px; color: #fff6a8; }
 
-  /* direction 3 preview — Wapuu */
-  .p3 { background: #fff3d6; position:relative; display:flex; align-items:center; justify-content:center; }
-  .p3 .wapuu { width: 120px; height: 120px; border-radius: 50%; background: #6dc77a; border: 3px solid #111; position:relative; }
-  .p3 .wapuu::before, .p3 .wapuu::after { content:''; position:absolute; top: 40px; width: 10px; height: 10px; background: #111; border-radius:50%; }
-  .p3 .wapuu::before { left: 35px; }
-  .p3 .wapuu::after { right: 35px; }
-  .p3 .bubble { position:absolute; top: 30px; left: 30px; background: #fff; border: 2px solid #111; border-radius: 20px; padding: 8px 14px; font-size: 12px; font-family: ui-monospace, monospace; transform: rotate(-3deg); }
-
   .open { font-size: 13px; font-family: ui-monospace, monospace; color: var(--wp); }
   .dir:hover .open { text-decoration: underline; }
 
@@ -69,8 +61,11 @@
 </head>
 <body>
   <header>
-    <h1>Four directions for<br/><span class="wp">mercantile.wordpress.org</span></h1>
-    <p>Four ways to rethink the Mercantile. Direction 00 is the current site with a CSS polish pass aligned to the Purple Woo starter theme — PDP cleanup, unified product cards, gallery fixes. Directions 01–03 are bigger swings from Claude Design: editorial &amp; quiet, loud &amp; playful, and mascot-forward. Same catalog, four personalities.</p>
+    <h1>Three directions for<br/><span class="wp">mercantile.wordpress.org</span></h1>
+    <p>Three ways to rethink the Mercantile. Same catalog, three personalities.<br/><br/>
+      <strong>00 &mdash; Current with tweaks.</strong> The live site with a CSS polish pass aligned to the Purple Woo starter theme: PDP cleanup, unified product cards, gallery fixes.<br/>
+      <strong>01 &mdash; Codex.</strong> Editorial &amp; quiet. Objects as museum pieces, EB Garamond on cream paper.<br/>
+      <strong>02 &mdash; Plot Twist.</strong> Loud &amp; playful. Soaked in WP blue, big italic display type, copy that flirts with chaos.</p>
   </header>
   <div class="dirs">
 
@@ -81,11 +76,11 @@
       <p>The current prototype, as-is. The starting point everything else departs from. Opens in a new tab.</p>
       <div class="preview p0">
         <span class="badge">LIVE ↗</span>
-        <div class="bar"><div class="dot"/><div class="dot"/><div class="dot"/></div>
-        <div class="ln1"/><div class="ln2"/>
+        <div class="bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="ln1"></div><div class="ln2"></div>
         <div class="grid4">
-          <div class="tile"/><div class="tile"/><div class="tile"/>
-          <div class="tile"/><div class="tile"/><div class="tile"/>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
         </div>
       </div>
       <span class="open">→ open existing</span>
@@ -112,19 +107,7 @@
       </div>
       <span class="open">→ open</span>
     </a>
-
-    <a class="dir" href="03-wapuus-world/index.html">
-      <div class="num">DIRECTION 03</div>
-      <h2>Wapuu's World</h2>
-      <div class="tag">Weirdest swing · mascot-forward</div>
-      <p>Wapuu is a character in the UI — cursor companion, shopkeeper, guide. Layout breaks grid. Map-as-menu. Zine energy.</p>
-      <div class="preview p3">
-        <div class="bubble">welcome friend</div>
-        <div class="wapuu"></div>
-      </div>
-      <span class="open">→ open</span>
-    </a>
   </div>
-  <footer>mercantile.wordpress.org · exploration · four directions</footer>
+  <footer>mercantile.wordpress.org · exploration · three directions</footer>
 </body>
 </html>
