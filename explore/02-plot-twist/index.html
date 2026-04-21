@@ -144,8 +144,8 @@
      across in a narrower strip. */
   .related .r { background: var(--fg); color: var(--ink); border: 2px solid var(--ink); border-radius: 20px; padding: 14px; box-shadow: 5px 5px 0 var(--ink); cursor: pointer; transition: transform 0.35s cubic-bezier(.2,.9,.3,1.3), box-shadow 0.25s, rotate 0.3s; display:flex; flex-direction: column; gap: 10px; text-decoration: none; }
   .related .r:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 var(--ink); rotate: -1deg; }
-  .related .r:nth-child(3n) { background: var(--yellow); }
-  .related .r:nth-child(5n) { background: #e2e8ff; }
+  /* Backgrounds are set inline per card by RelatedP (seeded by product id)
+     so each PDP gets a different palette rotation. */
   .related .r .img { aspect-ratio: 1; background: rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; }
   .related .r .img svg, .related .r .img img { width: 100%; height: 100%; display: block; }
   .related .r h4 { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 500; font-size: 14px; margin: 0; line-height: 1.3; color: var(--ink); text-wrap: balance; letter-spacing: -0.01em; }
@@ -599,8 +599,32 @@ function PDP({ id, onAdd }) {
   );
 }
 
+// Deterministic hash from a string — stable per product so refreshing doesn't
+// shuffle again, but different products produce different results.
+function seedHash(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+// Simple seeded LCG for stable "random" ordering.
+function seededShuffle(arr, seed) {
+  const copy = arr.slice();
+  let s = seed || 1;
+  for (let i = copy.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+const RELATED_BGS = ['var(--fg)', '#ffe066', '#e2e8ff', '#ffe9d6', '#d6f0e0', 'var(--fg)'];
+
 function RelatedP({ current }) {
-  const items = window.MERCANTILE_CATALOG.filter(x => x.id !== current).slice(0, 4);
+  const items = useMemo(() => {
+    const pool = window.MERCANTILE_CATALOG.filter(x => x.id !== current);
+    return seededShuffle(pool, seedHash(current)).slice(0, 4);
+  }, [current]);
+  const startColor = seedHash(current) % RELATED_BGS.length;
   return (
     <div className="related">
       <div className="hd">
@@ -608,8 +632,10 @@ function RelatedP({ current }) {
         <a href="#/shop" className="mono" style={{color:'var(--yellow)'}}>shop all →</a>
       </div>
       <div className="row">
-        {items.map(p => (
-          <a key={p.id} href={`#/p/${p.id}`} className="r" onClick={() => window.scrollTo(0,0)}>
+        {items.map((p, i) => (
+          <a key={p.id} href={`#/p/${p.id}`} className="r"
+             style={{background: RELATED_BGS[(startColor + i) % RELATED_BGS.length]}}
+             onClick={() => window.scrollTo(0,0)}>
             <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f7f3e3', fg: '#3858e9', variant: 'playful' })}}/>
             <h4>{p.name}</h4>
             <div className="pr">${p.price}</div>
