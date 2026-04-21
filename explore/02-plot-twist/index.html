@@ -48,17 +48,6 @@
   .nav .cart { padding: 10px 18px; background: var(--yellow); color: var(--ink); border-radius: 999px; border: 2px solid var(--ink); font-weight: 700; font-size: 14px; transition: all 0.2s; box-shadow: 3px 3px 0 var(--ink); }
   .nav .cart:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
   .nav .cart:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
-  @keyframes cart-bump {
-    0%   { transform: translate(0,0) scale(1); }
-    30%  { transform: translate(0,-3px) scale(1.18) rotate(-4deg); }
-    60%  { transform: translate(0,1px) scale(0.96) rotate(3deg); }
-    100% { transform: translate(0,0) scale(1); }
-  }
-  .nav .cart.cart-bump { animation: cart-bump 420ms cubic-bezier(.3,.9,.4,1.2); }
-
-  /* Fly-to-cart clone: product ghost trailing pink on its way to the cart. */
-  .fly-clone { filter: drop-shadow(0 0 14px var(--pink)) drop-shadow(0 8px 20px rgba(0,0,0,0.2)); will-change: transform, opacity; }
-  @media (prefers-reduced-motion: reduce) { .fly-clone, .nav .cart.cart-bump { animation: none !important; } }
 
   /* ---------- MARQUEE ---------- */
   .marquee { background: var(--ink); color: var(--yellow); padding: 10px 0; overflow: hidden; border-bottom: 2px solid var(--ink); }
@@ -246,67 +235,31 @@
 <script type="text/babel" data-presets="react">
 const { useState, useEffect, useMemo, useRef } = React;
 
-// Loading label rotator — cycles through fake-status strings during async ops.
+// Loading label pool — one random label shown per click, avoids repeating the
+// last one so rapid clicks cycle through different copy.
 const LOADING_LABELS_LONG = [
   'wiggling the plugins…',
   'stretching the cotton…',
   'asking the contributors…',
   'committing to main…',
   'deploying…',
+  'running npm install…',
+  'pushing to production…',
+  'rebasing onto main…',
 ];
 const LOADING_LABELS_SHORT = [
   'packing…',
   'wiggling…',
   'deploying…',
   'committing…',
+  'pushing…',
+  'rebasing…',
 ];
-function Rotator({ labels, interval = 90 }) {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setI(n => (n + 1) % labels.length), interval);
-    return () => clearInterval(t);
-  }, [interval, labels]);
-  return labels[i];
-}
-
-// Fly-to-cart — clone a source element, animate it on an arc toward the cart badge.
-function flyToCart(sourceEl) {
-  if (!sourceEl) return;
-  const cartEl = document.querySelector('.nav .cart');
-  if (!cartEl) return;
-  const src = sourceEl.getBoundingClientRect();
-  const dst = cartEl.getBoundingClientRect();
-  const clone = sourceEl.cloneNode(true);
-  clone.className = 'fly-clone';
-  Object.assign(clone.style, {
-    position: 'fixed',
-    left: src.left + 'px',
-    top:  src.top + 'px',
-    width:  src.width + 'px',
-    height: src.height + 'px',
-    margin: '0',
-    pointerEvents: 'none',
-    zIndex: 9998,
-    borderRadius: '14px',
-    overflow: 'hidden',
-  });
-  document.body.appendChild(clone);
-  const dx = (dst.left + dst.width/2)  - (src.left + src.width/2);
-  const dy = (dst.top  + dst.height/2) - (src.top  + src.height/2);
-  const midX = dx * 0.55;
-  const midY = dy * 0.35 - 160; // arc up before dropping in
-  const anim = clone.animate([
-    { transform: 'translate(0,0) rotate(0deg) scale(1)',                          opacity: 1, offset: 0 },
-    { transform: `translate(${midX}px, ${midY}px) rotate(240deg) scale(0.55)`,    opacity: 0.95, offset: 0.55 },
-    { transform: `translate(${dx}px, ${dy}px) rotate(540deg) scale(0.15)`,        opacity: 0, offset: 1 },
-  ], { duration: 820, easing: 'cubic-bezier(.55,.05,.5,.95)', fill: 'forwards' });
-  anim.onfinish = () => {
-    clone.remove();
-    cartEl.classList.remove('cart-bump');
-    void cartEl.offsetWidth; // restart
-    cartEl.classList.add('cart-bump');
-    setTimeout(() => cartEl.classList.remove('cart-bump'), 400);
-  };
+function pickNextLabel(pool, lastRef) {
+  const options = pool.filter(l => l !== lastRef.current);
+  const next = options[Math.floor(Math.random() * options.length)];
+  lastRef.current = next;
+  return next;
 }
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
@@ -456,28 +409,29 @@ function ProductCard({ p, onAdd, i }) {
   const tagMap = { heritage: 'heritage', 'tie-dye': 'limited', wapuu: 'wapuu ✿', pride: 'pride', cozy: 'cozy' };
   const tag = Object.keys(tagMap).find(k => p.tags.includes(k));
   const [state, setState] = useState('idle'); // idle | loading | added
-  const imgRef = useRef(null);
+  const [label, setLabel] = useState('');
+  const lastLabel = useRef('');
   const onClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (state !== 'idle') return;
+    setLabel(pickNextLabel(LOADING_LABELS_SHORT, lastLabel));
     setState('loading');
     setTimeout(() => {
-      flyToCart(imgRef.current);
       onAdd(p);
       setState('added');
       setTimeout(() => setState('idle'), 1200);
-    }, 450);
+    }, 700);
   };
   return (
     <a className="card" href={`#/p/${p.id}`} style={{animationDelay: `${i*0.035}s`}}>
       {tag && <span className="tag">{tagMap[tag]}</span>}
-      <div className="img" ref={imgRef} dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: 'rgba(255,255,255,0.6)', fg: '#0d0d14', variant: 'playful' })}}/>
+      <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: 'rgba(255,255,255,0.6)', fg: '#0d0d14', variant: 'playful' })}}/>
       <h3>{p.name}</h3>
       <div className="price-row">
         <span className="price">${p.price}</span>
         <button className={`add state-${state}`} onClick={onClick}>
-          {state === 'loading' ? <Rotator labels={LOADING_LABELS_SHORT}/> :
+          {state === 'loading' ? label :
            state === 'added'   ? '✓ bagged' :
                                  '+ Bag it'}
         </button>
@@ -538,25 +492,26 @@ function PDP({ id, onAdd }) {
   const p = window.MERCANTILE_CATALOG.find(x => x.id === id);
   const [size, setSize] = useState('M');
   const [state, setState] = useState('idle'); // idle | loading | added
-  const galleryRef = useRef(null);
+  const [label, setLabel] = useState('');
+  const lastLabel = useRef('');
   if (!p) return <div className="pdp"><a className="back" href="#/shop">← back</a><h1 className="serif" style={{fontSize:40}}>Can't find that one.</h1></div>;
   const apparel = p.cat === 'apparel';
   const sizes = apparel ? ['XS','S','M','L','XL','XXL'] : null;
   const add = () => {
     if (state !== 'idle') return;
+    setLabel(pickNextLabel(LOADING_LABELS_LONG, lastLabel));
     setState('loading');
     setTimeout(() => {
-      flyToCart(galleryRef.current);
       onAdd(p, sizes ? size : '—');
       setState('added');
       setTimeout(() => setState('idle'), 1400);
-    }, 550);
+    }, 900);
   };
   return (
     <div className="pdp">
       <a className="back" href="#/shop">← back to everything</a>
       <div className="wrap">
-        <div className="gallery" ref={galleryRef} dangerouslySetInnerHTML={{__html: (() => {
+        <div className="gallery" dangerouslySetInnerHTML={{__html: (() => {
           const sticker = `<div class="sticker">#${p.id.slice(0,4)}</div>`;
           return window.MERCANTILE_ART(p.id, { bg: '#f7f3e3', fg: '#3858e9', variant: 'playful' });
         })()}}/>
@@ -574,7 +529,7 @@ function PDP({ id, onAdd }) {
             </>
           )}
           <button className={`buy state-${state}`} onClick={add}>
-            {state === 'loading' ? <Rotator labels={LOADING_LABELS_LONG}/> :
+            {state === 'loading' ? label :
              state === 'added'   ? '✓ in the bag' :
                                    'Throw it in the bag ↝'}
           </button>
@@ -768,10 +723,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 <script>
   (function() {
     const WAPUU = '../shared/wapuu.svg';
-    // Preload so the first spawn doesn't flash blank.
     const pre = new Image(); pre.src = WAPUU;
     let last = 0;
-    const THROTTLE = 60; // ms between spawns — Wapuus are bigger than Ws, go a little gentler
+    const THROTTLE = 140; // ~7/sec — much gentler than before
     function spawn(x, y) {
       const el = document.createElement('div');
       el.className = 'wp-rain';
@@ -779,16 +733,17 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
       img.src = WAPUU;
       img.alt = '';
       el.appendChild(img);
-      const size = 28 + Math.random() * 28; // 28-56px — Wapuu needs room to read
+      const size = 20 + Math.random() * 18; // 20-38px — smaller, less in-your-face
       el.style.width  = size + 'px';
-      el.style.height = size * (66 / 60) + 'px'; // preserve SVG aspect ratio (60x66)
+      el.style.height = size * (66 / 60) + 'px';
       el.style.left = x + 'px';
       el.style.top  = y + 'px';
-      el.style.setProperty('--dx',  ((Math.random() - 0.5) * 160) + 'px');
-      el.style.setProperty('--dy',  (90 + Math.random() * 180) + 'px');
-      el.style.setProperty('--rot', ((Math.random() - 0.5) * 360) + 'deg');
+      el.style.opacity = 0.75; // translucent — more shower than downpour
+      el.style.setProperty('--dx',  ((Math.random() - 0.5) * 110) + 'px');
+      el.style.setProperty('--dy',  (55 + Math.random() * 110) + 'px');
+      el.style.setProperty('--rot', ((Math.random() - 0.5) * 220) + 'deg');
       document.body.appendChild(el);
-      setTimeout(() => el.remove(), 1500);
+      setTimeout(() => el.remove(), 1300);
     }
     document.addEventListener('mousemove', (e) => {
       const now = performance.now();
