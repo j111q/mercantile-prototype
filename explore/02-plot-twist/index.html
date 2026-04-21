@@ -153,10 +153,11 @@
   .pdp { padding: 40px 24px 80px; max-width: 1400px; margin: 0 auto; }
   .pdp .back { display:inline-flex; align-items:center; gap: 6px; padding: 8px 14px; background: var(--fg); color: var(--ink); border-radius: 999px; margin-bottom: 24px; font-size: 13px; font-weight:500; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); transition: all 0.2s; }
   .pdp .back:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
-  .pdp .wrap { display:grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
-  /* Sticky needs the grid item to have real room to stick within. Stretch it
-     to row height, then sticky-pin the inner .gallery. */
-  .pdp .gallery-wrap { align-self: stretch; display: flex; justify-content: flex-start; }
+  .pdp .wrap { display:grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
+  .pdp .info { align-self: start; }
+  /* gallery-wrap fills the row height (default grid stretch), giving sticky
+     real runway inside it. No flex on this wrapper — flex was stretching the
+     gallery tile vertically and fighting the aspect-ratio. */
   .pdp .gallery {
     background: var(--fg); border-radius: 32px; border: 2px solid var(--ink);
     padding: 40px; box-shadow: 8px 8px 0 var(--ink);
