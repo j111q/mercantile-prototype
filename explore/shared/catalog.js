@@ -41,32 +41,93 @@ window.MERCANTILE_CATS = [
 ];
 
 
-// Real product image paths (relative to /explore/{dir}/).
+// Real product image paths — array per product (front, back, extras).
 window.MERCANTILE_IMAGES = {
-  "i-love-wp-tee": "../../wp-content/uploads/2025/04/ILWP_Front.webp@w=600",
-  "i-love-wp-womens-tee": "../../wp-content/uploads/2025/04/ILWP_DT188_Front.png@w=600",
-  "unisex-pride-tee": "../../wp-content/uploads/2025/06/Untitled-design-7.png@w=600",
-  "rainbow-wapuu-tee": "../../wp-content/uploads/2025/06/Untitled-design-6.png@w=600",
-  "code-is-poetry-tee": "../../wp-content/uploads/2025/04/CIP_DT188_Front.png@w=600",
-  "black-crewneck": "../../wp-content/uploads/2025/04/Sweatshirt_Front_Black-1.webp@w=600",
-  "tackle-twill": "../../wp-content/uploads/2026/02/Howdy.png@w=600",
-  "tie-dye-hoodie": "../../wp-content/uploads/2025/06/Untitled-design-1.png@w=600",
-  "tie-dye-joggers": "../../wp-content/uploads/2025/06/Untitled-design-2.png@w=600",
-  "tie-dye-shorts": "../../wp-content/uploads/2025/06/Untitled-design-3.png@w=600",
-  "joggers": "../../wp-content/uploads/2025/04/Sweatpants_Front.webp@w=600",
-  "muscle-tank": "../../wp-content/uploads/2025/06/Untitled-design-4.png@w=600",
-  "north-face-jacket": "../../wp-content/uploads/2025/06/Untitled-design-5.png@w=600",
-  "blue-water-bottle": "../../wp-content/uploads/2025/10/Howdy.png@w=600",
-  "cozy-mug": "../../wp-content/uploads/2025/12/Howdy-17.png@w=600",
-  "fall-tumbler": "../../wp-content/uploads/2025/11/Howdy-8.png@w=600",
-  "fall-cold-cup": "../../wp-content/uploads/2025/11/Howdy-7.png@w=600",
-  "cozy-pins": "../../wp-content/uploads/2025/12/Howdy-13.png@w=600",
-  "cozy-stickers": "../../wp-content/uploads/2025/12/Howdy-14.png@w=600",
-  "dont-worry-pin-set": "../../wp-content/uploads/2025/11/Howdy-4.png@w=600",
-  "wapuu-patch": "../../wp-content/uploads/2026/02/Howdy-3.png@w=600",
-  "wapuu-disco": "../../wp-content/uploads/2025/06/WP_PrideWapuuSticker_3.jpg@w=600",
-  "wapuu-pride-sticker": "../../wp-content/uploads/2025/06/WP_PrideWapuuSticker_1.jpg@w=600",
-  "wapuu-popsocket": "../../wp-content/uploads/2025/06/PopSockets_A8C-084.png@w=600",
-  "tech-gloves": "../../wp-content/uploads/2025/11/Howdy.png@w=600",
-  "fair-isle-tote": "../../wp-content/uploads/2025/12/Howdy-16.png@w=600"
+  "i-love-wp-tee": [
+    "../../wp-content/uploads/2025/04/ILWP_Front.webp@w=600",
+    "../../wp-content/uploads/2025/04/ILWP_Back.webp@w=600"
+  ],
+  "i-love-wp-womens-tee": [
+    "../../wp-content/uploads/2025/04/ILWP_DT188_Front.png@w=600"
+  ],
+  "unisex-pride-tee": [
+    "../../wp-content/uploads/2025/06/Untitled-design-7.png@w=600"
+  ],
+  "rainbow-wapuu-tee": [
+    "../../wp-content/uploads/2025/06/Untitled-design-6.png@w=600",
+    "../../wp-content/uploads/2025/06/Screenshot-2025-06-13-at-3.59.58\u202fPM.png@w=600"
+  ],
+  "code-is-poetry-tee": [
+    "../../wp-content/uploads/2025/04/CIP_DT188_Front.png@w=600"
+  ],
+  "black-crewneck": [
+    "../../wp-content/uploads/2025/04/Sweatshirt_Front_Black-1.webp@w=600",
+    "../../wp-content/uploads/2025/04/Sweatshirt_Back_Black.webp@w=600"
+  ],
+  "tackle-twill": [
+    "../../wp-content/uploads/2026/02/Howdy.png@w=600"
+  ],
+  "tie-dye-hoodie": [
+    "../../wp-content/uploads/2025/06/Untitled-design-1.png@w=600"
+  ],
+  "tie-dye-joggers": [
+    "../../wp-content/uploads/2025/06/Untitled-design-2.png@w=600"
+  ],
+  "tie-dye-shorts": [
+    "../../wp-content/uploads/2025/06/Untitled-design-3.png@w=600"
+  ],
+  "joggers": [
+    "../../wp-content/uploads/2025/04/Sweatpants_Front.webp@w=600",
+    "../../wp-content/uploads/2025/04/Pants-bag.png@w=600"
+  ],
+  "muscle-tank": [
+    "../../wp-content/uploads/2025/06/Untitled-design-4.png@w=600"
+  ],
+  "north-face-jacket": [
+    "../../wp-content/uploads/2025/06/Untitled-design-5.png@w=600"
+  ],
+  "blue-water-bottle": [
+    "../../wp-content/uploads/2025/10/Howdy.png@w=600"
+  ],
+  "cozy-mug": [
+    "../../wp-content/uploads/2025/12/Howdy-17.png@w=600",
+    "../../wp-content/uploads/2025/12/Howdy-18.png@w=600",
+    "../../wp-content/uploads/2025/12/Howdy-19.png@w=600"
+  ],
+  "fall-tumbler": [
+    "../../wp-content/uploads/2025/11/Howdy-8.png@w=600"
+  ],
+  "fall-cold-cup": [
+    "../../wp-content/uploads/2025/11/Howdy-7.png@w=600"
+  ],
+  "cozy-pins": [
+    "../../wp-content/uploads/2025/12/Howdy-13.png@w=600"
+  ],
+  "cozy-stickers": [
+    "../../wp-content/uploads/2025/12/Howdy-14.png@w=600",
+    "../../wp-content/uploads/2025/12/Howdy-15.png@w=600"
+  ],
+  "dont-worry-pin-set": [
+    "../../wp-content/uploads/2025/11/Howdy-4.png@w=600",
+    "../../wp-content/uploads/2025/11/Howdy-5.png@w=600",
+    "../../wp-content/uploads/2025/11/Howdy-6.png@w=600"
+  ],
+  "wapuu-patch": [
+    "../../wp-content/uploads/2026/02/Howdy-3.png@w=600"
+  ],
+  "wapuu-disco": [
+    "../../wp-content/uploads/2025/06/WP_PrideWapuuSticker_3.jpg@w=600"
+  ],
+  "wapuu-pride-sticker": [
+    "../../wp-content/uploads/2025/06/WP_PrideWapuuSticker_1.jpg@w=600"
+  ],
+  "wapuu-popsocket": [
+    "../../wp-content/uploads/2025/06/PopSockets_A8C-084.png@w=600"
+  ],
+  "tech-gloves": [
+    "../../wp-content/uploads/2025/11/Howdy.png@w=600"
+  ],
+  "fair-isle-tote": [
+    "../../wp-content/uploads/2025/12/Howdy-16.png@w=600"
+  ]
 };
