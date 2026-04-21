@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Codex · Mercantile</title>
+<title>The Mercantile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
@@ -282,6 +282,7 @@ function useRoute() {
 
 function Marquee() {
   const line = <>
+    <span>Official WordPress swag</span><i className="dot"/>
     <span>Issue 01 · Spring 2026</span><i className="dot"/>
     <span>Shipping on Thursdays</span><i className="dot"/>
     <span>Free patch with every pull request*</span><i className="dot"/>
@@ -304,7 +305,7 @@ function Nav({ cart, openCart }) {
         <a href="#/shop/apparel" className="mono">Apparel</a>
         <a href="#/shop/accessories" className="mono">Accessories</a>
       </div>
-      <a className="center brand" href="#/">Mercantile <em>Codex</em></a>
+      <a className="center brand" href="#/">The <em>Mercantile</em></a>
       <div className="right">
         <a className="mono" href="#/">Journal</a>
         <button className="cart-btn mono" onClick={openCart}>Cart · {cart.count}</button>
@@ -507,7 +508,7 @@ function CartDrawer({ open, onClose, cart }) {
 function Tweaks({ t, set, visible }) {
   return (
     <div className={`tweaks ${visible?'on':''}`}>
-      <h4>Tweaks · Codex</h4>
+      <h4>Tweaks</h4>
       <label>Accent</label>
       <div className="swatches">
         {Object.entries(ACCENTS).map(([k,v]) => (
@@ -542,7 +543,7 @@ function App() {
         <div className="row">
           <div>
             <h3>A shop,<br/>slowly.</h3>
-            <p style={{maxWidth:360, color:'#555'}}>Codex is a small operation. We ship every Thursday and answer every email.</p>
+            <p style={{maxWidth:360, color:'#555'}}>The Mercantile is a small operation. We ship every Thursday and answer every email.</p>
           </div>
           <div>
             <div className="mono" style={{color:'var(--muted)', marginBottom:12}}>Shop</div>
@@ -571,7 +572,7 @@ function App() {
           </div>
         </div>
         <div className="fine">
-          <span>© Mercantile Codex · 2026</span>
+          <span>© The Mercantile · 2026</span>
           <span>Made with WordPress</span>
         </div>
       </footer>
