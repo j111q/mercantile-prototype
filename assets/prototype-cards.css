@@ -314,3 +314,14 @@ body[class*="woocommerce"] .wc-block-product-template .wc-block-components-produ
 body[class*="woocommerce"] .wc-block-product-template .wp-block-button.wc-block-components-product-button {
   display: none !important;
 }
+
+/* ═════════════ Header logo: force white ═════════════
+   Static mirror's duotone filter (.wp-duotone-ffffff-ffffff-2) points to
+   `filter: url(index.html)` — a broken reference. The original WP page
+   defines an inline <svg><filter> that doesn't exist in the mirror.
+   Override with brightness(0) invert(1) to force pure white. */
+.wp-block-site-logo img.custom-logo,
+.wp-duotone-ffffff-ffffff-2.wp-block-site-logo img,
+.custom-logo-link img.custom-logo {
+  filter: brightness(0) invert(1) !important;
+}

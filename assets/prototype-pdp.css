@@ -197,7 +197,7 @@ body.single-product .entry-content > .sd-sharing-enabled {
 .pdp-details { font-family: var(--purple-font, "Inter Variable", Inter, sans-serif) !important; color: #111 !important; max-width: 720px; margin: 48px auto 0; }
 .pdp-details details { border-top: 1px solid rgba(17,17,17,0.2) !important; padding: 12px 4px 12px 0 !important; }
 .pdp-details details:last-of-type { border-bottom: 1px solid rgba(17,17,17,0.2) !important; }
-.pdp-details summary { font-size: 16px !important; line-height: 25px !important; color: #111 !important; font-weight: 400 !important; padding: 6px 0; }
+.pdp-details summary { font-size: 16px !important; line-height: 25px !important; color: #111 !important; font-weight: 600 !important; padding: 6px 0; }
 .pdp-details summary::after {
   content: "" !important;
   display: inline-block;
@@ -476,7 +476,7 @@ body.single-product .woocommerce-product-gallery .flex-viewport > .woocommerce-p
 .pdp-details { max-width: 720px; margin: 56px auto 24px; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111; }
 .pdp-details details { border-top: 1px solid #e8e6e1; padding: 20px 0; }
 .pdp-details details:last-of-type { border-bottom: 1px solid #e8e6e1; }
-.pdp-details summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 500; letter-spacing: 0.005em; color: #111; }
+.pdp-details summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; letter-spacing: 0.005em; color: #111; }
 .pdp-details summary::-webkit-details-marker { display: none; }
 .pdp-details summary::after { content: "+"; font-size: 20px; font-weight: 300; color: #999; line-height: 1; }
 .pdp-details details[open] summary::after { content: "–"; }
