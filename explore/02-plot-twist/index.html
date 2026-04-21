@@ -109,6 +109,13 @@
     box-shadow: 5px 5px 0 var(--ink);
   }
   .card:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 var(--ink); rotate: -1deg; }
+  @keyframes pt-pop {
+    0%   { opacity: 0; transform: scale(0.72) translateY(24px); }
+    70%  { opacity: 1; transform: scale(1.04) translateY(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .grid .card { animation: pt-pop 520ms cubic-bezier(.25,.9,.4,1.25) both; animation-delay: calc(var(--i, 0) * 50ms); }
+  @media (prefers-reduced-motion: reduce) { .grid .card { animation: none; } }
   .card:nth-child(3n) { background: var(--yellow); }
   .card:nth-child(5n) { background: #e2e8ff; }
   .card .img { aspect-ratio: 1; background: rgba(0,0,0,0.05); border-radius: 14px; overflow: hidden; }
@@ -395,7 +402,7 @@ function Home({ onAdd }) {
       <div className="section-head">
         <div className="meta mono">{items.length} things · restocked Thursdays</div>
       </div>
-      <div className="grid">
+      <div className="grid" key={mood}>
         {items.slice(0, 12).map((p, i) => <ProductCard key={p.id} p={p} onAdd={onAdd} i={i}/>)}
       </div>
     </>
@@ -425,7 +432,7 @@ function Shop({ cat, onAdd }) {
           <span style={{marginLeft:'auto', fontFamily:'JetBrains Mono, monospace', fontSize:12}}>{items.length} items</span>
         </div>
       </div>
-      <div className="grid" style={{paddingTop:40}}>
+      <div className="grid" style={{paddingTop:40}} key={active}>
         {items.map((p, i) => <ProductCard key={p.id} p={p} onAdd={onAdd} i={i}/>)}
       </div>
     </>
