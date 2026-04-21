@@ -165,7 +165,7 @@
      cell so sticky has room below. */
   .pdp .gallery {
     align-self: start;
-    background: var(--fg); border-radius: 32px; border: 2px solid var(--ink);
+    background: #fff; border-radius: 32px; border: 2px solid var(--ink);
     padding: 40px; box-shadow: 8px 8px 0 var(--ink);
     aspect-ratio: 1; width: 100%; max-width: 540px;
     display:flex; align-items:center; justify-content:center;
@@ -519,7 +519,7 @@ function Shop({ cat, onAdd }) {
   );
 }
 
-function Gallery({ images, bg = '#f7f3e3' }) {
+function Gallery({ images, bg = '#fff' }) {
   const list = Array.isArray(images) ? images : (images ? [images] : []);
   const [i, setI] = useState(0);
   const [spinning, setSpinning] = useState(false);
