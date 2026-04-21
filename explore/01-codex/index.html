@@ -329,6 +329,8 @@ function Home({ onNav }) {
         </div>
       </section>
 
+      <Marquee/>
+
       <section className="featured">
         <div className="head">
           <h2>Object of the week</h2>
@@ -535,7 +537,6 @@ function App() {
   return (
     <>
       <Nav cart={cart} openCart={() => setDrawer(true)}/>
-      <Marquee/>
       {route.page === 'home' && <Home/>}
       {route.page === 'shop' && <Shop cat={route.cat}/>}
       {route.page === 'pdp' && <PDP id={route.id} cart={cart} toast={toastFn}/>}
