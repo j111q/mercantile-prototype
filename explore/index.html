@@ -11,9 +11,9 @@
   :root { --wp: #3858e9; --ink:#0d0d14; --paper:#f7f7f4; }
   * { box-sizing: border-box; }
   html, body { margin:0; padding:0; background: var(--paper); color: var(--ink); font-family: Inter, system-ui, sans-serif; }
-  header { padding: 64px 64px 32px; display:flex; align-items:baseline; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.08); }
+  header { padding: 64px 64px 32px; display:flex; flex-direction: column; gap: 24px; border-bottom: 1px solid rgba(0,0,0,0.08); }
   header h1 { font-family: 'EB Garamond', serif; font-size: 48px; font-weight: 500; margin: 0; letter-spacing: -0.02em; }
-  header p { max-width: 540px; font-size: 14px; line-height: 1.55; color: #555; margin: 0; }
+  header p { max-width: 720px; font-size: 14px; line-height: 1.7; color: #555; margin: 0; }
   header .wp { color: var(--wp); }
   .dirs { display:grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); }
   .dir { background: #fff; padding: 32px; min-height: 520px; display:flex; flex-direction:column; gap: 20px; text-decoration:none; color:inherit; position:relative; overflow:hidden; transition: transform 0.3s cubic-bezier(.2,.9,.3,1.2); }
@@ -32,17 +32,19 @@
   .p0 .ln1 { width: 75%; height: 14px; background: var(--wp); border-radius: 3px; margin-bottom: 8px; }
   .p0 .ln2 { width: 55%; height: 8px; background: rgba(0,0,0,0.35); border-radius: 3px; margin-bottom: 20px; }
   .p0 .grid4 { display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
-  .p0 .tile { aspect-ratio: 1; background: #fff; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+  .p0 .tile { aspect-ratio: 1; background: #fff; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 4px; }
+  .p0 .tile img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
   .p0 .badge { position:absolute; top: 12px; right: 14px; font-size: 10px; font-family: ui-monospace, monospace; color: var(--wp); letter-spacing: 0.1em; }
 
   /* direction 1 preview — editorial */
-  .p1 { background: #f7f7f4; display:flex; align-items:flex-end; justify-content:center; padding: 24px; }
-  .p1 svg { width:60%; }
+  .p1 { background: #f7f7f4; display:flex; align-items:center; justify-content:center; padding: 20px; }
+  .p1 img { width: 80%; height: 80%; object-fit: contain; mix-blend-mode: multiply; }
 
   /* direction 2 preview — plot twist */
   .p2 { background: var(--wp); color: white; position: relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-  .p2 .huge { font-family: 'EB Garamond', serif; font-style: italic; font-size: 80px; line-height: 0.9; font-weight: 500; color: #fff6a8; mix-blend-mode: screen; transform: rotate(-4deg); }
-  .p2::after { content:'★'; position:absolute; top: 12px; right: 18px; font-size: 40px; color: #fff6a8; }
+  .p2 .huge { font-family: 'EB Garamond', serif; font-style: italic; font-size: 80px; line-height: 0.9; font-weight: 500; color: #fff6a8; mix-blend-mode: screen; transform: rotate(-4deg); position: relative; z-index: 2; pointer-events: none; }
+  .p2::after { content:'★'; position:absolute; top: 12px; right: 18px; font-size: 40px; color: #fff6a8; z-index: 2; }
+  .p2 .p2-product { position: absolute; right: -20px; bottom: -30px; width: 62%; object-fit: contain; opacity: 0.92; transform: rotate(6deg); filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25)); }
 
   .open { font-size: 13px; font-family: ui-monospace, monospace; color: var(--wp); }
   .dir:hover .open { text-decoration: underline; }
@@ -79,31 +81,36 @@
         <div class="bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="ln1"></div><div class="ln2"></div>
         <div class="grid4">
-          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
-          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"><img src="../wp-content/uploads/2025/04/Sweatpants_Front.webp@w=600" alt=""/></div>
+          <div class="tile"><img src="../wp-content/uploads/2025/04/ILWP_Front.webp@w=600" alt=""/></div>
+          <div class="tile"><img src="../wp-content/uploads/2025/10/Howdy.png@w=600" alt=""/></div>
+          <div class="tile"><img src="../wp-content/uploads/2025/12/Howdy-17.png@w=600" alt=""/></div>
+          <div class="tile"><img src="../wp-content/uploads/2025/12/Howdy-13.png@w=600" alt=""/></div>
+          <div class="tile"><img src="../wp-content/uploads/2025/12/Howdy-14.png@w=600" alt=""/></div>
         </div>
       </div>
       <span class="open">→ open existing</span>
     </a>
 
-    <a class="dir" href="01-codex/index.html">
+    <a class="dir" href="01-codex/index.html" target="_blank" rel="noopener">
       <div class="num">DIRECTION 01</div>
       <h2>Codex</h2>
-      <div class="tag">Editorial · quiet · Supply-ish</div>
+      <div class="tag">Editorial · quiet · elegant</div>
       <p>Objects treated like museum pieces. Single-column storytelling. EB&nbsp;Garamond on cream paper. Confidence in restraint.</p>
       <div class="preview p1">
-        <svg viewBox="0 0 400 400"><path d="M100 120 L160 90 L180 110 L200 100 L220 110 L240 90 L300 120 L290 160 L260 150 L260 320 L140 320 L140 150 L110 160 Z" fill="#3858e9" opacity="0.88"/></svg>
+        <img src="../wp-content/uploads/2025/04/CIP_DT188_Front.png@w=600" alt=""/>
       </div>
       <span class="open">→ open</span>
     </a>
 
-    <a class="dir" href="02-plot-twist/index.html">
+    <a class="dir" href="02-plot-twist/index.html" target="_blank" rel="noopener">
       <div class="num">DIRECTION 02</div>
       <h2>Plot Twist</h2>
-      <div class="tag">Playful · motion · Cash-ish</div>
+      <div class="tag">Playful · motion · a bit weird</div>
       <p>Soaked in WP blue. Big italic display type, draggable cart, scroll-driven choreography. Copy that flirts with chaos.</p>
       <div class="preview p2">
         <div class="huge">code is<br/><em>proof.</em></div>
+        <img class="p2-product" src="../wp-content/uploads/2025/04/Sweatpants_Front.webp@w=600" alt=""/>
       </div>
       <span class="open">→ open</span>
     </a>

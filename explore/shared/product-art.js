@@ -1,5 +1,7 @@
 // Generates a stylized placeholder SVG for each product, keyed by id.
 // Each direction can theme it (bg color, fg color, wapuu flag, etc).
+// If a real product image is known (window.MERCANTILE_IMAGES), return an
+// <img> on a themed background instead of procedural art.
 window.MERCANTILE_ART = function productArt(id, opts = {}) {
   const {
     bg = '#eef1ff',
@@ -7,6 +9,13 @@ window.MERCANTILE_ART = function productArt(id, opts = {}) {
     ink = '#111',
     variant = 'editorial', // 'editorial' | 'playful' | 'wapuu'
   } = opts;
+
+  // Real product photo? Return an <img> on the themed background.
+  if (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[id]) {
+    const src = String(window.MERCANTILE_IMAGES[id]).replace(/"/g, '&quot;');
+    const bgEsc = String(bg).replace(/"/g, '&quot;');
+    return '<div style="width:100%;height:100%;background:' + bgEsc + ';display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="' + src + '" alt="" loading="lazy" style="width:88%;height:88%;object-fit:contain;display:block;"/></div>';
+  }
 
   const garments = ['tee', 'hoodie', 'jogger', 'tank', 'crewneck'];
   const drinkware = ['bottle', 'mug', 'tumbler', 'cold-cup'];
