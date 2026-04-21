@@ -422,39 +422,41 @@ function PDP({ id, cart, toast }) {
     setTimeout(() => setAdded(false), 1400);
   };
   return (
-    <div className="pdp">
-      <div className="gallery" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
-      <div className="info">
-        <div className="crumbs">Catalog / {p.cat} / № {p.id}</div>
-        <h1>{p.name}</h1>
-        <p className="mono" style={{color:'var(--muted)'}}>{p.tags.join(' · ')}</p>
-        <div className="price">${p.price}</div>
-        <p className="desc">{p.blurb} Printed on heavy stock, finished by hand, and dispatched from the kind of warehouse where the lights are off by seven.</p>
-        <dl className="spec">
-          <dt>Composition</dt><dd>{isApparel ? '100% ring-spun cotton, 220gsm' : 'Mixed materials, see tag'}</dd>
-          <dt>Made in</dt><dd>Wherever the code is</dd>
-          <dt>Edition</dt><dd>Open. Re-run quarterly.</dd>
-          <dt>Care</dt><dd>Cold wash, line dry, review pull requests</dd>
-        </dl>
-        {sizes && (
-          <>
-            <div className="mono" style={{marginTop:24, color:'var(--muted)'}}>Size</div>
-            <div className="size">
-              {sizes.map(s => <button key={s} className={size===s?'on':''} onClick={() => setSize(s)}>{s}</button>)}
-            </div>
-          </>
-        )}
-        <button className={`addbtn ${added?'added':''}`} onClick={add}>{added ? '✓ In your cart' : 'Add to cart'}</button>
+    <>
+      <div className="pdp">
+        <div className="gallery" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#ebe7dc', fg: 'var(--wp)' })}}/>
+        <div className="info">
+          <div className="crumbs">Catalog / {p.cat} / № {p.id}</div>
+          <h1>{p.name}</h1>
+          <p className="mono" style={{color:'var(--muted)'}}>{p.tags.join(' · ')}</p>
+          <div className="price">${p.price}</div>
+          <p className="desc">{p.blurb} Printed on heavy stock, finished by hand, and dispatched from the kind of warehouse where the lights are off by seven.</p>
+          <dl className="spec">
+            <dt>Composition</dt><dd>{isApparel ? '100% ring-spun cotton, 220gsm' : 'Mixed materials, see tag'}</dd>
+            <dt>Made in</dt><dd>Wherever the code is</dd>
+            <dt>Edition</dt><dd>Open. Re-run quarterly.</dd>
+            <dt>Care</dt><dd>Cold wash, line dry, review pull requests</dd>
+          </dl>
+          {sizes && (
+            <>
+              <div className="mono" style={{marginTop:24, color:'var(--muted)'}}>Size</div>
+              <div className="size">
+                {sizes.map(s => <button key={s} className={size===s?'on':''} onClick={() => setSize(s)}>{s}</button>)}
+              </div>
+            </>
+          )}
+          <button className={`addbtn ${added?'added':''}`} onClick={add}>{added ? '✓ In your cart' : 'Add to cart'}</button>
+        </div>
       </div>
       <RelatedC current={p.id} onGo={(nid) => { window.location.hash = `#/product/${nid}`; window.scrollTo(0,0); }}/>
-    </div>
+    </>
   );
 }
 
 function RelatedC({ current, onGo }) {
   const items = window.MERCANTILE_CATALOG.filter(x => x.id !== current).slice(0, 4);
   return (
-    <div className="related" style={{gridColumn:'1 / -1'}}>
+    <div className="related">
       <div className="hd">
         <div className="mono" style={{color:'var(--muted)'}}>— Also from the catalog</div>
         <a href="#/shop" className="mono" style={{color:'var(--wp)'}}>Everything →</a>
