@@ -821,6 +821,12 @@ function useCart() {
 function sku(id) { return 'WP—' + id.split('-').map(s => s.slice(0,3).toUpperCase()).join('·'); }
 function hashN(id) { let h = 0; for (let i=0; i<id.length; i++) h = (h*31 + id.charCodeAt(i)) | 0; return Math.abs(h); }
 
+// Glue the last two words with a non-breaking space so a single-word
+// orphan never lands alone on the final line.
+function tight(s) {
+  return String(s).replace(/\s+([^\s]+)$/, '\u00A0$1');
+}
+
 // Tiny Wapuu burst — spawns N Wapuus from (x,y) that drift outward and fade.
 // Triggered when the PDP modal closes.
 function rainWapuus(x, y, count = 12) {
@@ -1262,7 +1268,7 @@ function ProductModal({ id, onClose, onAdd }) {
               <span style={{marginLeft:10, color:'var(--slate-2)'}}>· modified {dateStr}</span>
             </div>
             <h1>{p.name}</h1>
-            <p className="blurb">{p.blurb}</p>
+            <p className="blurb">{tight(p.blurb)}</p>
             <div className="marginalia">
               <span className="pill blue">highlighted</span>
               <span className="pill">indexed</span>
@@ -1300,7 +1306,7 @@ function ProductModal({ id, onClose, onAdd }) {
                 <dt>price</dt><dd><span className="hl-blue">${p.price}.00</span> USD</dd>
                 <dt>category</dt><dd>{p.cat}</dd>
                 <dt>tags</dt><dd className="tagwrap">{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
-                <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
+                <dt>material</dt><dd>{tight(apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish'))}</dd>
                 {apparel && (<><dt>care</dt><dd>cold wash · line dry · review PRs</dd></>)}
               </dl>
             </div>
@@ -1309,7 +1315,7 @@ function ProductModal({ id, onClose, onAdd }) {
               <div className="related">
                 {related.map(r => (
                   <a key={r.id} href={`#/p/${r.id}`} onClick={(e) => { e.preventDefault(); window.location.hash = `#/p/${r.id}`; }}>
-                    <span>{r.name}</span><span className="p">${r.price}</span>
+                    <span>{tight(r.name)}</span><span className="p">${r.price}</span>
                   </a>
                 ))}
               </div>
@@ -1318,7 +1324,7 @@ function ProductModal({ id, onClose, onAdd }) {
               <h3>Revisions</h3>
               <div className="revisions">
                 {pickRevisions(p.id, 3).map((r, i) => (
-                  <div key={i}><b>wapuu</b>, <span dangerouslySetInnerHTML={{__html: r}}/></div>
+                  <div key={i}><b>wapuu</b>, <span dangerouslySetInnerHTML={{__html: tight(r)}}/></div>
                 ))}
               </div>
             </div>
