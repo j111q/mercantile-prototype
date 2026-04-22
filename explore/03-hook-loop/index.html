@@ -449,6 +449,26 @@
   .modal .editor .specs dd:last-of-type,
   .modal .editor .specs dt:last-of-type + dd { border-bottom: 0; }
 
+  /* Spec list when shown in the side panel — stack rows so the cramped
+     300px column doesn't crush labels. */
+  .modal .side .specs {
+    display: grid; grid-template-columns: auto 1fr; gap: 4px 12px;
+    margin: 10px 0 0; font-size: 12px; padding-top: 0; border-top: 0;
+  }
+  .modal .side .specs dt {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--slate); text-transform: uppercase; letter-spacing: 0.08em;
+    padding-top: 3px; white-space: nowrap;
+  }
+  .modal .side .specs dd {
+    margin: 0; padding: 2px 0 6px; border-bottom: 1px dashed var(--rule);
+    font-family: 'Newsreader', serif; font-size: 13px; color: var(--ink);
+    line-height: 1.35; word-break: break-word;
+  }
+  .modal .side .specs dd.tagwrap { display: flex; flex-wrap: wrap; gap: 3px 0; }
+  .modal .side .specs dd:last-of-type,
+  .modal .side .specs dt:last-of-type + dd { border-bottom: 0; }
+
   .modal .editor .shortcode {
     background: var(--ink); color: var(--paper);
     padding: 10px 14px; margin-top: 18px;
@@ -833,15 +853,6 @@ function ProductModal({ id, onClose, onAdd }) {
               <span className="pill">cross-ref · §{p.cat}</span>
             </div>
             <HLGallery p={p}/>
-            <dl className="specs">
-              <dt>SKU</dt><dd>{sku(p.id)}</dd>
-              <dt>price</dt><dd><span className="hl-blue">${p.price}.00</span> USD</dd>
-              <dt>category</dt><dd>{p.cat}</dd>
-              <dt>tags</dt><dd>{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
-              <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
-              <dt>made in</dt><dd>wherever the code is</dd>
-              <dt>care</dt><dd>cold wash · line dry · review PRs</dd>
-            </dl>
             <div className="shortcode">
               <span>[<span className="k">mercantile</span> <span className="k">id</span>=<span className="v">"{p.id}"</span>{sizes ? <> <span className="k">size</span>=<span className="v">"{size}"</span></> : null}]</span>
               <span className="copy" onClick={() => navigator.clipboard?.writeText(`[mercantile id="${p.id}"]`)}>copy →</span>
@@ -862,6 +873,18 @@ function ProductModal({ id, onClose, onAdd }) {
               <button className={`add-btn ${added?'added':''}`} onClick={add}>
                 {added ? '✓ added' : `Add to cart · $${p.price}`}
               </button>
+            </div>
+            <div className="mb">
+              <h3>Details</h3>
+              <dl className="specs side">
+                <dt>SKU</dt><dd>{sku(p.id)}</dd>
+                <dt>price</dt><dd><span className="hl-blue">${p.price}.00</span> USD</dd>
+                <dt>category</dt><dd>{p.cat}</dd>
+                <dt>tags</dt><dd className="tagwrap">{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
+                <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
+                <dt>made in</dt><dd>wherever the code is</dd>
+                <dt>care</dt><dd>cold wash · line dry · review PRs</dd>
+              </dl>
             </div>
             <div className="mb">
               <h3>Related</h3>
