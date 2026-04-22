@@ -466,8 +466,9 @@
      300px column doesn't crush labels. */
   .modal .side .specs {
     display: grid; grid-template-columns: auto 1fr; gap: 4px 12px;
-    margin: 10px 0 0; font-size: 12px; padding-top: 0; border-top: 0;
+    margin: 10px 0 0; padding: 0; font-size: 12px; border-top: 0;
   }
+  .modal .side .specs dt, .modal .side .specs dd { margin-inline-start: 0; }
   .modal .side .specs dt {
     font-family: 'JetBrains Mono', monospace; font-size: 9px;
     color: var(--slate); text-transform: uppercase; letter-spacing: 0.08em;
