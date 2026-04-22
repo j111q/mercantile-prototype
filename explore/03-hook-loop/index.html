@@ -39,11 +39,11 @@
   /* ========== TICKER (the "actively updating" strip) ========== */
   .ticker {
     position: sticky; top: 0; z-index: 50;
-    background: var(--paper-2);
-    border-bottom: 1px solid var(--rule);
+    background: var(--ink);
+    border-bottom: 1px solid var(--ink);
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--slate);
+    color: #9a9ca3;
     height: 28px;
     display: flex;
     align-items: stretch;
@@ -52,9 +52,9 @@
   .ticker .lead {
     padding: 0 12px;
     display: flex; align-items: center; gap: 8px;
-    border-right: 1px solid var(--rule);
-    background: var(--paper-2);
-    color: var(--ink);
+    border-right: 1px solid rgba(255,255,255,0.12);
+    background: var(--ink);
+    color: #ecebe4;
     font-weight: 600;
     letter-spacing: 0.02em;
     flex-shrink: 0;
@@ -73,11 +73,11 @@
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
   }
-  .ticker .item b { color: var(--ink); font-weight: 600; }
-  .ticker .item.wapuu { color: var(--wp); font-weight: 600; }
+  .ticker .item b { color: #ecebe4; font-weight: 600; }
+  .ticker .item.wapuu { color: #9fb1ff; font-weight: 600; }
   .ticker .item.wapuu::before { content: '✿ '; }
-  .ticker .tab { padding: 0 12px; border-left: 1px solid var(--rule); display:flex; align-items: center; gap: 8px; flex-shrink:0; background: var(--paper-2); }
-  .ticker .tab .v { color: var(--ink); font-weight: 600; }
+  .ticker .tab { padding: 0 12px; border-left: 1px solid rgba(255,255,255,0.12); display:flex; align-items: center; gap: 8px; flex-shrink:0; background: var(--ink); }
+  .ticker .tab .v { color: #ecebe4; font-weight: 600; }
 
   /* ========== HERO ========== */
   .hero {
@@ -377,13 +377,12 @@
     font-size: clamp(24px, 3vw, 34px);
     line-height: 1.15; margin: 0 0 14px;
     text-wrap: balance; letter-spacing: -0.02em;
-    /* Input-field styling — this is the editable post title. */
-    background: #fff;
+    /* Input-field look — transparent so it blends with the paper bg. */
+    background: transparent;
     border: 1px solid var(--rule);
     border-radius: 4px;
     padding: 12px 14px;
     color: var(--ink);
-    box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
   }
   .modal .editor .blurb {
     font-family: 'Newsreader', serif; font-size: 17px; line-height: 1.45;
