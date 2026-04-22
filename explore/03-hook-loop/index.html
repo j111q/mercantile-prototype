@@ -530,12 +530,22 @@
     background: var(--ink); color: var(--paper);
     padding: 10px 14px; margin-top: 18px;
     font-family: 'JetBrains Mono', monospace; font-size: 12px;
-    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+    flex-wrap: wrap;
   }
   .modal .editor .shortcode .k { color: #9ab1ff; }
   .modal .editor .shortcode .v { color: #fff; }
-  .modal .editor .shortcode .copy { color: var(--slate-2); font-size: 10px; cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
+  .modal .editor .shortcode .copy {
+    color: var(--slate-2); font-size: 10px; cursor: pointer;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
   .modal .editor .shortcode .copy:hover { color: #fff; }
+  /* When the easter-egg snark is showing: drop caps, lighten, bump size. */
+  .modal .editor .shortcode .copy.snarked {
+    text-transform: none; letter-spacing: 0; font-size: 12px;
+    color: #fff; font-style: italic;
+  }
 
   .modal .side { padding: 22px 18px 22px 20px; background: var(--paper-2); }
   .modal .side .mb { border-top: 1px solid var(--rule); padding: 12px 0; }
@@ -1184,9 +1194,35 @@ function ProductModal({ id, onClose, onAdd }) {
         x = window.innerWidth / 2; y = 120;
       }
     }
-    rainWapuus(x, y, 3);
+    rainWapuus(x, y, 1);
     setExiting(true);
     setTimeout(() => onClose(), 320);
+  };
+
+  // Easter egg: 'copy' never actually copies.
+  const COPY_DEFAULT = 'copy →';
+  const COPY_SNARK = [
+    'why are you trying to copy this, you weirdo? →',
+    'hard-coded. not going anywhere. →',
+    'ctrl+c ? ctrl-nope. →',
+    'no clipboard. only vibes. →',
+    "shortcodes don't work like that →",
+    'forked. cloned. but not copied. →',
+    'this is a prototype. kindly imagine. →',
+    "we saw that. we're flattered. →",
+    'access denied (just kidding, also yes) →',
+    'not today, scraper →',
+  ];
+  const [copyText, setCopyText] = useState(COPY_DEFAULT);
+  const lastCopy = useRef('');
+  const copyTimer = useRef(null);
+  const onCopyClick = () => {
+    const options = COPY_SNARK.filter(m => m !== lastCopy.current);
+    const next = options[Math.floor(Math.random() * options.length)];
+    lastCopy.current = next;
+    setCopyText(next);
+    if (copyTimer.current) clearTimeout(copyTimer.current);
+    copyTimer.current = setTimeout(() => setCopyText(COPY_DEFAULT), 3200);
   };
   useEffect(() => {
     const h = (e) => { if (e.key === 'Escape') closeWithRain(); };
@@ -1238,7 +1274,7 @@ function ProductModal({ id, onClose, onAdd }) {
             <HLGallery p={p}/>
             <div className="shortcode">
               <span>[<span className="k">mercantile</span> <span className="k">id</span>=<span className="v">"{p.id}"</span>{sizes ? <> <span className="k">size</span>=<span className="v">"{size}"</span></> : null}]</span>
-              <span className="copy" onClick={() => navigator.clipboard?.writeText(`[mercantile id="${p.id}"]`)}>copy →</span>
+              <span className={`copy ${copyText !== COPY_DEFAULT ? 'snarked' : ''}`} onClick={onCopyClick}>{copyText}</span>
             </div>
           </div>
           <aside className="side">
