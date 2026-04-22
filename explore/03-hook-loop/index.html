@@ -186,6 +186,15 @@
   @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 500px)  { .grid { grid-template-columns: 1fr; } }
 
+  /* Gentle stagger on cells when the filter or query changes. React
+     remounts the grid via key so each cell plays the animation. */
+  @keyframes hl-fade-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .grid .cell { animation: hl-fade-up 380ms cubic-bezier(.2,.7,.3,1) both; animation-delay: calc(var(--i, 0) * 25ms); }
+  @media (prefers-reduced-motion: reduce) { .grid .cell { animation: none; } }
+
   .cell {
     border-right: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
@@ -513,9 +522,11 @@
     background: var(--wp); color: #fff; border: 1px solid var(--wp-d);
     padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
     font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
   }
   .modal .side .add-btn:hover { background: var(--wp-d); }
-  .modal .side .add-btn.added { background: var(--ok); border-color: var(--ok); }
+  .modal .side .add-btn.state-added { background: var(--ok); border-color: var(--ok); }
+  .modal .side .add-btn.state-loading { background: var(--ink); border-color: var(--ink); color: #ecebe4; cursor: wait; text-transform: none; letter-spacing: 0.02em; }
 
   .modal .side .related a {
     display: flex; justify-content: space-between;
@@ -620,6 +631,27 @@ function useCart() {
 // deterministic helpers
 function sku(id) { return 'WP—' + id.split('-').map(s => s.slice(0,3).toUpperCase()).join('·'); }
 function hashN(id) { let h = 0; for (let i=0; i<id.length; i++) h = (h*31 + id.charCodeAt(i)) | 0; return Math.abs(h); }
+
+// Add-to-cart loading labels — mono / wp-admin flavored for Hook & Loop.
+const HL_LOADING_LABELS = [
+  'committing…',
+  'pushing to trunk…',
+  'wp_cache_flush()…',
+  'running migrations…',
+  'acquiring table lock…',
+  'saving to wp_options…',
+  'apply_filters( merch_add )…',
+  'do_action( on_buy )…',
+  'rebasing on main…',
+  'hydrating the cart…',
+  'serializing…',
+];
+function pickNextLabel(pool, lastRef) {
+  const options = pool.filter(l => l !== lastRef.current);
+  const next = options[Math.floor(Math.random() * options.length)];
+  lastRef.current = next;
+  return next;
+}
 
 // Wapuu's revision log — absurd, seeded per product so each PDP has its own.
 const WAPUU_REVISIONS = [
@@ -774,7 +806,7 @@ function Cell({ p, idx, onOpen }) {
   const stk = stockFor(p.id);
   const stamp = stk === 0 ? 'OUT' : (stk < 12 ? 'LOW STOCK' : (p.tags.includes('tie-dye') ? 'SEASONAL' : (p.tags.includes('heritage') ? 'HERITAGE' : `IN STOCK`)));
   return (
-    <div className="cell" onClick={() => onOpen(p.id)}>
+    <div className="cell" style={{'--i': idx}} onClick={() => onOpen(p.id)}>
       <span className="idx">{String(idx+1).padStart(3,'0')} / {sku(p.id)}</span>
       <span className="price-tag">${p.price}</span>
       <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>
@@ -861,7 +893,9 @@ function HLGallery({ p }) {
 function ProductModal({ id, onClose, onAdd }) {
   const p = window.MERCANTILE_CATALOG.find(x => x.id === id);
   const [size, setSize] = useState('M');
-  const [added, setAdded] = useState(false);
+  const [state, setState] = useState('idle'); // idle | loading | added
+  const [label, setLabel] = useState('');
+  const lastLabel = useRef('');
   useEffect(() => {
     const h = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', h);
@@ -873,9 +907,14 @@ function ProductModal({ id, onClose, onAdd }) {
   const sizes = apparel ? ['XS','S','M','L','XL','XXL'] : null;
   const related = window.MERCANTILE_CATALOG.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 5);
   const add = () => {
-    onAdd(p, sizes ? size : '—');
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1200);
+    if (state !== 'idle') return;
+    setLabel(pickNextLabel(HL_LOADING_LABELS, lastLabel));
+    setState('loading');
+    setTimeout(() => {
+      onAdd(p, sizes ? size : '—');
+      setState('added');
+      setTimeout(() => setState('idle'), 1200);
+    }, 800);
   };
   const dateStr = new Date(Date.now() - (hashN(p.id) % 800)*864e5).toISOString().slice(0,10);
   return (
@@ -922,8 +961,10 @@ function ProductModal({ id, onClose, onAdd }) {
                   {sizes.map(s => <button key={s} className={size===s?'on':''} onClick={() => setSize(s)}>{s}</button>)}
                 </div>
               </>)}
-              <button className={`add-btn ${added?'added':''}`} onClick={add}>
-                {added ? '✓ added' : `Add to cart · $${p.price}`}
+              <button className={`add-btn state-${state}`} onClick={add}>
+                {state === 'loading' ? label :
+                 state === 'added'   ? '✓ added' :
+                                       `Add to cart · $${p.price}`}
               </button>
             </div>
             <div className="mb">
@@ -1065,7 +1106,7 @@ function App() {
       </div>
 
       <div className="grid-wrap">
-        <div className="grid">
+        <div className="grid" key={`${cat}|${q}`}>
           {rendered}
         </div>
       </div>
