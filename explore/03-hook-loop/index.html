@@ -72,7 +72,11 @@
   }
   .ticker .lead .wp-mark { display: inline-flex; color: #ecebe4; line-height: 0; }
   .ticker .lead .wp-mark svg { display: block; }
-  .ticker .lead .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); animation: pulse 2s infinite; }
+  .ticker .lead .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); animation: pulse 2s infinite; flex-shrink: 0; }
+  /* Clicked-paused state — ticker stops, dot goes amber, lead reads 'PAUSED BY USER'. */
+  .ticker.paused .track { animation-play-state: paused !important; }
+  .ticker.paused .lead .dot { background: #f5b800; animation: none; }
+  .ticker .lead { border: 0; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
   .ticker .rail {
     flex: 1; overflow: hidden; position: relative; display: flex; align-items: center;
@@ -1079,12 +1083,23 @@ const WP_MARK_SVG = {__html: '<svg xmlns="http://www.w3.org/2000/svg" role="img"
 
 function Ticker({ cart, onCartClick }) {
   const items = [...TICKER_ITEMS, ...TICKER_ITEMS]; // duplicate for seamless loop
+  const [paused, setPaused] = useState(false);
+  const pauseTimer = useRef(null);
+  const togglePause = () => {
+    if (pauseTimer.current) clearTimeout(pauseTimer.current);
+    setPaused(true);
+    pauseTimer.current = setTimeout(() => setPaused(false), 3000);
+  };
   return (
-    <div className="ticker">
-      <div className="lead">
+    <div className={`ticker ${paused ? 'paused' : ''}`}>
+      <button
+        className="lead" onClick={togglePause}
+        aria-label={paused ? 'Ticker paused — click to reset' : 'Pause ticker'}
+        style={{cursor:'pointer'}}
+      >
         <span className="wp-mark" dangerouslySetInnerHTML={WP_MARK_SVG}/>
-        <span className="dot"/>LIVE
-      </div>
+        <span className="dot"/>{paused ? 'PAUSED BY USER' : 'LIVE'}
+      </button>
       <div className="rail">
         <div className="track">
           {items.map((it, i) => (
