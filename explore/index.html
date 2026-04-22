@@ -6,7 +6,7 @@
 <title>Mercantile · Four Directions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet"/>
 <style>
   :root { --wp: #3858e9; --ink:#0d0d14; --paper:#f7f7f4; }
   * { box-sizing: border-box; }
@@ -46,16 +46,28 @@
   .p2::after { content:'★'; position:absolute; top: 12px; right: 18px; font-size: 40px; color: #fff6a8; z-index: 2; }
   .p2 .p2-product { position: absolute; right: -20px; bottom: -30px; width: 62%; object-fit: contain; opacity: 0.92; transform: rotate(6deg); filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25)); }
 
-  /* direction 3 preview — The Register (wp-admin / text-dense) */
-  .p3 { background: #ecebe4; color: #111214; padding: 0; display:flex; flex-direction:column; font-family: 'Newsreader', Georgia, serif; }
-  .p3 .head { padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: #6b6e76; background: #f3f2ec; border-bottom: 1px solid #d9d7d1; display:flex; justify-content:space-between; align-items:center; }
+  /* direction 3 preview — Hook & Loop (dark ticker + wp-admin palette + blackletter) */
+  .p3 { background: #f0f0f1; color: #1d2327; padding: 0; display:flex; flex-direction:column; font-family: 'JetBrains Mono', monospace; }
+  .p3 .head {
+    padding: 0 10px; height: 22px; flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em;
+    color: #9a9ca3; background: #1d2327;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .p3 .head b { color: #ecebe4; font-weight: 600; }
   .p3 .head .dot { display:inline-block; width: 5px; height: 5px; border-radius: 50%; background: #1f8f3a; margin-right: 6px; vertical-align: middle; }
-  .p3 .body { flex: 1; padding: 12px 14px; display:flex; flex-direction:column; gap: 8px; }
-  .p3 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: #6b6e76; text-transform: uppercase; }
-  .p3 .title { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 26px; line-height: 1; margin: 0; letter-spacing: -0.01em; color: #111214; }
-  .p3 .rows { display:flex; flex-direction:column; gap: 2px; margin-top: 6px; border-top: 1px solid #d9d7d1; padding-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #2a2c31; }
-  .p3 .rows .row { display:flex; justify-content: space-between; }
-  .p3 .rows .row .k { color: #6b6e76; }
+  .p3 .body { flex: 1; padding: 14px 14px 10px; display:flex; flex-direction:column; }
+  .p3 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: #646970; text-transform: uppercase; margin-bottom: 8px; }
+  .p3 .title { font-family: 'UnifrakturCook', serif; font-weight: 700; font-size: 52px; line-height: 0.88; margin: 0 0 8px; letter-spacing: -0.005em; color: #1d2327; }
+  .p3 .title .period { color: var(--wp); }
+  .p3 .pills { display: flex; gap: 4px; margin: 4px 0 8px; flex-wrap: wrap; }
+  .p3 .pill { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; color: #1d2327; padding: 1px 6px; border: 1px solid #c3c4c7; border-radius: 2px; background: #f6f7f7; }
+  .p3 .pill.blue { background: #e2e8ff; border-color: #c5d0ff; }
+  .p3 .pill.pink { background: #ffd4e1; border-color: #ffb5c9; }
+  .p3 .rows { display:flex; flex-direction:column; margin-top: auto; border-top: 1px solid #c3c4c7; padding-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #1d2327; }
+  .p3 .rows .row { display:flex; justify-content: space-between; padding: 1.5px 0; }
+  .p3 .rows .row + .row { border-top: 1px dashed #dcdcde; }
+  .p3 .rows .row .k { color: #646970; }
 
   .open { font-size: 13px; font-family: ui-monospace, monospace; color: var(--wp); }
   .dir:hover .open { text-decoration: underline; }
@@ -133,15 +145,22 @@
       <div class="tag">Dense · text-based · avant-garde</div>
       <p>wp-admin as muse. Tickers, serif headlines, typographic textures. A shop that reads like a directory.</p>
       <div class="preview p3">
-        <div class="head"><span><span class="dot"></span>MERCANTILE · v1.0 · online</span><span>INDEX/A</span></div>
+        <div class="head">
+          <span><span class="dot"></span><b>MERCANTILE</b> · live</span>
+          <span><b>cart</b> 0 · <b>v</b> 2.1.0</span>
+        </div>
         <div class="body">
-          <div class="kicker">№ 042 · apparel / unisex</div>
-          <h3 class="title">Tackle twill<br/>sweatshirt.</h3>
+          <div class="kicker">26 products · 3 categories · GPLv2</div>
+          <h3 class="title">Mercantile<span class="period">.</span></h3>
+          <div class="pills">
+            <span class="pill blue">highlighted</span>
+            <span class="pill">indexed</span>
+            <span class="pill pink">in stock</span>
+          </div>
           <div class="rows">
-            <div class="row"><span class="k">PRICE</span><span>$72</span></div>
-            <div class="row"><span class="k">EDITION</span><span>open · quarterly</span></div>
-            <div class="row"><span class="k">COMP.</span><span>100% ring-spun cotton</span></div>
-            <div class="row"><span class="k">MADE IN</span><span>wherever the code is</span></div>
+            <div class="row"><span class="k">editor</span><span><b>wapuu</b></span></div>
+            <div class="row"><span class="k">hooks fired</span><span><b>847</b></span></div>
+            <div class="row"><span class="k">runtime</span><span><b>PHP 8.3</b></span></div>
           </div>
         </div>
       </div>
