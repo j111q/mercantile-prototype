@@ -530,14 +530,13 @@ function Gallery({ images, bg = '#fff' }) {
     setSpinning(true);
     setTimeout(() => setSpinning(false), 500);
   };
-  const label = list.length === 2 ? 'flip' : `flip · ${i+1}/${list.length}`;
   return (
     <div className="gallery" style={{background: bg}}>
       <img src={list[i]} alt="" key={i}/>
       {list.length > 1 && (
-        <button className={`flip-btn ${spinning ? 'spin' : ''}`} onClick={flip} aria-label="Flip to next image">
-          <span className="icn">↻</span>
-          <span>{label}</span>
+        <button className={`flip-btn ${spinning ? 'spin' : ''}`} onClick={flip} aria-label="Next image">
+          <span className="icn">→</span>
+          <span>{i+1}/{list.length}</span>
         </button>
       )}
     </div>

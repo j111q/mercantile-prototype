@@ -883,7 +883,7 @@ function HLGallery({ p }) {
         ? <img className="gimg" src={list[i]} alt="" key={i}/>
         : <div className="gfallback" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>}
       {list.length > 1
-        ? <button className="flip-btn" onClick={flip}>⟲ flip · {i+1}/{list.length}</button>
+        ? <button className="flip-btn" onClick={flip} aria-label="Next image">→ {i+1}/{list.length}</button>
         : <span className="dims">1600 × 1000px</span>}
     </div>
   );
