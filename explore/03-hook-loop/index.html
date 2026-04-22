@@ -303,7 +303,7 @@
   }
   .band .line .q { color: var(--wp); font-style: normal; }
   .band .line.italic { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; }
-  .band .line.mono { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.4vw, 18px); color: var(--slate); letter-spacing: 0.02em; line-height: 1.7; margin-top: 16px; max-width: 60ch; }
+  .band .line.mono { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: clamp(16px, 1.5vw, 20px); color: var(--ink-2); letter-spacing: 0; line-height: 1.5; margin-top: 20px; max-width: 62ch; }
   .band .line.mono b { color: var(--ink); font-weight: 600; }
   .band .line.mono em { color: var(--wp); font-style: normal; }
   .band .rule { height: 1px; background: var(--rule); margin: 24px 0; }
@@ -1063,8 +1063,8 @@ function Interstitial({ kind }) {
 function Band() {
   return (
     <section className="band">
-      <p className="line"><em style={{fontStyle:'italic', fontFamily:"'Newsreader', serif"}}>we</em> make <span className="q">things</span></p>
-      <p className="line">for the people who <em style={{fontStyle:'italic', fontFamily:"'Newsreader', serif"}}>make</em></p>
+      <p className="line"><span style={{fontFamily:"'JetBrains Mono', ui-monospace, monospace", fontWeight:600, fontSize:'0.72em', letterSpacing:'-0.01em', verticalAlign:'0.06em'}}>we make</span> <span className="q">things</span></p>
+      <p className="line">for the people who <span style={{fontFamily:"'JetBrains Mono', ui-monospace, monospace", fontWeight:600, fontSize:'0.72em', letterSpacing:'-0.01em', verticalAlign:'0.06em'}}>make</span></p>
       <p className="line">the <span className="q">internet.</span></p>
       <div className="rule"/>
       <p className="line mono">
