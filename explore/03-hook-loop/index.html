@@ -357,6 +357,14 @@
     60%  { opacity: 1; }
     100% { opacity: 1; transform: translateY(0) scale(1); }
   }
+  /* Exit = mirror of entry. */
+  .modal-back.exiting { animation: mb-fadeOut 0.3s cubic-bezier(.3,.4,.6,1) forwards; }
+  .modal.exiting       { animation: mb-modal-out 0.32s cubic-bezier(.4,.1,.7,1) forwards; }
+  @keyframes mb-fadeOut { to { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); } }
+  @keyframes mb-modal-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(18px) scale(0.985); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .modal-back, .modal { animation: none !important; }
   }
@@ -1156,10 +1164,14 @@ function ProductModal({ id, onClose, onAdd }) {
   const [size, setSize] = useState('M');
   const [state, setState] = useState('idle'); // idle | loading | added
   const [label, setLabel] = useState('');
+  const [exiting, setExiting] = useState(false);
   const lastLabel = useRef('');
+  // If the product changes (e.g. Related click), re-arm from clean state.
+  useEffect(() => { setExiting(false); }, [id]);
 
-  // Rain wapuus from the click point (or the × button as fallback), then close.
+  // Tiny Wapuu burst from the click point, play the exit anim, then close.
   const closeWithRain = (e) => {
+    if (exiting) return;
     let x, y;
     if (e && typeof e.clientX === 'number' && e.clientX) {
       x = e.clientX; y = e.clientY;
@@ -1172,8 +1184,9 @@ function ProductModal({ id, onClose, onAdd }) {
         x = window.innerWidth / 2; y = 120;
       }
     }
-    rainWapuus(x, y);
-    onClose();
+    rainWapuus(x, y, 3);
+    setExiting(true);
+    setTimeout(() => onClose(), 320);
   };
   useEffect(() => {
     const h = (e) => { if (e.key === 'Escape') closeWithRain(); };
@@ -1197,8 +1210,8 @@ function ProductModal({ id, onClose, onAdd }) {
   };
   const dateStr = new Date(Date.now() - (hashN(p.id) % 800)*864e5).toISOString().slice(0,10);
   return (
-    <div className="modal-back" onClick={(e) => { if (e.target.classList.contains('modal-back')) closeWithRain(e); }}>
-      <div className="modal" onClick={e => e.stopPropagation()}>
+    <div className={`modal-back ${exiting ? 'exiting' : ''}`} onClick={(e) => { if (e.target.classList.contains('modal-back')) closeWithRain(e); }}>
+      <div className={`modal ${exiting ? 'exiting' : ''}`} key={id} onClick={e => e.stopPropagation()}>
         <header>
           <div className="crumb">
             <span>mercantile</span><span className="sl">/</span>
@@ -1254,14 +1267,14 @@ function ProductModal({ id, onClose, onAdd }) {
                 <dt>category</dt><dd>{p.cat}</dd>
                 <dt>tags</dt><dd className="tagwrap">{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
                 <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
-                <dt>care</dt><dd>{apparel ? 'cold wash · line dry · review PRs' : 'wipe clean · handle gently · review PRs'}</dd>
+                {apparel && (<><dt>care</dt><dd>cold wash · line dry · review PRs</dd></>)}
               </dl>
             </div>
             <div className="mb">
               <h3>Related</h3>
               <div className="related">
                 {related.map(r => (
-                  <a key={r.id} href={`#/p/${r.id}`} onClick={(e) => { e.preventDefault(); onClose(); setTimeout(() => window.location.hash = `#/p/${r.id}`, 60); }}>
+                  <a key={r.id} href={`#/p/${r.id}`} onClick={(e) => { e.preventDefault(); window.location.hash = `#/p/${r.id}`; }}>
                     <span>{r.name}</span><span className="p">${r.price}</span>
                   </a>
                 ))}
