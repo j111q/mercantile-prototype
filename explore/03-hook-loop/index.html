@@ -260,7 +260,9 @@
     letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate);
     padding: 2px 8px; border: 1px solid var(--rule); border-radius: 2px;
     background: var(--paper-2);
+    display: inline-flex; align-items: center; gap: 5px;
   }
+  .cell .stamp .stamp-icn { font-size: 1.15em; line-height: 0; }
   .cell .meta-row {
     display: flex; justify-content: space-between; align-items: baseline;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -1211,16 +1213,27 @@ function Hero({ titleMode, total }) {
 }
 
 // ======== GRID CELL ========
+const STAMPS = {
+  'OUT':       { icon: '▪', color: '#d63638' },
+  'LOW STOCK': { icon: '⬢', color: '#ff7aa8' },
+  'SEASONAL':  { icon: '✦', color: '#f5b800' },
+  'HERITAGE':  { icon: '◆', color: '#8c8f94' },
+  'IN STOCK':  { icon: '▲', color: '#3858e9' },
+};
 function Cell({ p, idx, onOpen }) {
   const stk = stockFor(p.id);
   const stamp = stk === 0 ? 'OUT' : (stk < 12 ? 'LOW STOCK' : (p.tags.includes('tie-dye') ? 'SEASONAL' : (p.tags.includes('heritage') ? 'HERITAGE' : `IN STOCK`)));
+  const meta = STAMPS[stamp] || {};
   return (
     <div className="cell" style={{'--i': idx}} onClick={() => onOpen(p.id)}>
       <span className="idx">{String(idx+1).padStart(3,'0')} / {sku(p.id)}</span>
       <span className="price-tag">${p.price}</span>
       <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f6f7f7', fg: '#3858e9' })}}/>
       <div style={{position:'relative', marginTop:-2}}>
-        <span className="stamp" style={{position:'absolute', right: 0, top: -22}}>{stamp}</span>
+        <span className="stamp" style={{position:'absolute', right: 0, top: -22}}>
+          <span className="stamp-icn" style={{color: meta.color}}>{meta.icon}</span>
+          {stamp}
+        </span>
       </div>
       <div className="meta-row">
         <span>{p.cat}</span>
