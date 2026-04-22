@@ -40,11 +40,12 @@
   .mono, code, kbd, pre { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
   ::selection { background: var(--wp); color: #fff; }
 
-  /* ========== WIDTH CAPS — content centers above 1600px ========== */
-  .ticker, .hero, .section-head, .grid-wrap, .band, .footer-band {
-    max-width: var(--max-w);
-    margin-left: auto; margin-right: auto;
-  }
+  /* ========== WIDTH CAPS ==========
+     Full-width bars (ticker, section-head, footer, grid's bottom line)
+     stay edge-to-edge. Content bleeds to --max-w via a dynamic side
+     gutter — so trim lines/backgrounds reach the viewport edges while
+     the body content stays centered on wide monitors. */
+  :root { --gutter: max(40px, calc(50vw - var(--max-w) / 2)); }
 
   /* ========== TICKER (the "actively updating" strip) ========== */
   .ticker {
@@ -93,7 +94,7 @@
 
   /* ========== HERO ========== */
   .hero {
-    padding: 48px 40px 0;
+    padding: 48px var(--gutter) 0;
     position: relative;
     border-bottom: 1px solid var(--rule);
   }
@@ -150,7 +151,7 @@
     background: var(--paper);
     border-bottom: 1px solid var(--rule);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 40px;
+    padding: 10px var(--gutter);
     gap: 20px; flex-wrap: wrap;
   }
   .section-head .label {
@@ -186,7 +187,14 @@
   .section-head .right .cart .n { color: #fff; font-weight: 700; }
 
   /* ========== GRID ========== */
-  .grid-wrap { padding: 0 40px; }
+  .grid-wrap {
+    padding: 0 var(--gutter);
+    /* Full-width bottom line under the product grid. Margin-bottom: -1px
+       pulls the band's border-top over it so it reads as one clean line
+       instead of doubling. */
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: -1px;
+  }
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -302,7 +310,7 @@
 
   /* ========== INTERSTITIAL BAND (adam-ho-ish text texture) ========== */
   .band {
-    padding: 56px 40px 48px;
+    padding: 56px var(--gutter) 48px;
     border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
     background: var(--paper);
@@ -327,7 +335,7 @@
 
   /* ========== FOOTER ========== */
   .footer-band {
-    padding: 64px 40px 24px; background: var(--ink); color: var(--paper);
+    padding: 64px var(--gutter) 24px; background: var(--ink); color: var(--paper);
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px;
     line-height: 1.7;
