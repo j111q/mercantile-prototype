@@ -680,12 +680,14 @@
   /* ========== TOAST ========== */
   .toast {
     position: fixed; bottom: 20px; left: 20px;
+    max-width: calc(100vw - 40px); box-sizing: border-box;
     background: var(--ink); color: var(--paper);
     padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
     border: 1px solid var(--wp);
     opacity: 0; transform: translateY(10px); transition: 0.2s;
     z-index: 120; letter-spacing: 0.03em;
     pointer-events: none;
+    overflow-wrap: anywhere; word-break: break-word;
   }
   .toast.on { opacity: 1; transform: translateY(0); }
   .toast .ok { color: #7bda7b; margin-right: 6px; }
@@ -904,6 +906,8 @@
     .cart-drawer { width: 100%; }
     .cart-drawer .item { grid-template-columns: 56px 1fr auto; }
     .cart-drawer .item .img { width: 56px; height: 56px; }
+    /* Toast: full-width-ish banner near bottom, centered text. */
+    .toast { left: 16px; right: 16px; bottom: 16px; max-width: none; text-align: center; }
   }
   @media (max-width: 500px) {
     .hero { padding: 24px 16px 0; }
