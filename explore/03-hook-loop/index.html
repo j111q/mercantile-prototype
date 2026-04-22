@@ -124,7 +124,8 @@
     padding: 20px 0 24px;
     font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
     line-height: 1.7;
-    border-bottom: 1px solid var(--rule);
+    /* No border-bottom — the hero's own border-bottom sits directly beneath
+       and was doubling against this one. */
   }
   .hero .rail-row .blurb { font-family: 'Newsreader', serif; font-size: 17px; color: var(--ink); line-height: 1.4; font-style: italic; font-weight: 400; max-width: 38ch; }
   .hero .rail-row .blurb em { color: var(--wp); font-style: italic; }
@@ -281,7 +282,7 @@
     color: var(--slate);
     letter-spacing: 0.02em;
     background: var(--paper-2);
-    line-height: 1.35;
+    line-height: 0.8;
     display: flex; gap: 18px; flex-wrap: wrap;
     align-items: baseline;
     position: relative;
@@ -1137,7 +1138,7 @@ function Hero({ titleMode, total }) {
 
       <div className="rail-row">
         <div className="blurb">
-          Objects for the people who make the <em>open web</em>. Cotton, ceramic, vinyl, and mascots — shipped out of{'\u00A0'}<em>wp-content/merch</em>.
+          Objects for the people who make the <em>open web</em>. Cotton, ceramic, vinyl, and mascots — shipped out of{'\u00A0'}<em style={{whiteSpace:'nowrap'}}>wp-content/merch</em>.
         </div>
         <div>
           <div className="kv"><span>editor</span><b>wapuu</b></div>
