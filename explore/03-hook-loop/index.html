@@ -55,7 +55,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: #9a9ca3;
-    height: 28px;
+    height: 34px;
     display: flex;
     align-items: stretch;
     overflow: hidden;
@@ -156,7 +156,7 @@
 
   /* ========== SECTION HEAD / FILTER BAR ========== */
   .section-head {
-    position: sticky; top: 28px; z-index: 40;
+    position: sticky; top: 34px; z-index: 40;
     background: var(--paper);
     border-bottom: 1px solid var(--rule);
     display: flex; align-items: center; justify-content: space-between;
@@ -1140,7 +1140,6 @@ function Ticker({ cart, onCartClick }) {
       <button className="tab" onClick={onCartClick} style={{cursor:'pointer'}} aria-label="Open cart">
         <span>cart</span><span className="v">{cart.count}</span>
       </button>
-      <div className="tab"><span>v</span><span className="v">2.1.0</span></div>
     </div>
   );
 }
