@@ -743,22 +743,21 @@ function Hero({ titleMode, total }) {
   return (
     <section className="hero">
       <div className="gutter-code" aria-hidden="true">
-        <div><span className="k">&lt;?php</span></div>
-        <div>/* est. 2003 */</div>
-        <div>wp_enqueue_style(<br/>&nbsp;&nbsp;'mercantile' );</div>
-        <div>add_action(<br/>&nbsp;&nbsp;'merch_browsed',<br/>&nbsp;&nbsp;__NAMESPACE__ );</div>
-        <div>/* run trunk */</div>
-        <div>add_filter(<br/>&nbsp;&nbsp;'the_content',<br/>&nbsp;&nbsp;'wapuufy' );</div>
-        <div>while ( have_posts() ) :<br/>&nbsp;&nbsp;the_post();<br/>endwhile;</div>
-        <div>/* the loop */</div>
-        <div>apply_filters(<br/>&nbsp;&nbsp;'merch_price',<br/>&nbsp;&nbsp;$price );</div>
-        <div>do_action(<br/>&nbsp;&nbsp;'post_purchase',<br/>&nbsp;&nbsp;$order_id );</div>
-        <div>/* hooks &amp; loops */</div>
-        <div>wp_cache_flush();</div>
-        <div><span className="k">namespace</span> Mercantile\Catalog;</div>
-        <div>register_post_type(<br/>&nbsp;&nbsp;'merch', [...] );</div>
-        <div>get_template_part(<br/>&nbsp;&nbsp;'parts/footer' );</div>
-        <div>/* ?&gt; */</div>
+        <div><span className="k">&lt;?php</span> declare( strict_types = 1 );</div>
+        <div>/* established 2003 · GPLv2 · merch since forever */</div>
+        <div>wp_enqueue_style( 'mercantile', plugins_url( 'css/merch.css', __FILE__ ), [], MERCANTILE_VERSION );</div>
+        <div>add_action( 'merch_browsed', 'mercantile\track_visit', 10, 2 );</div>
+        <div>/* run trunk — ship on fridays — apologize on mondays */</div>
+        <div>add_filter( 'the_content', 'mercantile\wapuufy_the_copy', 20 );</div>
+        <div>while ( have_posts() ) : the_post(); endwhile; // the loop, forever</div>
+        <div>apply_filters( 'merch_price', $price, $product, $currency );</div>
+        <div>do_action( 'woocommerce_after_add_to_cart_button', $product );</div>
+        <div>/* hooks fire from this file 1,402 times a day on average */</div>
+        <div>wp_cache_flush(); // thoughts &amp; prayers</div>
+        <div><span className="k">namespace</span> Mercantile\Catalog\Apparel\Joggers\WordPress;</div>
+        <div>register_post_type( 'merch', [ 'public' =&gt; true, 'supports' =&gt; [ 'title', 'editor', 'thumbnail' ] ] );</div>
+        <div>get_template_part( 'parts/footer', null, [ 'reveal' =&gt; 'wapuu' ] );</div>
+        <div>/* signed off by wapuu @ 3:17am local time — ?&gt; */</div>
       </div>
       <div className="meta-strip">
         <div className="col">
