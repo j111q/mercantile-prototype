@@ -181,7 +181,8 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border-left: 1px solid var(--rule);
-    border-top: 1px solid var(--rule);
+    /* No border-top — section-head's border-bottom already provides the
+       line above the grid. */
   }
   @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
@@ -268,6 +269,10 @@
   /* code interstitial row (spans full width) */
   .interstitial {
     grid-column: 1 / -1;
+    /* margin-top -1px pulls the interstitial over the cells' bottom borders
+       above it. Its own border-top then re-draws a single clean line that
+       also fills in across any empty grid cells in an incomplete row. */
+    margin-top: -1px;
     border-top: 1px solid var(--rule);
     border-right: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
@@ -279,6 +284,7 @@
     line-height: 1.35;
     display: flex; gap: 18px; flex-wrap: wrap;
     align-items: baseline;
+    position: relative;
   }
   .interstitial b { color: var(--ink); font-weight: 600; }
   .interstitial .k { color: var(--wp); }
