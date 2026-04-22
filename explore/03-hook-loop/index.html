@@ -14,6 +14,9 @@
 <script src="../shared/product-art.js"></script>
 <style>
   :root {
+    /* Cap the store's content width — above this, we center on the page
+       instead of stretching. */
+    --max-w: 1600px;
     --wp:     #3858e9;
     --wp-d:   #183ad6;
     /* Neutral greys lifted from the real wp-admin palette. */
@@ -36,6 +39,12 @@
   button { font: inherit; cursor: pointer; background: none; border: 0; color: inherit; padding: 0; }
   .mono, code, kbd, pre { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
   ::selection { background: var(--wp); color: #fff; }
+
+  /* ========== WIDTH CAPS — content centers above 1600px ========== */
+  .ticker, .hero, .section-head, .grid-wrap, .band, .footer-band {
+    max-width: var(--max-w);
+    margin-left: auto; margin-right: auto;
+  }
 
   /* ========== TICKER (the "actively updating" strip) ========== */
   .ticker {
@@ -778,8 +787,8 @@
        flattens each .col so its child spans join the parent flex row. */
     .hero .meta-strip {
       flex-direction: row; flex-wrap: wrap;
-      align-items: baseline; gap: 2px 14px;
-      font-size: 10px; padding-bottom: 6px;
+      align-items: baseline; gap: 2px 12px;
+      font-size: 9px; padding-bottom: 4px;
     }
     .hero .meta-strip .col { display: contents; }
     .hero .meta-strip .col.r { text-align: left; }
@@ -797,7 +806,7 @@
   }
   @media (max-width: 700px) {
     .hero { padding: 28px 20px 0; }
-    .hero .meta-strip { font-size: 9.5px; gap: 2px 12px; }
+    .hero .meta-strip { font-size: 8.5px; gap: 2px 10px; }
     .hero .mark { margin: 6px 0 -4px; }
     .hero .rail-row { font-size: 10px; gap: 14px 20px; }
     /* Section head goes vertical: filter row above, search+cart row below. */
