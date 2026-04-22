@@ -863,6 +863,14 @@
     .footer-band { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 700px) {
+    /* Ticker: compact so it takes less vertical space on phones. */
+    .ticker { height: 24px; font-size: 10px; }
+    /* Section head: taller controls so filters/search/cart have thumb room. */
+    .section-head { padding: 14px 20px; gap: 12px; }
+    .section-head .filters button { padding: 10px 14px; font-size: 13px; }
+    .section-head .right { gap: 10px; }
+    .section-head .right .search { padding: 10px 14px; font-size: 13px; }
+    .section-head .right .cart { padding: 10px 14px; font-size: 13px; }
     .hero { padding: 28px 20px 0; }
     .hero .meta-strip { font-size: 8.5px; gap: 2px 10px; }
     .hero .mark { font-size: clamp(56px, 13vw, 110px); margin: 22px 0 -4px; }
