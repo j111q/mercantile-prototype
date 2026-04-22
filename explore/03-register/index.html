@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mercantile — wordpress.org</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../shared/catalog.js"></script>
+<script src="../shared/product-art.js"></script>
+<style>
+  :root {
+    --wp:     #3858e9;
+    --wp-d:   #183ad6;
+    --ink:    #111214;
+    --ink-2:  #2a2c31;
+    --slate:  #6b6e76;
+    --slate-2:#9a9ca3;
+    --rule:   #d9d7d1;
+    --rule-2: #e6e4dd;
+    --paper:  #ecebe4;
+    --paper-2:#f3f2ec;
+    --card:   #f7f6f1;
+    --accent: #d63638;
+    --ok:     #1f8f3a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--paper); color: var(--ink); font: 14px/1.5 'Newsreader', Georgia, serif; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; background: none; border: 0; color: inherit; padding: 0; }
+  .mono, code, kbd, pre { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+  ::selection { background: var(--wp); color: #fff; }
+
+  /* ========== TICKER (the "actively updating" strip) ========== */
+  .ticker {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--slate);
+    height: 28px;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+  }
+  .ticker .lead {
+    padding: 0 12px;
+    display: flex; align-items: center; gap: 8px;
+    border-right: 1px solid var(--rule);
+    background: var(--paper-2);
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .ticker .lead .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .ticker .rail {
+    flex: 1; overflow: hidden; position: relative; display: flex; align-items: center;
+  }
+  .ticker .track {
+    display: flex; gap: 40px; white-space: nowrap; padding-left: 16px;
+    animation: marquee 90s linear infinite;
+  }
+  .ticker .track:hover { animation-play-state: paused; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .ticker .item b { color: var(--ink); font-weight: 600; }
+  .ticker .item.wapuu { color: var(--wp); font-weight: 600; }
+  .ticker .item.wapuu::before { content: '✿ '; }
+  .ticker .tab { padding: 0 12px; border-left: 1px solid var(--rule); display:flex; align-items: center; gap: 8px; flex-shrink:0; background: var(--paper-2); }
+  .ticker .tab .v { color: var(--ink); font-weight: 600; }
+
+  /* ========== HERO ========== */
+  .hero {
+    padding: 48px 40px 0;
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero .meta-strip {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+    margin-bottom: 0;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .hero .meta-strip b { color: var(--ink); font-weight: 600; }
+  .hero .meta-strip .col { display:flex; flex-direction:column; gap:2px; }
+  .hero .meta-strip .col.r { text-align:right; }
+
+  .hero .mark {
+    font-family: 'UnifrakturCook', serif; font-weight: 700;
+    font-size: clamp(120px, 18vw, 260px);
+    line-height: 0.86;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin: 10px 0 -6px;
+    padding: 0;
+    text-wrap: balance;
+    position: relative;
+  }
+  .hero .mark .dot { color: var(--wp); }
+  .hero .mark::after {
+    content: '';
+    display: block;
+    height: 1px; background: var(--rule);
+    margin-top: 16px;
+  }
+
+  .hero .rail-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+    padding: 20px 0 24px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
+    line-height: 1.7;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero .rail-row .blurb { font-family: 'Newsreader', serif; font-size: 17px; color: var(--ink); line-height: 1.4; font-style: italic; font-weight: 400; max-width: 38ch; }
+  .hero .rail-row .blurb em { color: var(--wp); font-style: italic; }
+  .hero .rail-row b { color: var(--ink); font-weight: 600; }
+  .hero .rail-row .kv { display:flex; justify-content:space-between; border-bottom: 1px dashed var(--rule); padding: 2px 0; }
+  .hero .rail-row .kv:last-child { border-bottom: 0; }
+
+  /* decorative code margin texture on hero */
+  .hero .gutter-code {
+    position: absolute; right: 14px; top: 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate-2); text-align: right; line-height: 1.9;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    max-width: 30vw;
+  }
+  .hero .gutter-code span.k { color: var(--wp); }
+  @media (max-width: 900px) { .hero .gutter-code { display: none; } }
+
+  /* ========== SECTION HEAD / FILTER BAR ========== */
+  .section-head {
+    position: sticky; top: 28px; z-index: 40;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 40px;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .section-head .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--slate); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .section-head .filters {
+    display: flex; gap: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    border: 1px solid var(--rule); background: var(--paper-2);
+  }
+  .section-head .filters button {
+    padding: 6px 12px; color: var(--slate); border-right: 1px solid var(--rule);
+    display: flex; align-items: baseline; gap: 5px;
+  }
+  .section-head .filters button:last-child { border-right: 0; }
+  .section-head .filters button.on { background: var(--ink); color: var(--paper); }
+  .section-head .filters button .n { font-size: 10px; color: var(--slate-2); }
+  .section-head .filters button.on .n { color: var(--slate-2); }
+  .section-head .filters button:hover:not(.on) { color: var(--ink); background: var(--card); }
+
+  .section-head .right { display:flex; gap: 10px; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .section-head .right .search {
+    border: 1px solid var(--rule); background: var(--paper-2);
+    padding: 6px 10px; width: 220px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--ink);
+  }
+  .section-head .right .search::placeholder { color: var(--slate-2); }
+  .section-head .right .search:focus { outline: none; border-color: var(--wp); background: #fff; }
+  .section-head .right .cart {
+    display:flex; align-items: baseline; gap: 6px; color: var(--ink); padding: 6px 10px;
+    border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+  }
+  .section-head .right .cart .n { color: #fff; font-weight: 700; }
+
+  /* ========== GRID ========== */
+  .grid-wrap { padding: 0 40px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-left: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+  }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px)  { .grid { grid-template-columns: 1fr; } }
+
+  .cell {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    padding: 14px 14px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.12s;
+    min-height: 340px;
+  }
+  .cell:hover { background: var(--card); }
+  .cell:hover .t { color: var(--wp); }
+  .cell .idx {
+    position: absolute; top: 8px; left: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate-2); letter-spacing: 0.05em;
+  }
+  .cell .price-tag {
+    position: absolute; top: 8px; right: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--ink); font-weight: 600;
+  }
+  .cell .img {
+    aspect-ratio: 1; margin-top: 16px;
+    background: var(--paper-2); border: 1px solid var(--rule);
+    overflow: hidden; position: relative;
+  }
+  .cell .img svg { width: 100%; height: 100%; display:block; }
+  .cell .img .stamp {
+    position: absolute; bottom: 6px; left: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--slate); letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(236,235,228,0.85); padding: 1px 5px;
+  }
+  .cell .meta-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .cell .t {
+    font-family: 'Newsreader', serif; font-size: 17px; font-weight: 500;
+    color: var(--ink); line-height: 1.15;
+    text-wrap: balance; transition: color 0.12s;
+    letter-spacing: -0.005em;
+  }
+  .cell .tags {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); margin-top: auto;
+  }
+  .cell .tags span::before { content: '#'; color: var(--slate-2); }
+  .cell .add {
+    position: absolute; bottom: 12px; right: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--wp); font-weight: 500; letter-spacing: 0.02em;
+    opacity: 0; transition: opacity 0.1s;
+  }
+  .cell:hover .add { opacity: 1; }
+
+  /* code interstitial row (spans full width) */
+  .interstitial {
+    grid-column: 1 / -1;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--slate);
+    letter-spacing: 0.02em;
+    background: var(--paper-2);
+    line-height: 1.7;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .interstitial b { color: var(--ink); font-weight: 600; }
+  .interstitial .k { color: var(--wp); }
+  .interstitial .c { color: var(--slate-2); }
+
+  /* ========== INTERSTITIAL BAND (adam-ho-ish text texture) ========== */
+  .band {
+    padding: 56px 40px 48px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    overflow: hidden;
+  }
+  .band .line {
+    font-family: 'UnifrakturCook', serif;
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 84px);
+    line-height: 1.02;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .band .line .q { color: var(--wp); font-style: normal; }
+  .band .line.italic { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; }
+  .band .line.mono { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.4vw, 18px); color: var(--slate); letter-spacing: 0.02em; line-height: 1.7; margin-top: 16px; max-width: 60ch; }
+  .band .line.mono b { color: var(--ink); font-weight: 600; }
+  .band .line.mono em { color: var(--wp); font-style: normal; }
+  .band .rule { height: 1px; background: var(--rule); margin: 24px 0; }
+
+  /* ========== FOOTER ========== */
+  .footer-band {
+    padding: 64px 40px 24px; background: var(--ink); color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px;
+    line-height: 1.7;
+  }
+  @media (max-width: 800px) { .footer-band { grid-template-columns: 1fr; } }
+  .footer-band .frak { font-family: 'UnifrakturCook', serif; font-size: 84px; line-height: 0.9; color: var(--paper); }
+  .footer-band .frak .d { color: var(--wp); }
+  .footer-band h4 { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate-2); margin: 0 0 8px; font-weight: 500; }
+  .footer-band a:hover { color: var(--wp); }
+  .footer-band .bottom-row {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--slate);
+    padding-top: 14px; margin-top: 28px;
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    color: var(--slate-2);
+  }
+  .footer-band .bottom-row b { color: var(--paper); }
+
+  /* ========== MODAL (edit-post style, toned down) ========== */
+  .modal-back {
+    position: fixed; inset: 0; background: rgba(17, 18, 20, 0.55);
+    z-index: 100; display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 20px; overflow-y: auto; backdrop-filter: blur(2px);
+    animation: fadeIn 0.15s ease-out;
+  }
+  @keyframes fadeIn { from { opacity: 0; } }
+  .modal {
+    width: 100%; max-width: 1040px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    animation: slideUp 0.22s cubic-bezier(.2,.9,.3,1.1);
+  }
+  @keyframes slideUp { from { transform: translateY(12px); opacity: 0; } }
+  .modal header {
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--paper-2);
+  }
+  .modal header .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--slate); letter-spacing: 0.02em;
+  }
+  .modal header .crumb .sl { color: var(--rule); margin: 0 6px; }
+  .modal header .crumb b { color: var(--ink); }
+  .modal header .close {
+    width: 28px; height: 28px; border: 1px solid var(--rule);
+    background: var(--paper); color: var(--slate); font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal header .close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .modal .body { display: grid; grid-template-columns: 1fr 300px; gap: 0; }
+  @media (max-width: 860px) { .modal .body { grid-template-columns: 1fr; } }
+
+  .modal .editor { padding: 28px 32px 32px; border-right: 1px solid var(--rule); }
+  .modal .editor .permalink {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--slate); margin-bottom: 14px;
+    padding-bottom: 10px; border-bottom: 1px dashed var(--rule);
+    word-break: break-all;
+  }
+  .modal .editor .permalink .k { color: var(--wp); }
+  .modal .editor .permalink b { color: var(--ink); }
+  .modal .editor h1 {
+    font-family: 'UnifrakturCook', serif; font-weight: 700;
+    font-size: clamp(36px, 4.5vw, 52px);
+    line-height: 0.95; margin: 0 0 12px;
+    text-wrap: balance; letter-spacing: -0.005em;
+  }
+  .modal .editor .blurb {
+    font-family: 'Newsreader', serif; font-size: 17px; line-height: 1.45;
+    color: var(--ink-2); margin: 0 0 20px; max-width: 56ch; font-style: italic;
+  }
+  .modal .editor .gallery {
+    background: var(--paper-2); border: 1px solid var(--rule);
+    aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
+    position: relative; margin: 18px 0;
+    overflow: hidden;
+  }
+  .modal .editor .gallery > svg { width: 55%; max-height: 75%; }
+  .modal .editor .gallery .frame-label {
+    position: absolute; top: 10px; left: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .modal .editor .gallery .frame-label b { color: var(--ink); }
+  .modal .editor .gallery .dims {
+    position: absolute; bottom: 10px; right: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); letter-spacing: 0.05em;
+  }
+
+  .modal .editor .specs {
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 4px 20px; margin: 18px 0 0;
+    border-top: 1px solid var(--rule); padding-top: 14px;
+    font-size: 13px;
+  }
+  .modal .editor .specs dt {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); text-transform: uppercase; letter-spacing: 0.08em;
+    padding-top: 4px;
+  }
+  .modal .editor .specs dd {
+    margin: 0; padding: 2px 0; border-bottom: 1px dashed var(--rule);
+    font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink);
+  }
+  .modal .editor .specs dd:last-of-type,
+  .modal .editor .specs dt:last-of-type + dd { border-bottom: 0; }
+
+  .modal .editor .shortcode {
+    background: var(--ink); color: var(--paper);
+    padding: 10px 14px; margin-top: 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  }
+  .modal .editor .shortcode .k { color: #9ab1ff; }
+  .modal .editor .shortcode .v { color: #fff; }
+  .modal .editor .shortcode .copy { color: var(--slate-2); font-size: 10px; cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
+  .modal .editor .shortcode .copy:hover { color: #fff; }
+
+  .modal .side { padding: 22px 20px; background: var(--paper-2); }
+  .modal .side .mb { border-top: 1px solid var(--rule); padding: 12px 0; }
+  .modal .side .mb:first-child { border-top: 0; padding-top: 0; }
+  .modal .side .mb h3 {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); letter-spacing: 0.1em; text-transform: uppercase;
+    margin: 0 0 10px; font-weight: 500;
+  }
+  .modal .side .status-row {
+    display: flex; justify-content: space-between; font-size: 12px;
+    padding: 3px 0; border-bottom: 1px dashed var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .modal .side .status-row:last-child { border-bottom: 0; }
+  .modal .side .status-row .v { color: var(--slate); }
+  .modal .side .status-row .v.g { color: var(--ok); }
+  .modal .side .status-row .v b { color: var(--ink); font-weight: 600; }
+
+  .modal .side .sizes { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .modal .side .sizes button {
+    padding: 5px 10px; border: 1px solid var(--rule);
+    background: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--ink);
+  }
+  .modal .side .sizes button:hover { border-color: var(--ink); }
+  .modal .side .sizes button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .modal .side .add-btn {
+    width: 100%; margin-top: 12px;
+    background: var(--wp); color: #fff; border: 1px solid var(--wp-d);
+    padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .modal .side .add-btn:hover { background: var(--wp-d); }
+  .modal .side .add-btn.added { background: var(--ok); border-color: var(--ok); }
+
+  .modal .side .related a {
+    display: flex; justify-content: space-between;
+    padding: 5px 0; border-bottom: 1px dashed var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--wp);
+  }
+  .modal .side .related a:last-child { border-bottom: 0; }
+  .modal .side .related a .p { color: var(--slate); }
+  .modal .side .related a:hover { color: var(--wp-d); }
+
+  .modal .side .revisions {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--slate); line-height: 1.8;
+  }
+  .modal .side .revisions b { color: var(--ink); }
+
+  /* ========== TOAST ========== */
+  .toast {
+    position: fixed; bottom: 20px; left: 20px;
+    background: var(--ink); color: var(--paper);
+    padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    border: 1px solid var(--wp);
+    opacity: 0; transform: translateY(10px); transition: 0.2s;
+    z-index: 120; letter-spacing: 0.03em;
+    pointer-events: none;
+  }
+  .toast.on { opacity: 1; transform: translateY(0); }
+  .toast .ok { color: #7bda7b; margin-right: 6px; }
+
+  /* ========== TWEAKS ========== */
+  .tweaks {
+    position: fixed; right: -360px; bottom: 20px; width: 320px;
+    background: var(--paper); border: 1px solid var(--ink);
+    box-shadow: -4px 4px 0 var(--ink); z-index: 90;
+    transition: right 0.25s;
+  }
+  .tweaks.on { right: 20px; }
+  .tweaks h4 {
+    margin: 0; padding: 10px 12px; background: var(--ink); color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display:flex; justify-content:space-between;
+  }
+  .tweaks .in { padding: 12px; }
+  .tweaks label { display:block; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--slate); margin: 10px 0 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .tweaks .row { display:flex; gap: 4px; flex-wrap: wrap; }
+  .tweaks .row button { border: 1px solid var(--rule); background: var(--paper-2); padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .tweaks .row button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  @media (max-width: 700px) {
+    .hero { padding: 32px 20px 0; }
+    .section-head { padding: 10px 20px; }
+    .grid-wrap { padding: 0 20px; }
+    .band { padding: 40px 20px; }
+    .footer-band { padding: 40px 20px 20px; }
+    .section-head .right .search { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "view": "grid",
+  "titleMode": "fraktur",
+  "showTerminal": true
+}/*EDITMODE-END*/;
+
+function useTweaks() {
+  const [t, setT] = useState(TWEAK_DEFAULTS);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const h = (e) => {
+      if (!e.data?.type) return;
+      if (e.data.type === '__activate_edit_mode') setVisible(true);
+      if (e.data.type === '__deactivate_edit_mode') setVisible(false);
+    };
+    window.addEventListener('message', h);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', h);
+  }, []);
+  const set = (edits) => { setT(p => { const n = {...p, ...edits}; window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*'); return n; }); };
+  return { t, set, visible };
+}
+
+function useCart() {
+  const [items, setItems] = useState(() => { try { return JSON.parse(localStorage.getItem('wpa_cart4')||'[]'); } catch { return []; } });
+  useEffect(() => localStorage.setItem('wpa_cart4', JSON.stringify(items)), [items]);
+  const add = (p, size='—') => setItems(prev => {
+    const k = p.id + '@' + size;
+    const ex = prev.find(x => x.key === k);
+    if (ex) return prev.map(x => x.key === k ? { ...x, qty: x.qty+1 } : x);
+    return [...prev, { key: k, id: p.id, name: p.name, price: p.price, size, qty: 1 }];
+  });
+  const count = items.reduce((s,x) => s+x.qty, 0);
+  const total = items.reduce((s,x) => s+x.qty*x.price, 0);
+  return { items, add, count, total };
+}
+
+// deterministic helpers
+function sku(id) { return 'WP—' + id.split('-').map(s => s.slice(0,3).toUpperCase()).join('·'); }
+function hashN(id) { let h = 0; for (let i=0; i<id.length; i++) h = (h*31 + id.charCodeAt(i)) | 0; return Math.abs(h); }
+function stockFor(id) { return hashN(id) % 240; }
+
+// ======== TICKER ========
+const TICKER_ITEMS = [
+  { k: 'order', t: 'ORDER #10823 · i-love-wp-tee × 2 → Brooklyn, NY', b: true },
+  { k: 'wapuu', t: 'hi there! i\'m wapuu. it\'s nice to see you.' },
+  { k: 'code',  t: '$wpdb->prefix · post_type="merch" · ORDER BY post_date DESC' },
+  { k: 'order', t: 'ORDER #10822 · cozy-mug × 1 → Lisbon, PT', b: true },
+  { k: 'fact',  t: 'Hello Dolly is still activated somewhere in the world.' },
+  { k: 'wapuu', t: 'matt pushed to main. everybody wave.' },
+  { k: 'code',  t: 'wp cache flush && git push origin trunk — OK' },
+  { k: 'order', t: 'ORDER #10821 · wapuu-patch × 4 → Kyoto, JP', b: true },
+  { k: 'fact',  t: 'Since 2003 · licensed under the GPLv2 · and always will be.' },
+  { k: 'wapuu', t: 'the tie-dye hoodie is my favorite (don\'t tell the others).' },
+  { k: 'code',  t: 'did_action("merch_browsed") = 1,402' },
+  { k: 'order', t: 'ORDER #10820 · tie-dye-hoodie × 1 → Portland, OR', b: true },
+  { k: 'fact',  t: 'Code is poetry. Merch is proof.' },
+  { k: 'wapuu', t: 'don\'t worry, press happy.' },
+  { k: 'code',  t: '[mercantile id="i-love-wp-tee"]  →  renders in 38ms' },
+];
+
+function Ticker({ cart }) {
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS]; // duplicate for seamless loop
+  return (
+    <div className="ticker">
+      <div className="lead"><span className="dot"/>LIVE</div>
+      <div className="rail">
+        <div className="track">
+          {items.map((it, i) => (
+            <span key={i} className={`item ${it.k === 'wapuu' ? 'wapuu' : ''}`}>
+              {it.b ? <b>{it.t}</b> : it.t}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="tab"><span>cart</span><span className="v">{cart.count}</span></div>
+      <div className="tab"><span>v</span><span className="v">2.1.0</span></div>
+    </div>
+  );
+}
+
+// ======== HERO ========
+function Hero({ titleMode, total }) {
+  const now = new Date();
+  const d = now.toISOString().slice(0,10);
+  const tt = now.toTimeString().slice(0,5);
+  return (
+    <section className="hero">
+      <div className="gutter-code" aria-hidden="true">
+        <div><span className="k">&lt;?php</span></div>
+        <div>/* est. 2003 */</div>
+        <div>wp_enqueue_style( <br/>&nbsp;&nbsp;'mercantile' );</div>
+        <div>add_action(<br/>&nbsp;&nbsp;'merch_browsed', <br/>&nbsp;&nbsp;__NAMESPACE__ );</div>
+        <div>/* run trunk */</div>
+      </div>
+      <div className="meta-strip">
+        <div className="col">
+          <span><b>Mercantile</b> · wordpress.org / shop</span>
+          <span>vol. 03 · {d}</span>
+        </div>
+        <div className="col" style={{textAlign:'center'}}>
+          <span><b>{total}</b> products · <b>3</b> categories</span>
+          <span>updated {tt} UTC</span>
+        </div>
+        <div className="col r">
+          <span>GPLv2 · made with ♥︎ &amp; PHP</span>
+          <span>shipping worldwide</span>
+        </div>
+      </div>
+
+      <h1 className="mark">
+        {titleMode === 'fraktur'
+          ? <>Mercantile<span className="dot">.</span></>
+          : <span style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.28em', display:'inline-block', padding: '0.6em 0', letterSpacing:'-0.01em'}}>MERCANTILE/</span>
+        }
+      </h1>
+
+      <div className="rail-row">
+        <div className="blurb">
+          Objects for the people who make the <em>open web</em>. Cotton, ceramic, vinyl, and mascots — shipped out of <em>wp-content/merch</em>.
+        </div>
+        <div>
+          <div className="kv"><span>editor</span><b>matt</b></div>
+          <div className="kv"><span>theme</span><b>twentytwentysix-shop</b></div>
+          <div className="kv"><span>runtime</span><b>PHP 8.3</b></div>
+          <div className="kv"><span>commits today</span><b>47</b></div>
+        </div>
+        <div>
+          <div className="kv"><span>shipping from</span><b>San Francisco, CA</b></div>
+          <div className="kv"><span>dispatch</span><b>1–2 business days</b></div>
+          <div className="kv"><span>returns</span><b>within 30 days</b></div>
+          <div className="kv"><span>help</span><b>shop@wordpress.org</b></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ======== GRID CELL ========
+function Cell({ p, idx, onOpen }) {
+  const stk = stockFor(p.id);
+  const stamp = stk === 0 ? 'OUT' : (stk < 12 ? 'LOW STOCK' : (p.tags.includes('tie-dye') ? 'SEASONAL' : (p.tags.includes('heritage') ? 'HERITAGE' : `IN STOCK`)));
+  return (
+    <div className="cell" onClick={() => onOpen(p.id)}>
+      <span className="idx">{String(idx+1).padStart(3,'0')} / {sku(p.id)}</span>
+      <span className="price-tag">${p.price}</span>
+      <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>
+      <div style={{position:'relative', marginTop:-2}}>
+        <span className="stamp" style={{position:'absolute', right: 0, top: -22}}>{stamp}</span>
+      </div>
+      <div className="meta-row">
+        <span>{p.cat}</span>
+        <span>{p.tags[0]}</span>
+      </div>
+      <div className="t">{p.name}</div>
+      <div className="tags">
+        {p.tags.slice(0,3).map(t => <span key={t}>{t}</span>)}
+      </div>
+      <span className="add">edit →</span>
+    </div>
+  );
+}
+
+function Interstitial({ kind }) {
+  if (kind === 'code') return (
+    <div className="interstitial">
+      <span className="c">/* ---------- */</span>
+      <span><span className="k">$wpdb</span>-&gt;get_results( <span className="c">"SELECT *"</span> );</span>
+      <span><b>WP_Query</b>( [ <span className="c">'post_type'</span> =&gt; <span className="c">'merch'</span> ] );</span>
+      <span>ORDER BY <b>post_date</b> DESC · LIMIT <b>12</b></span>
+      <span className="c">/* ---------- 11 rows returned in 38ms */</span>
+    </div>
+  );
+  if (kind === 'filelist') return (
+    <div className="interstitial">
+      <span className="c">// changelog.txt</span>
+      <span><b>2.1.0</b> · added cozy collection</span>
+      <span><b>2.0.4</b> · fixed wapuu-patch misalignment</span>
+      <span><b>2.0.0</b> · theme refresh · new grid</span>
+      <span className="c">// and another thing …</span>
+    </div>
+  );
+  if (kind === 'quote') return (
+    <div className="interstitial" style={{fontFamily:"'Newsreader', serif", fontSize: 14, fontStyle:'italic', color: 'var(--ink)', justifyContent:'center', textAlign:'center'}}>
+      "Code is poetry. Merch is proof."&nbsp;&nbsp;<span style={{color:'var(--slate)', fontStyle:'normal', fontFamily:"'JetBrains Mono', monospace", fontSize:11}}>— every README in the monorepo</span>
+    </div>
+  );
+  return null;
+}
+
+// ======== BAND (adam-ho-ish big type band) ========
+function Band() {
+  return (
+    <section className="band">
+      <p className="line"><em style={{fontStyle:'italic', fontFamily:"'Newsreader', serif"}}>we</em> make <span className="q">things</span></p>
+      <p className="line">for the people who <em style={{fontStyle:'italic', fontFamily:"'Newsreader', serif"}}>make</em></p>
+      <p className="line">the <span className="q">internet.</span></p>
+      <div className="rule"/>
+      <p className="line mono">
+        Every object here started as a <b>pull request</b>. A kerning fix. A mascot drawn in <b>Affinity</b> at 11pm. A sweatshirt approved by <em>committee</em>. Ship with us, wear us. <b>Since 2003.</b>
+      </p>
+    </section>
+  );
+}
+
+// ======== MODAL ========
+function ProductModal({ id, onClose, onAdd }) {
+  const p = window.MERCANTILE_CATALOG.find(x => x.id === id);
+  const [size, setSize] = useState('M');
+  const [added, setAdded] = useState(false);
+  useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', h);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = ''; };
+  }, [onClose]);
+  if (!p) return null;
+  const apparel = p.cat === 'apparel';
+  const sizes = apparel ? ['XS','S','M','L','XL','XXL'] : null;
+  const related = window.MERCANTILE_CATALOG.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 5);
+  const add = () => {
+    onAdd(p, sizes ? size : '—');
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1200);
+  };
+  const dateStr = new Date(Date.now() - (hashN(p.id) % 800)*864e5).toISOString().slice(0,10);
+  return (
+    <div className="modal-back" onClick={(e) => { if (e.target.classList.contains('modal-back')) onClose(); }}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <header>
+          <div className="crumb">
+            <span>mercantile</span><span className="sl">/</span>
+            <span>{p.cat}</span><span className="sl">/</span>
+            <b>{p.id}</b>
+            <span style={{marginLeft:14, color:'var(--slate-2)'}}>post.php?action=edit</span>
+          </div>
+          <button className="close" onClick={onClose} aria-label="Close">×</button>
+        </header>
+        <div className="body">
+          <div className="editor">
+            <div className="permalink">
+              permalink: <span className="k">https://mercantile.wordpress.org/product/</span><b>{p.id}</b>
+              <span style={{marginLeft:10, color:'var(--slate-2)'}}>· modified {dateStr}</span>
+            </div>
+            <h1>{p.name}</h1>
+            <p className="blurb">{p.blurb}</p>
+            <div className="gallery">
+              <span className="frame-label"><b>fig. {String(hashN(p.id) % 99).padStart(2,'0')}</b> · {p.cat}</span>
+              <div dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>
+              <span className="dims">1600 × 1000px</span>
+            </div>
+            <dl className="specs">
+              <dt>SKU</dt><dd>{sku(p.id)}</dd>
+              <dt>price</dt><dd>${p.price}.00 USD</dd>
+              <dt>category</dt><dd>{p.cat}</dd>
+              <dt>tags</dt><dd>{p.tags.map(t => '#'+t).join(' · ')}</dd>
+              <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
+              <dt>made in</dt><dd>wherever the code is</dd>
+              <dt>care</dt><dd>cold wash · line dry · review PRs</dd>
+            </dl>
+            <div className="shortcode">
+              <span>[<span className="k">mercantile</span> <span className="k">id</span>=<span className="v">"{p.id}"</span>{sizes ? <> <span className="k">size</span>=<span className="v">"{size}"</span></> : null}]</span>
+              <span className="copy" onClick={() => navigator.clipboard?.writeText(`[mercantile id="${p.id}"]`)}>copy →</span>
+            </div>
+          </div>
+          <aside className="side">
+            <div className="mb">
+              <h3>Publish</h3>
+              <div className="status-row"><span>status</span><span className="v g">● published</span></div>
+              <div className="status-row"><span>visibility</span><span className="v">public</span></div>
+              <div className="status-row"><span>stock</span><span className="v"><b>{stockFor(p.id)}</b> on hand</span></div>
+              {sizes && (<>
+                <div style={{fontFamily:"'JetBrains Mono', monospace", fontSize:10, color:'var(--slate)', marginTop:10, textTransform:'uppercase', letterSpacing:'0.08em'}}>Size</div>
+                <div className="sizes">
+                  {sizes.map(s => <button key={s} className={size===s?'on':''} onClick={() => setSize(s)}>{s}</button>)}
+                </div>
+              </>)}
+              <button className={`add-btn ${added?'added':''}`} onClick={add}>
+                {added ? '✓ added' : `Add to cart · $${p.price}`}
+              </button>
+            </div>
+            <div className="mb">
+              <h3>Related</h3>
+              <div className="related">
+                {related.map(r => (
+                  <a key={r.id} href={`#/p/${r.id}`} onClick={(e) => { e.preventDefault(); onClose(); setTimeout(() => window.location.hash = `#/p/${r.id}`, 60); }}>
+                    <span>{r.name}</span><span className="p">${r.price}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div className="mb">
+              <h3>Revisions</h3>
+              <div className="revisions">
+                <b>matt</b>, 2d ago — price +$2<br/>
+                <b>matt</b>, 1w ago — copy<br/>
+                <b>nacin</b>, 2w ago — created
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ======== TWEAKS ========
+function Tweaks({ t, set, visible }) {
+  return (
+    <div className={`tweaks ${visible?'on':''}`}>
+      <h4>TWEAKS</h4>
+      <div className="in">
+        <label>Wordmark</label>
+        <div className="row">
+          {['fraktur','mono'].map(v => <button key={v} className={t.titleMode===v?'on':''} onClick={() => set({titleMode:v})}>{v}</button>)}
+        </div>
+        <label>Live ticker</label>
+        <div className="row">
+          <button className={t.showTerminal?'on':''} onClick={() => set({showTerminal: true})}>on</button>
+          <button className={!t.showTerminal?'on':''} onClick={() => set({showTerminal: false})}>off</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ======== ROUTE / APP ========
+function useRoute() {
+  const parse = () => {
+    const h = location.hash.slice(1) || '/';
+    const parts = h.split('/').filter(Boolean);
+    if (parts[0] === 'p') return { view: 'product', id: parts[1] };
+    return { view: 'list' };
+  };
+  const [r, setR] = useState(parse);
+  useEffect(() => {
+    const h = () => setR(parse());
+    window.addEventListener('hashchange', h);
+    return () => window.removeEventListener('hashchange', h);
+  }, []);
+  return r;
+}
+
+function App() {
+  const { t, set, visible } = useTweaks();
+  const route = useRoute();
+  const cart = useCart();
+  const [q, setQ] = useState('');
+  const [cat, setCat] = useState('all');
+  const [toast, setToast] = useState('');
+
+  const onAdd = (p, size) => {
+    cart.add(p, size);
+    setToast(`✓ ${p.name} — ${size} — committed`);
+    setTimeout(() => setToast(''), 1600);
+  };
+
+  const items = useMemo(() => {
+    let list = window.MERCANTILE_CATALOG;
+    if (cat !== 'all') list = list.filter(p => p.cat === cat);
+    if (q.trim()) {
+      const qq = q.toLowerCase();
+      list = list.filter(p => p.name.toLowerCase().includes(qq) || p.tags.join(' ').includes(qq) || p.id.includes(qq));
+    }
+    return list;
+  }, [q, cat]);
+
+  const counts = {
+    all: window.MERCANTILE_CATALOG.length,
+    apparel: window.MERCANTILE_CATALOG.filter(x => x.cat==='apparel').length,
+    drinkware: window.MERCANTILE_CATALOG.filter(x => x.cat==='drinkware').length,
+    accessories: window.MERCANTILE_CATALOG.filter(x => x.cat==='accessories').length,
+  };
+
+  const open = (id) => { window.location.hash = `#/p/${id}`; };
+  const close = () => { history.replaceState(null,'',window.location.pathname); window.dispatchEvent(new HashChangeEvent('hashchange')); };
+
+  // Build rendered list with interstitials every 8 items
+  const rendered = [];
+  items.forEach((p, i) => {
+    rendered.push(<Cell key={p.id} p={p} idx={i} onOpen={open}/>);
+    if ((i+1) % 8 === 0 && i !== items.length - 1) {
+      const kind = (i+1) === 8 ? 'code' : ((i+1) === 16 ? 'quote' : 'filelist');
+      rendered.push(<Interstitial key={`int-${i}`} kind={kind}/>);
+    }
+  });
+
+  return (
+    <>
+      {t.showTerminal && <Ticker cart={cart}/>}
+      <Hero titleMode={t.titleMode} total={window.MERCANTILE_CATALOG.length}/>
+
+      <div className="section-head" style={!t.showTerminal ? { top: 0 } : {}}>
+        <div style={{display:'flex', alignItems:'center', gap: 18, flexWrap:'wrap'}}>
+          <span className="label">§ Catalog</span>
+          <div className="filters">
+            <button className={cat==='all'?'on':''} onClick={() => setCat('all')}>All <span className="n">{counts.all}</span></button>
+            <button className={cat==='apparel'?'on':''} onClick={() => setCat('apparel')}>Apparel <span className="n">{counts.apparel}</span></button>
+            <button className={cat==='drinkware'?'on':''} onClick={() => setCat('drinkware')}>Drinkware <span className="n">{counts.drinkware}</span></button>
+            <button className={cat==='accessories'?'on':''} onClick={() => setCat('accessories')}>Accessories <span className="n">{counts.accessories}</span></button>
+          </div>
+        </div>
+        <div className="right">
+          <input className="search" placeholder="grep products…" value={q} onChange={e => setQ(e.target.value)}/>
+          <div className="cart">cart · <span className="n">{cart.count}</span> · ${cart.total}</div>
+        </div>
+      </div>
+
+      <div className="grid-wrap">
+        <div className="grid">
+          {rendered}
+        </div>
+      </div>
+
+      <Band/>
+
+      <footer className="footer-band">
+        <div>
+          <div className="frak">Mercantile<span className="d">.</span></div>
+          <div style={{marginTop: 14, maxWidth: '50ch'}}>
+            <b style={{color:'#fff'}}>mercantile.wordpress.org</b> · shop of the open web · shipping worldwide since 2003 · licensed under the GPLv2 · made with ♥︎ and a lot of PHP
+          </div>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <a>Apparel</a><br/>
+          <a>Drinkware</a><br/>
+          <a>Accessories</a><br/>
+          <a>Cozy Collection</a><br/>
+          <a>Heritage</a><br/>
+          <a>Wapuu</a>
+        </div>
+        <div>
+          <h4>Elsewhere</h4>
+          <a>wordpress.org</a><br/>
+          <a>WordCamp</a><br/>
+          <a>Five for the Future</a><br/>
+          <a>Contribute</a><br/>
+          <a>News</a>
+          <h4 style={{marginTop:18}}>Contact</h4>
+          <a>shop@wordpress.org</a>
+        </div>
+        <div className="bottom-row">
+          <span>© 2003–2026 WordPress Foundation · <b>GPLv2</b></span>
+          <span>Run trunk like your landlord.</span>
+          <span>v2.1.0 · php 8.3 · build 8401</span>
+        </div>
+      </footer>
+
+      {route.view === 'product' && <ProductModal id={route.id} onClose={close} onAdd={onAdd}/>}
+      <Tweaks t={t} set={set} visible={visible}/>
+      <div className={`toast ${toast?'on':''}`}><span className="ok">●</span>{toast}</div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+<div id="root"></div>
+</body>
+</html>
