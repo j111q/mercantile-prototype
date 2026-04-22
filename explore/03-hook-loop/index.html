@@ -360,6 +360,22 @@
   @media (prefers-reduced-motion: reduce) {
     .modal-back, .modal { animation: none !important; }
   }
+
+  /* Wapuu burst on modal close — quick, tiny shower from the close point. */
+  .wapuu-poof {
+    position: fixed; pointer-events: none; z-index: 9999;
+    user-select: none; line-height: 0; opacity: 0;
+    filter: drop-shadow(0 3px 2px rgba(0,0,0,0.18));
+    animation: wapuu-poof 1.2s cubic-bezier(.25,.45,.45,1) forwards;
+    will-change: transform, opacity;
+  }
+  .wapuu-poof img { display: block; width: 100%; height: 100%; }
+  @keyframes wapuu-poof {
+    0%   { transform: translate(-50%, -50%) scale(0.3) rotate(0); opacity: 0; }
+    18%  { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 0.9; }
+    100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.92) rotate(var(--rot)); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .wapuu-poof { display: none !important; } }
   .modal header {
     border-bottom: 1px solid var(--rule);
     padding: 10px 16px;
@@ -435,7 +451,7 @@
   .modal .editor .gallery .flip-btn {
     position: absolute; top: 10px; right: 12px;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: var(--ink); padding: 4px 10px; background: #fff3b0;
+    color: var(--ink); padding: 4px 10px; background: #e2e8ff;
     border: 1px solid var(--ink); border-radius: 2px;
     cursor: pointer; letter-spacing: 0.04em;
     transition: background 0.15s, color 0.15s;
@@ -787,6 +803,30 @@ function useCart() {
 function sku(id) { return 'WP—' + id.split('-').map(s => s.slice(0,3).toUpperCase()).join('·'); }
 function hashN(id) { let h = 0; for (let i=0; i<id.length; i++) h = (h*31 + id.charCodeAt(i)) | 0; return Math.abs(h); }
 
+// Tiny Wapuu burst — spawns N Wapuus from (x,y) that drift outward and fade.
+// Triggered when the PDP modal closes.
+function rainWapuus(x, y, count = 12) {
+  const src = '../shared/wapuu.svg';
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'wapuu-poof';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    el.appendChild(img);
+    const size = 18 + Math.random() * 22; // 18–40px
+    el.style.width  = size + 'px';
+    el.style.height = size * (66 / 60) + 'px';
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+    el.style.setProperty('--dx',  ((Math.random() - 0.5) * 220) + 'px');
+    el.style.setProperty('--dy',  (60 + Math.random() * 200) + 'px');
+    el.style.setProperty('--rot', ((Math.random() - 0.5) * 340) + 'deg');
+    el.style.animationDelay = (i * 22) + 'ms';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1300 + i * 22);
+  }
+}
+
 // Add-to-cart loading labels — mono / wp-admin flavored for Hook & Loop.
 const HL_LOADING_LABELS = [
   'committing…',
@@ -1117,8 +1157,26 @@ function ProductModal({ id, onClose, onAdd }) {
   const [state, setState] = useState('idle'); // idle | loading | added
   const [label, setLabel] = useState('');
   const lastLabel = useRef('');
+
+  // Rain wapuus from the click point (or the × button as fallback), then close.
+  const closeWithRain = (e) => {
+    let x, y;
+    if (e && typeof e.clientX === 'number' && e.clientX) {
+      x = e.clientX; y = e.clientY;
+    } else {
+      const btn = document.querySelector('.modal header .close');
+      if (btn) {
+        const r = btn.getBoundingClientRect();
+        x = r.left + r.width/2; y = r.top + r.height/2;
+      } else {
+        x = window.innerWidth / 2; y = 120;
+      }
+    }
+    rainWapuus(x, y);
+    onClose();
+  };
   useEffect(() => {
-    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    const h = (e) => { if (e.key === 'Escape') closeWithRain(); };
     window.addEventListener('keydown', h);
     document.body.style.overflow = 'hidden';
     return () => { window.removeEventListener('keydown', h); document.body.style.overflow = ''; };
@@ -1139,7 +1197,7 @@ function ProductModal({ id, onClose, onAdd }) {
   };
   const dateStr = new Date(Date.now() - (hashN(p.id) % 800)*864e5).toISOString().slice(0,10);
   return (
-    <div className="modal-back" onClick={(e) => { if (e.target.classList.contains('modal-back')) onClose(); }}>
+    <div className="modal-back" onClick={(e) => { if (e.target.classList.contains('modal-back')) closeWithRain(e); }}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <header>
           <div className="crumb">
@@ -1148,7 +1206,7 @@ function ProductModal({ id, onClose, onAdd }) {
             <b>{p.id}</b>
             <span style={{marginLeft:14, color:'var(--slate-2)'}}>post.php?action=edit</span>
           </div>
-          <button className="close" onClick={onClose} aria-label="Close">×</button>
+          <button className="close" onClick={closeWithRain} aria-label="Close">×</button>
         </header>
         <div className="body">
           <div className="editor">
