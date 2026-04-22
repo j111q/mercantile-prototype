@@ -262,7 +262,11 @@
     background: var(--paper-2);
     display: inline-flex; align-items: center; gap: 5px;
   }
-  .cell .stamp .stamp-icn { font-size: 1.15em; line-height: 0; }
+  .cell .stamp .stamp-icn {
+    font-size: 1.1em; line-height: 1;
+    display: inline-flex; align-items: center;
+    transform: translateY(-1px); /* optical centering — geometric glyphs sit low */
+  }
   .cell .meta-row {
     display: flex; justify-content: space-between; align-items: baseline;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
