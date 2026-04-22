@@ -187,20 +187,23 @@
   .section-head .right .cart .n { color: #fff; font-weight: 700; }
 
   /* ========== GRID ========== */
-  .grid-wrap {
-    padding: 0 var(--gutter);
-    /* Full-width bottom line under the product grid. Margin-bottom: -1px
-       pulls the band's border-top over it so it reads as one clean line
-       instead of doubling. */
-    border-bottom: 1px solid var(--rule);
-    margin-bottom: -1px;
-  }
+  .grid-wrap { padding: 0 var(--gutter); }
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border-left: 1px solid var(--rule);
     /* No border-top — section-head's border-bottom already provides the
        line above the grid. */
+  }
+  /* Synthetic full-width line under the last row of products. Extends
+     beyond the grid via negative horizontal margins = --gutter, and
+     overlaps the last row of cells' border-bottom via margin-top:-1px
+     so the seam reads as ONE line even at the gutter transition. */
+  .grid::after {
+    content: '';
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule);
+    margin: -1px calc(-1 * var(--gutter)) 0;
   }
   @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
@@ -270,22 +273,20 @@
     text-wrap: balance; transition: color 0.12s;
     letter-spacing: -0.005em;
   }
-  /* Fake typing caret — blinks at the end of every product title. */
-  .cell .t::after,
+  /* Fake typing caret — only on the PDP title (input-field). */
   .modal .editor h1::after {
     content: '';
     display: inline-block;
-    width: 0.08em;
-    height: 1em;
+    width: 0.06em;
+    height: 0.9em;
     background: var(--wp);
-    margin-left: 0.28em;
-    vertical-align: -0.12em;
+    margin-left: 0.2em;
+    vertical-align: -0.08em;
     animation: caret-blink 1.1s steps(2, start) infinite;
   }
-  .modal .editor h1::after { height: 0.9em; width: 0.06em; margin-left: 0.2em; vertical-align: -0.08em; }
   @keyframes caret-blink { to { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) {
-    .cell .t::after, .modal .editor h1::after { animation: none; opacity: 0.9; }
+    .modal .editor h1::after { animation: none; opacity: 0.9; }
   }
   .cell .tags {
     display: flex; gap: 4px; flex-wrap: wrap;
@@ -328,7 +329,7 @@
   /* ========== INTERSTITIAL BAND (adam-ho-ish text texture) ========== */
   .band {
     padding: 56px var(--gutter) 48px;
-    border-top: 1px solid var(--rule);
+    /* No border-top — the grid's ::after line sits right above us. */
     border-bottom: 1px solid var(--rule);
     background: var(--paper);
     overflow: hidden;
@@ -833,7 +834,8 @@
     /* Rail row: blurb on its own row full width; stats stay side-by-side in 2 cols. */
     .hero .rail-row { grid-template-columns: 1fr 1fr; gap: 18px 24px; padding: 18px 0 22px; font-size: 10.5px; }
     .hero .rail-row .blurb { grid-column: 1 / -1; max-width: none; }
-    .hero .rail-row .kv { padding: 1px 0; }
+    .hero .rail-row .kv { padding: 1px 0; flex-wrap: wrap; }
+    .hero .rail-row .kv b { margin-left: auto; text-align: right; }
   }
   @media (max-width: 860px) {
     .modal-back { padding: 16px 12px; }
