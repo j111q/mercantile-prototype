@@ -270,6 +270,23 @@
     text-wrap: balance; transition: color 0.12s;
     letter-spacing: -0.005em;
   }
+  /* Fake typing caret — blinks at the end of every product title. */
+  .cell .t::after,
+  .modal .editor h1::after {
+    content: '';
+    display: inline-block;
+    width: 0.08em;
+    height: 1em;
+    background: var(--wp);
+    margin-left: 0.28em;
+    vertical-align: -0.12em;
+    animation: caret-blink 1.1s steps(2, start) infinite;
+  }
+  .modal .editor h1::after { height: 0.9em; width: 0.06em; margin-left: 0.2em; vertical-align: -0.08em; }
+  @keyframes caret-blink { to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .cell .t::after, .modal .editor h1::after { animation: none; opacity: 0.9; }
+  }
   .cell .tags {
     display: flex; gap: 4px; flex-wrap: wrap;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
