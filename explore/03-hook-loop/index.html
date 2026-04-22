@@ -556,6 +556,135 @@
   .toast.on { opacity: 1; transform: translateY(0); }
   .toast .ok { color: #7bda7b; margin-right: 6px; }
 
+  /* ========== CART DRAWER ========== */
+  .cart-backdrop {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,0.45);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.22s;
+  }
+  .cart-backdrop.on { opacity: 1; pointer-events: auto; }
+  .cart-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 440px; max-width: 100vw; z-index: 101;
+    background: var(--paper); color: var(--ink);
+    border-left: 1px solid var(--rule);
+    transform: translateX(100%);
+    transition: transform 0.34s cubic-bezier(.22,.8,.3,1);
+    display: flex; flex-direction: column;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cart-drawer.on { transform: translateX(0); }
+  .cart-drawer header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+  .cart-drawer header h3 {
+    margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 600;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .cart-drawer header h3 .n { color: var(--slate); font-weight: 400; margin-left: 4px; }
+  .cart-drawer header .close {
+    width: 28px; height: 28px; border: 1px solid var(--rule); background: transparent;
+    font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer;
+  }
+  .cart-drawer header .close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .cart-drawer .items { flex: 1; overflow-y: auto; padding: 4px 20px; }
+  .cart-drawer .item {
+    display: grid; grid-template-columns: 68px 1fr auto; gap: 12px;
+    padding: 14px 0; border-bottom: 1px dashed var(--rule);
+    align-items: start;
+  }
+  .cart-drawer .item:last-child { border-bottom: 0; }
+  .cart-drawer .item .img {
+    width: 68px; height: 68px; background: #fff;
+    border: 1px solid var(--rule); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center; padding: 6px;
+  }
+  .cart-drawer .item .img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .cart-drawer .item .meta h4 {
+    font-family: 'Newsreader', serif; font-size: 15px; font-weight: 500;
+    margin: 0 0 4px; line-height: 1.2; color: var(--ink); text-wrap: balance;
+  }
+  .cart-drawer .item .meta .k {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .cart-drawer .item .qty { display: inline-flex; align-items: center; gap: 0; margin: 8px 0 0; border: 1px solid var(--rule); }
+  .cart-drawer .item .qty button {
+    width: 24px; height: 22px; background: transparent;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    color: var(--ink); cursor: pointer; line-height: 1;
+  }
+  .cart-drawer .item .qty button:hover { background: var(--ink); color: var(--paper); }
+  .cart-drawer .item .qty .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    min-width: 22px; padding: 0 4px; text-align: center;
+    border-left: 1px solid var(--rule); border-right: 1px solid var(--rule);
+    line-height: 22px;
+  }
+  .cart-drawer .item .rm {
+    display: inline-block; margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate-2); background: transparent; border: 0; padding: 0;
+    text-decoration: underline; cursor: pointer;
+  }
+  .cart-drawer .item .rm:hover { color: var(--accent); }
+  .cart-drawer .item .price {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+    color: var(--ink); text-align: right; white-space: nowrap;
+  }
+
+  .cart-drawer .empty {
+    flex: 1; padding: 60px 24px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    color: var(--slate);
+  }
+  .cart-drawer .empty .frak {
+    font-family: 'UnifrakturCook', serif; font-size: 64px;
+    color: var(--slate-2); line-height: 1; margin-bottom: 16px;
+  }
+  .cart-drawer .empty p { font-family: 'Newsreader', serif; font-style: italic; font-size: 16px; margin: 0 0 18px; }
+  .cart-drawer .empty button {
+    padding: 10px 16px; background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .cart-drawer footer {
+    padding: 18px 20px 20px;
+    border-top: 1px solid var(--rule);
+    background: var(--paper-2);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .cart-drawer footer .row {
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--ink);
+  }
+  .cart-drawer footer .row .k { color: var(--slate); }
+  .cart-drawer footer .row.total {
+    font-size: 15px; font-weight: 700;
+    padding-top: 8px; margin-top: 4px; border-top: 1px solid var(--rule);
+  }
+  .cart-drawer footer .checkout {
+    width: 100%; margin-top: 8px; padding: 12px;
+    background: var(--wp); color: #fff; border: 1px solid var(--wp-d);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+  }
+  .cart-drawer footer .checkout:hover { background: var(--wp-d); }
+  .cart-drawer footer .fine {
+    text-align: center; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--slate-2); margin-top: 4px;
+  }
+
   /* ========== TWEAKS ========== */
   .tweaks {
     position: fixed; right: -360px; bottom: 20px; width: 320px;
@@ -623,9 +752,12 @@ function useCart() {
     if (ex) return prev.map(x => x.key === k ? { ...x, qty: x.qty+1 } : x);
     return [...prev, { key: k, id: p.id, name: p.name, price: p.price, size, qty: 1 }];
   });
+  const remove = (key) => setItems(prev => prev.filter(x => x.key !== key));
+  const setQty = (key, qty) => setItems(prev => qty <= 0 ? prev.filter(x => x.key !== key) : prev.map(x => x.key === key ? { ...x, qty } : x));
+  const clear = () => setItems([]);
   const count = items.reduce((s,x) => s+x.qty, 0);
   const total = items.reduce((s,x) => s+x.qty*x.price, 0);
-  return { items, add, count, total };
+  return { items, add, remove, setQty, clear, count, total };
 }
 
 // deterministic helpers
@@ -728,7 +860,7 @@ const TICKER_ITEMS = [
 
 const WP_MARK_SVG = {__html: '<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 28 28" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.6052 0.923525C16.1432 0.923525 18.6137 1.67953 20.7062 3.09703C22.7447 4.47403 24.3512 6.41803 25.3097 8.68603C26.9837 12.6415 26.5382 17.164 24.1352 20.7145C22.7582 22.753 20.8142 24.3595 18.5462 25.318C14.5907 26.992 10.0682 26.5465 6.51772 24.1435C4.47922 22.7665 2.87272 20.8225 1.91422 18.5545C0.240225 14.599 0.685725 10.0765 3.08872 6.52603C4.46572 4.48753 6.40973 2.88103 8.67772 1.92253C10.2302 1.26103 11.9177 0.923525 13.6052 0.923525ZM13.6052 0.113525C6.15322 0.113525 0.105225 6.16153 0.105225 13.6135C0.105225 21.0655 6.15322 27.1135 13.6052 27.1135C21.0572 27.1135 27.1052 21.0655 27.1052 13.6135C27.1052 6.16153 21.0572 0.113525 13.6052 0.113525Z"/><path fill="currentColor" d="M2.36011 13.6133C2.36011 17.9198 4.81711 21.8618 8.70511 23.7383L3.33211 9.03684C2.68411 10.4813 2.36011 12.0338 2.36011 13.6133ZM21.2061 13.0463C21.2061 11.6558 20.7066 10.6973 20.2746 9.94134C19.8426 9.18534 19.1676 8.22684 19.1676 7.30884C19.1676 6.39084 19.9506 5.31084 21.0576 5.31084H21.2061C16.6296 1.11234 9.51511 1.42284 5.31661 6.01284C4.91161 6.45834 4.53361 6.93084 4.20961 7.43034H4.93861C6.11311 7.43034 7.93561 7.28184 7.93561 7.28184C8.54311 7.24134 8.61061 8.13234 8.00311 8.21334C8.00311 8.21334 7.39561 8.28084 6.72061 8.32134L10.8111 20.5118L13.2681 13.1273L11.5131 8.32134C10.9056 8.28084 10.3386 8.21334 10.3386 8.21334C9.73111 8.17284 9.79861 7.25484 10.4061 7.28184C10.4061 7.28184 12.2691 7.43034 13.3626 7.43034C14.4561 7.43034 16.3596 7.28184 16.3596 7.28184C16.9671 7.24134 17.0346 8.13234 16.4271 8.21334C16.4271 8.21334 15.8196 8.28084 15.1446 8.32134L19.2081 20.4173L20.3691 16.7453C20.8821 15.1388 21.1926 14.0048 21.1926 13.0328L21.2061 13.0463ZM13.7946 14.5853L10.4196 24.3998C12.6876 25.0613 15.1041 25.0073 17.3316 24.2243L17.2506 24.0758L13.7946 14.5853ZM23.4741 8.21334C23.5281 8.59134 23.5551 8.98284 23.5551 9.37434C23.5551 10.5218 23.3391 11.8043 22.7046 13.3973L19.2621 23.3333C24.5271 20.2688 26.4036 13.5593 23.4741 8.21334Z"/></svg>'};
 
-function Ticker({ cart }) {
+function Ticker({ cart, onCartClick }) {
   const items = [...TICKER_ITEMS, ...TICKER_ITEMS]; // duplicate for seamless loop
   return (
     <div className="ticker">
@@ -745,9 +877,75 @@ function Ticker({ cart }) {
           ))}
         </div>
       </div>
-      <div className="tab"><span>cart</span><span className="v">{cart.count}</span></div>
+      <button className="tab" onClick={onCartClick} style={{cursor:'pointer'}} aria-label="Open cart">
+        <span>cart</span><span className="v">{cart.count}</span>
+      </button>
       <div className="tab"><span>v</span><span className="v">2.1.0</span></div>
     </div>
+  );
+}
+
+function CartDrawer({ open, onClose, cart }) {
+  useEffect(() => {
+    if (!open) return;
+    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', h);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', h);
+      document.body.style.overflow = '';
+    };
+  }, [open, onClose]);
+  const empty = cart.items.length === 0;
+  return (
+    <>
+      <div className={`cart-backdrop ${open ? 'on' : ''}`} onClick={onClose}/>
+      <aside className={`cart-drawer ${open ? 'on' : ''}`} aria-hidden={!open}>
+        <header>
+          <h3>cart<span className="n">· {cart.count} item{cart.count === 1 ? '' : 's'}</span></h3>
+          <button className="close" onClick={onClose} aria-label="Close cart">×</button>
+        </header>
+        {empty ? (
+          <div className="empty">
+            <div className="frak">Empty.</div>
+            <p>Nothing here yet — the catalog is waiting.</p>
+            <button onClick={onClose}>keep shopping</button>
+          </div>
+        ) : (
+          <>
+            <div className="items">
+              {cart.items.map(it => {
+                const imgs = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[it.id]) || [];
+                return (
+                  <div key={it.key} className="item">
+                    <div className="img">{imgs[0] && <img src={imgs[0]} alt=""/>}</div>
+                    <div className="meta">
+                      <h4>{it.name}</h4>
+                      <div className="k">size {it.size} · ${it.price} ea</div>
+                      <div className="qty">
+                        <button onClick={() => cart.setQty(it.key, it.qty - 1)} aria-label="Decrease">−</button>
+                        <span className="n">{it.qty}</span>
+                        <button onClick={() => cart.setQty(it.key, it.qty + 1)} aria-label="Increase">+</button>
+                      </div>
+                      <br/>
+                      <button className="rm" onClick={() => cart.remove(it.key)}>remove</button>
+                    </div>
+                    <div className="price">${(it.qty * it.price).toFixed(0)}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <footer>
+              <div className="row"><span className="k">subtotal</span><span>${cart.total}</span></div>
+              <div className="row"><span className="k">shipping</span><span>calc at checkout</span></div>
+              <div className="row total"><span>total</span><span>${cart.total}</span></div>
+              <button className="checkout">proceed to checkout →</button>
+              <div className="fine">free returns · ships worldwide · packed by a human</div>
+            </footer>
+          </>
+        )}
+      </aside>
+    </>
   );
 }
 
@@ -1047,6 +1245,7 @@ function App() {
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('all');
   const [toast, setToast] = useState('');
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const onAdd = (p, size) => {
     cart.add(p, size);
@@ -1086,7 +1285,7 @@ function App() {
 
   return (
     <>
-      {t.showTerminal && <Ticker cart={cart}/>}
+      {t.showTerminal && <Ticker cart={cart} onCartClick={() => setDrawerOpen(true)}/>}
       <Hero titleMode={t.titleMode} total={window.MERCANTILE_CATALOG.length}/>
 
       <div className="section-head" style={!t.showTerminal ? { top: 0 } : {}}>
@@ -1101,7 +1300,7 @@ function App() {
         </div>
         <div className="right">
           <input className="search" placeholder="grep products…" value={q} onChange={e => setQ(e.target.value)}/>
-          <div className="cart">cart · <span className="n">{cart.count}</span> · ${cart.total}</div>
+          <button className="cart" onClick={() => setDrawerOpen(true)} style={{cursor:'pointer'}}>cart · <span className="n">{cart.count}</span> · ${cart.total}</button>
         </div>
       </div>
 
@@ -1147,6 +1346,7 @@ function App() {
       </footer>
 
       {route.view === 'product' && <ProductModal id={route.id} onClose={close} onAdd={onAdd}/>}
+      <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} cart={cart}/>
       <Tweaks t={t} set={set} visible={visible}/>
       <div className={`toast ${toast?'on':''}`}><span className="ok">●</span>{toast}</div>
     </>
