@@ -379,15 +379,21 @@
   }
   .modal .editor .gallery {
     background: var(--paper-2); border: 1px solid var(--rule);
-    aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center;
     position: relative; margin: 18px 0;
     overflow: hidden;
   }
   .modal .editor .gallery > svg { width: 55%; max-height: 75%; }
+  .modal .editor .gallery .gimg {
+    width: 100%; height: 100%; object-fit: contain; padding: 24px;
+    box-sizing: border-box; display: block;
+  }
+  .modal .editor .gallery .gfallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
   .modal .editor .gallery .frame-label {
     position: absolute; top: 10px; left: 12px;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: var(--slate); letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink); letter-spacing: 0.08em; text-transform: uppercase;
+    background: #e2e8ff; padding: 3px 8px; border-radius: 2px;
   }
   .modal .editor .gallery .frame-label b { color: var(--ink); }
   .modal .editor .gallery .dims {
@@ -395,6 +401,35 @@
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     color: var(--slate); letter-spacing: 0.05em;
   }
+  .modal .editor .gallery .flip-btn {
+    position: absolute; bottom: 10px; right: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--ink); padding: 4px 10px; background: #ffd4e1;
+    border: 1px solid var(--ink); border-radius: 2px;
+    cursor: pointer; letter-spacing: 0.04em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .modal .editor .gallery .flip-btn:hover { background: var(--wp); color: #fff; }
+
+  /* Typographic color pops — pale blue + pink highlights as decorative texture. */
+  .hl-blue { background: #e2e8ff; padding: 0 5px; border-radius: 2px; }
+  .hl-pink { background: #ffd4e1; padding: 0 5px; border-radius: 2px; color: var(--ink); }
+  .tag-pill {
+    display: inline-block; background: #ffd4e1; color: var(--ink);
+    padding: 0 6px; margin-right: 4px; border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  }
+  /* Decorative marginalia strip above the gallery. */
+  .modal .editor .marginalia {
+    display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate);
+  }
+  .modal .editor .marginalia .pill {
+    padding: 2px 8px; border: 1px solid var(--rule); border-radius: 2px; background: var(--paper-2);
+  }
+  .modal .editor .marginalia .pill.blue { background: #e2e8ff; border-color: #c5d0ff; color: var(--ink); }
+  .modal .editor .marginalia .pill.pink { background: #ffd4e1; border-color: #ffb5c9; color: var(--ink); }
 
   .modal .editor .specs {
     display: grid; grid-template-columns: auto 1fr;
@@ -729,6 +764,27 @@ function Band() {
   );
 }
 
+// Multi-image gallery with a single flip button. Uses MERCANTILE_IMAGES
+// (array per product); falls back to procedural art if no real images.
+function HLGallery({ p }) {
+  const list = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[p.id]) || [];
+  const [i, setI] = useState(0);
+  useEffect(() => { setI(0); }, [p.id]);
+  const flip = () => setI(n => (n + 1) % list.length);
+  const figNum = String(hashN(p.id) % 99).padStart(2,'0');
+  return (
+    <div className="gallery">
+      <span className="frame-label"><b>fig. {figNum}</b> · {p.cat}</span>
+      {list.length > 0
+        ? <img className="gimg" src={list[i]} alt="" key={i}/>
+        : <div className="gfallback" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>}
+      {list.length > 1
+        ? <button className="flip-btn" onClick={flip}>⟲ flip · {i+1}/{list.length}</button>
+        : <span className="dims">1600 × 1000px</span>}
+    </div>
+  );
+}
+
 // ======== MODAL ========
 function ProductModal({ id, onClose, onAdd }) {
   const p = window.MERCANTILE_CATALOG.find(x => x.id === id);
@@ -765,21 +821,23 @@ function ProductModal({ id, onClose, onAdd }) {
         <div className="body">
           <div className="editor">
             <div className="permalink">
-              permalink: <span className="k">https://mercantile.wordpress.org/product/</span><b>{p.id}</b>
+              permalink: <span className="k">https://mercantile.wordpress.org/product/</span><b className="hl-blue">{p.id}</b>
               <span style={{marginLeft:10, color:'var(--slate-2)'}}>· modified {dateStr}</span>
             </div>
             <h1>{p.name}</h1>
             <p className="blurb">{p.blurb}</p>
-            <div className="gallery">
-              <span className="frame-label"><b>fig. {String(hashN(p.id) % 99).padStart(2,'0')}</b> · {p.cat}</span>
-              <div dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>
-              <span className="dims">1600 × 1000px</span>
+            <div className="marginalia">
+              <span className="pill blue">highlighted</span>
+              <span className="pill">indexed</span>
+              <span className="pill pink">in stock</span>
+              <span className="pill">cross-ref · §{p.cat}</span>
             </div>
+            <HLGallery p={p}/>
             <dl className="specs">
               <dt>SKU</dt><dd>{sku(p.id)}</dd>
-              <dt>price</dt><dd>${p.price}.00 USD</dd>
+              <dt>price</dt><dd><span className="hl-blue">${p.price}.00</span> USD</dd>
               <dt>category</dt><dd>{p.cat}</dd>
-              <dt>tags</dt><dd>{p.tags.map(t => '#'+t).join(' · ')}</dd>
+              <dt>tags</dt><dd>{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
               <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
               <dt>made in</dt><dd>wherever the code is</dd>
               <dt>care</dt><dd>cold wash · line dry · review PRs</dd>
