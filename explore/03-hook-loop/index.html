@@ -863,8 +863,7 @@
     .footer-band { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 700px) {
-    /* Ticker: compact so it takes less vertical space on phones. */
-    .ticker { height: 24px; font-size: 10px; }
+    /* Ticker stays at desktop size — no compression. */
     /* Section head: taller controls so filters/search/cart have thumb room. */
     .section-head { padding: 14px 20px; gap: 12px; }
     .section-head .filters button { padding: 10px 14px; font-size: 13px; }
@@ -890,9 +889,6 @@
     .cart-drawer { width: 100%; }
     .cart-drawer .item { grid-template-columns: 56px 1fr auto; }
     .cart-drawer .item .img { width: 56px; height: 56px; }
-    /* Ticker gets smaller. */
-    .ticker { font-size: 10px; }
-    .ticker .lead, .ticker .tab { padding: 0 10px; }
   }
   @media (max-width: 500px) {
     .hero { padding: 24px 16px 0; }
@@ -911,9 +907,6 @@
     .modal .side .specs { grid-template-columns: 100px 1fr; gap: 3px 10px; }
     .modal .side .specs dt { font-size: 8.5px; }
     .modal .side .specs dd { font-size: 12.5px; }
-    /* Ticker tab/lead smaller. */
-    .ticker { font-size: 9.5px; }
-    .ticker .lead, .ticker .tab { padding: 0 8px; gap: 6px; }
     /* Sticky gallery — a bit less top offset since nav + ticker are tighter. */
     .modal .editor .gallery { top: 12px; max-width: 100%; }
   }
