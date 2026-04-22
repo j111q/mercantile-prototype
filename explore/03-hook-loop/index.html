@@ -765,11 +765,21 @@
 
   /* ========== RESPONSIVE ========== */
   @media (max-width: 960px) {
-    /* Stack the hero rail content; stacked info reads better on narrow screens. */
     .hero { padding: 40px 28px 0; }
-    .hero .meta-strip { flex-direction: column; align-items: flex-start; gap: 10px; }
+    /* Meta-strip: collapse the three columns' spans into one flowing row
+       so the top info takes 1-2 lines instead of six. display:contents
+       flattens each .col so its child spans join the parent flex row. */
+    .hero .meta-strip {
+      flex-direction: row; flex-wrap: wrap;
+      align-items: baseline; gap: 2px 14px;
+      font-size: 10px; padding-bottom: 6px;
+    }
+    .hero .meta-strip .col { display: contents; }
     .hero .meta-strip .col.r { text-align: left; }
-    .hero .rail-row { grid-template-columns: 1fr; gap: 24px; padding: 18px 0 22px; }
+    /* Rail row: blurb on its own row full width; stats stay side-by-side in 2 cols. */
+    .hero .rail-row { grid-template-columns: 1fr 1fr; gap: 18px 24px; padding: 18px 0 22px; font-size: 10.5px; }
+    .hero .rail-row .blurb { grid-column: 1 / -1; max-width: none; }
+    .hero .rail-row .kv { padding: 1px 0; }
   }
   @media (max-width: 860px) {
     .modal-back { padding: 16px 12px; }
@@ -780,8 +790,9 @@
   }
   @media (max-width: 700px) {
     .hero { padding: 28px 20px 0; }
-    .hero .meta-strip { font-size: 10px; }
+    .hero .meta-strip { font-size: 9.5px; gap: 2px 12px; }
     .hero .mark { margin: 6px 0 -4px; }
+    .hero .rail-row { font-size: 10px; gap: 14px 20px; }
     /* Section head goes vertical: filter row above, search+cart row below. */
     .section-head { padding: 10px 20px; flex-direction: column; align-items: stretch; gap: 10px; }
     .section-head > div:first-child { flex-wrap: wrap; gap: 10px; }
