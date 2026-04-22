@@ -133,7 +133,7 @@
 
   /* decorative code margin texture on hero */
   .hero .gutter-code {
-    position: absolute; right: 14px; top: 0;
+    position: absolute; right: 14px; top: 0; bottom: 0;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     color: #c9cbd1; line-height: 1.9;
     letter-spacing: 0.02em;
@@ -141,11 +141,13 @@
     writing-mode: vertical-rl;
     text-orientation: mixed;
     text-align: left;
-    max-height: 70vh;
+    z-index: 0;
   }
   .hero .gutter-code > div { margin-left: 18px; }
   .hero .gutter-code > div:first-child { margin-left: 0; }
   .hero .gutter-code span.k { color: #9fb1ff; }
+  /* Keep actual hero content above the decorative PHP texture. */
+  .hero > *:not(.gutter-code) { position: relative; z-index: 1; }
   @media (max-width: 900px) { .hero .gutter-code { display: none; } }
 
   /* ========== SECTION HEAD / FILTER BAR ========== */
@@ -743,9 +745,20 @@ function Hero({ titleMode, total }) {
       <div className="gutter-code" aria-hidden="true">
         <div><span className="k">&lt;?php</span></div>
         <div>/* est. 2003 */</div>
-        <div>wp_enqueue_style( <br/>&nbsp;&nbsp;'mercantile' );</div>
-        <div>add_action(<br/>&nbsp;&nbsp;'merch_browsed', <br/>&nbsp;&nbsp;__NAMESPACE__ );</div>
+        <div>wp_enqueue_style(<br/>&nbsp;&nbsp;'mercantile' );</div>
+        <div>add_action(<br/>&nbsp;&nbsp;'merch_browsed',<br/>&nbsp;&nbsp;__NAMESPACE__ );</div>
         <div>/* run trunk */</div>
+        <div>add_filter(<br/>&nbsp;&nbsp;'the_content',<br/>&nbsp;&nbsp;'wapuufy' );</div>
+        <div>while ( have_posts() ) :<br/>&nbsp;&nbsp;the_post();<br/>endwhile;</div>
+        <div>/* the loop */</div>
+        <div>apply_filters(<br/>&nbsp;&nbsp;'merch_price',<br/>&nbsp;&nbsp;$price );</div>
+        <div>do_action(<br/>&nbsp;&nbsp;'post_purchase',<br/>&nbsp;&nbsp;$order_id );</div>
+        <div>/* hooks &amp; loops */</div>
+        <div>wp_cache_flush();</div>
+        <div><span className="k">namespace</span> Mercantile\Catalog;</div>
+        <div>register_post_type(<br/>&nbsp;&nbsp;'merch', [...] );</div>
+        <div>get_template_part(<br/>&nbsp;&nbsp;'parts/footer' );</div>
+        <div>/* ?&gt; */</div>
       </div>
       <div className="meta-strip">
         <div className="col">
