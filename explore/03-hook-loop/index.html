@@ -131,18 +131,19 @@
 
   /* decorative code margin texture on hero */
   .hero .gutter-code {
-    position: absolute; right: 14px; top: 18px;
+    position: absolute; right: 14px; top: 0;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: var(--slate-2); line-height: 1.9;
+    color: #c9cbd1; line-height: 1.9;
     letter-spacing: 0.02em;
     pointer-events: none;
     writing-mode: vertical-rl;
     text-orientation: mixed;
+    text-align: left;
     max-height: 70vh;
   }
   .hero .gutter-code > div { margin-left: 18px; }
   .hero .gutter-code > div:first-child { margin-left: 0; }
-  .hero .gutter-code span.k { color: var(--wp); }
+  .hero .gutter-code span.k { color: #9fb1ff; }
   @media (max-width: 900px) { .hero .gutter-code { display: none; } }
 
   /* ========== SECTION HEAD / FILTER BAR ========== */
@@ -484,8 +485,7 @@
   .modal .editor .shortcode .copy { color: var(--slate-2); font-size: 10px; cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
   .modal .editor .shortcode .copy:hover { color: #fff; }
 
-  .modal .side { padding: 22px 18px 22px 0; background: var(--paper-2); }
-  .modal .side .mb { padding-left: 0; }
+  .modal .side { padding: 22px 18px 22px 20px; background: var(--paper-2); }
   .modal .side .mb { border-top: 1px solid var(--rule); padding: 12px 0; }
   .modal .side .mb:first-child { border-top: 0; padding-top: 0; }
   .modal .side .mb h3 {
@@ -624,6 +624,48 @@ function useCart() {
 // deterministic helpers
 function sku(id) { return 'WP—' + id.split('-').map(s => s.slice(0,3).toUpperCase()).join('·'); }
 function hashN(id) { let h = 0; for (let i=0; i<id.length; i++) h = (h*31 + id.charCodeAt(i)) | 0; return Math.abs(h); }
+
+// Wapuu's revision log — absurd, seeded per product so each PDP has its own.
+const WAPUU_REVISIONS = [
+  '1y ago — price +$1,000',
+  '1w ago — price −$1,000',
+  '3d ago — fixed typo (again)',
+  '6h ago — added more cheese',
+  '4h ago — hotfix: spelling',
+  '2w ago — first draft (angry)',
+  '1d ago — fought with CSS grid',
+  '5m ago — git reset --hard HEAD~1',
+  '11mo ago — originally conceived at 3am',
+  '3d ago — accidentally rm -rf&apos;d, restored',
+  '8h ago — PR #42 merged',
+  '2d ago — sprinkled some joy',
+  '5d ago — rebased on trunk',
+  '2w ago — created in a frenzy',
+  '1mo ago — changed color to mauve',
+  '2d ago — added a hidden message',
+  '1w ago — wapuu won the coin toss',
+  '6mo ago — swapped to organic cotton',
+  '4h ago — blamed it on cache',
+  '9d ago — forgot what this did',
+  '2mo ago — `wp cache flush`',
+  '1d ago — stared at it for 40 min',
+  '3w ago — peer-reviewed by nobody',
+  '2h ago — removed a TODO',
+  '12d ago — renamed for vibes',
+];
+function pickRevisions(id, n = 3) {
+  const out = [];
+  const used = new Set();
+  let seed = hashN(id) || 1;
+  while (out.length < n && used.size < WAPUU_REVISIONS.length) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const i = Math.floor((seed / 233280) * WAPUU_REVISIONS.length);
+    if (used.has(i)) continue;
+    used.add(i);
+    out.push(WAPUU_REVISIONS[i]);
+  }
+  return out;
+}
 function stockFor(id) { return hashN(id) % 240; }
 
 // ======== TICKER ========
@@ -903,9 +945,9 @@ function ProductModal({ id, onClose, onAdd }) {
             <div className="mb">
               <h3>Revisions</h3>
               <div className="revisions">
-                <b>wapuu</b>, 2d ago — price +$2<br/>
-                <b>wapuu</b>, 1w ago — copy<br/>
-                <b>wapuu</b>, 2w ago — created
+                {pickRevisions(p.id, 3).map((r, i) => (
+                  <div key={i}><b>wapuu</b>, <span dangerouslySetInnerHTML={{__html: r}}/></div>
+                ))}
               </div>
             </div>
           </aside>
