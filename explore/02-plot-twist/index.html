@@ -535,7 +535,7 @@ function Gallery({ images, bg = '#fff' }) {
       <img src={list[i]} alt="" key={i}/>
       {list.length > 1 && (
         <button className={`flip-btn ${spinning ? 'spin' : ''}`} onClick={flip} aria-label="Next image">
-          more images · {i+1}/{list.length}
+          see more · {i+1}/{list.length}
         </button>
       )}
     </div>
