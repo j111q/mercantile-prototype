@@ -133,11 +133,15 @@
   .hero .gutter-code {
     position: absolute; right: 14px; top: 18px;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: var(--slate-2); text-align: right; line-height: 1.9;
+    color: var(--slate-2); line-height: 1.9;
     letter-spacing: 0.02em;
     pointer-events: none;
-    max-width: 30vw;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    max-height: 70vh;
   }
+  .hero .gutter-code > div { margin-left: 18px; }
+  .hero .gutter-code > div:first-child { margin-left: 0; }
   .hero .gutter-code span.k { color: var(--wp); }
   @media (max-width: 900px) { .hero .gutter-code { display: none; } }
 
@@ -480,7 +484,8 @@
   .modal .editor .shortcode .copy { color: var(--slate-2); font-size: 10px; cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
   .modal .editor .shortcode .copy:hover { color: #fff; }
 
-  .modal .side { padding: 22px 20px; background: var(--paper-2); }
+  .modal .side { padding: 22px 18px 22px 0; background: var(--paper-2); }
+  .modal .side .mb { padding-left: 0; }
   .modal .side .mb { border-top: 1px solid var(--rule); padding: 12px 0; }
   .modal .side .mb:first-child { border-top: 0; padding-top: 0; }
   .modal .side .mb h3 {
@@ -882,7 +887,6 @@ function ProductModal({ id, onClose, onAdd }) {
                 <dt>category</dt><dd>{p.cat}</dd>
                 <dt>tags</dt><dd className="tagwrap">{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
                 <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
-                <dt>made in</dt><dd>wherever the code is</dd>
                 <dt>care</dt><dd>cold wash · line dry · review PRs</dd>
               </dl>
             </div>
