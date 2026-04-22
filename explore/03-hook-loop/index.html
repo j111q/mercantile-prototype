@@ -95,14 +95,11 @@
   .ticker .item.wapuu::before { content: '✿ '; }
   .ticker .tab { padding: 0 12px; border-left: 1px solid rgba(255,255,255,0.12); display:flex; align-items: center; gap: 8px; flex-shrink:0; background: var(--ink); }
   .ticker .tab .v { color: #ecebe4; font-weight: 600; }
-  .ticker .tab.new { color: #ecebe4; }
+  .ticker .tab.new { color: #ecebe4; gap: 5px; transition: color 0.15s; }
   .ticker .tab.new .plus {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: #ecebe4; color: var(--ink);
-    font-weight: 700; font-size: 11px; line-height: 1;
+    font-weight: 700; font-size: 13px; line-height: 1; color: inherit;
   }
-  .ticker .tab.new:hover .plus { background: var(--ok); }
+  .ticker .tab.new:hover { color: #9fb1ff; }
 
   /* ========== HERO ========== */
   .hero {
@@ -1102,7 +1099,7 @@ function Ticker({ cart, onCartClick }) {
   };
   const onNewClick = (e) => {
     const r = e.currentTarget.getBoundingClientRect();
-    rainWapuus(r.left + r.width/2, r.bottom + 10, 3);
+    rainWapuus(r.left + r.width/2, r.bottom + 10, 1);
   };
   return (
     <div className={`ticker ${paused ? 'paused' : ''}`}>
