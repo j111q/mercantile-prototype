@@ -231,6 +231,13 @@
     text-transform: uppercase;
     background: rgba(236,235,228,0.85); padding: 1px 5px;
   }
+  /* Status stamp below the image — match PDP marginalia pill style. */
+  .cell .stamp {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate);
+    padding: 2px 8px; border: 1px solid var(--rule); border-radius: 2px;
+    background: var(--paper-2);
+  }
   .cell .meta-row {
     display: flex; justify-content: space-between; align-items: baseline;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -1019,7 +1026,7 @@ function Cell({ p, idx, onOpen }) {
       <div className="tags">
         {p.tags.slice(0,3).map(t => <span key={t}>{t}</span>)}
       </div>
-      <span className="add">edit →</span>
+      <span className="add">view →</span>
     </div>
   );
 }
