@@ -475,11 +475,24 @@
     color: var(--ink-2); margin: 0 0 20px; max-width: 56ch; font-style: italic;
   }
   .modal .editor .gallery {
-    background: var(--paper-2); border: 1px solid var(--rule);
+    background: #fff; border: 1px solid var(--rule);
     aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center;
     position: relative; margin: 18px 0;
     overflow: hidden;
   }
+  /* Rich-text-toolbar strip at the top of the gallery — sits behind the
+     fig label + see-more button, then a rule separates it from the image. */
+  .modal .editor .gallery::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 42px;
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--rule);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .modal .editor .gallery .frame-label,
+  .modal .editor .gallery .flip-btn { z-index: 2; }
   .modal .editor .gallery > svg { width: 55%; max-height: 75%; }
   .modal .editor .gallery .gimg {
     width: 100%; height: 100%; object-fit: contain; padding: 24px;
