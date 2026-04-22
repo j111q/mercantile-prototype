@@ -1196,7 +1196,7 @@ function ProductModal({ id, onClose, onAdd }) {
                 <dt>category</dt><dd>{p.cat}</dd>
                 <dt>tags</dt><dd className="tagwrap">{p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}</dd>
                 <dt>material</dt><dd>{apparel ? '100% ring-spun cotton, 220gsm' : (p.cat === 'drinkware' ? 'double-wall insulated, BPA-free' : 'matte vinyl, durable finish')}</dd>
-                <dt>care</dt><dd>{apparel ? 'cold wash · line dry · review PRs' : (p.cat === 'drinkware' ? 'hand wash · avoid the microwave · review PRs' : 'wipe clean · handle gently · review PRs')}</dd>
+                <dt>care</dt><dd>{apparel ? 'cold wash · line dry · review PRs' : 'wipe clean · handle gently · review PRs'}</dd>
               </dl>
             </div>
             <div className="mb">
