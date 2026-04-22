@@ -172,14 +172,14 @@
     border: 1px solid var(--rule); background: var(--paper-2);
   }
   .section-head .filters button {
-    padding: 6px 12px; color: var(--slate); border-right: 1px solid var(--rule);
+    padding: 6px 12px; color: var(--wp); border-right: 1px solid var(--rule);
     display: flex; align-items: baseline; gap: 5px;
   }
   .section-head .filters button:last-child { border-right: 0; }
   .section-head .filters button.on { background: var(--ink); color: var(--paper); }
   .section-head .filters button .n { font-size: 10px; color: var(--slate-2); }
   .section-head .filters button.on .n { color: var(--slate-2); }
-  .section-head .filters button:hover:not(.on) { color: var(--ink); background: var(--card); }
+  .section-head .filters button:hover:not(.on) { color: var(--wp); background: var(--card); }
 
   .section-head .right { display:flex; gap: 10px; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
   .section-head .right .search {
@@ -374,7 +374,7 @@
     line-height: 1.7;
   }
   @media (max-width: 800px) { .footer-band { grid-template-columns: 1fr; } }
-  .footer-band .frak { font-family: 'UnifrakturCook', serif; font-size: 84px; line-height: 0.9; color: var(--paper); }
+  .footer-band .frak { font-family: 'UnifrakturCook', serif; font-size: 63px; line-height: 0.9; color: var(--paper); }
   .footer-band .frak .d { color: var(--wp); }
   .footer-band h4 { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate-2); margin: 0 0 8px; font-weight: 500; }
   .footer-band a:hover { color: var(--wp); }
@@ -877,8 +877,9 @@
     /* Section head goes vertical: filter row above, search+cart row below. */
     .section-head { padding: 10px 20px; flex-direction: column; align-items: stretch; gap: 10px; }
     .section-head > div:first-child { flex-wrap: wrap; gap: 10px; }
-    .section-head .filters { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
-    .section-head .filters button { white-space: nowrap; flex-shrink: 0; }
+    .section-head .filters { flex: 1 1 100%; flex-wrap: wrap; gap: 6px; border: 0 !important; background: transparent !important; padding: 0; min-width: 0; }
+    .section-head .filters button { border: 1px solid var(--rule) !important; border-radius: 4px; background: var(--paper-2); white-space: nowrap; flex: 0 0 auto; }
+    .section-head .filters button.on { border-color: var(--ink) !important; background: var(--ink) !important; color: #fff !important; }
     .section-head .right { width: 100%; flex-wrap: wrap; }
     .section-head .right .search { flex: 1; min-width: 140px; width: auto; }
     .grid-wrap { padding: 0 20px; }
