@@ -762,13 +762,65 @@
   .tweaks .row button { border: 1px solid var(--rule); background: var(--paper-2); padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
   .tweaks .row button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 960px) {
+    /* Stack the hero rail content; stacked info reads better on narrow screens. */
+    .hero { padding: 40px 28px 0; }
+    .hero .meta-strip { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .hero .meta-strip .col.r { text-align: left; }
+    .hero .rail-row { grid-template-columns: 1fr; gap: 24px; padding: 18px 0 22px; }
+  }
+  @media (max-width: 860px) {
+    .modal-back { padding: 16px 12px; }
+    .modal .editor { padding: 22px 20px 24px; border-right: 0; border-bottom: 1px solid var(--rule); }
+    .modal .side { padding: 20px 20px 24px; }
+    .modal header .crumb { font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .footer-band { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 700px) {
-    .hero { padding: 32px 20px 0; }
-    .section-head { padding: 10px 20px; }
+    .hero { padding: 28px 20px 0; }
+    .hero .meta-strip { font-size: 10px; }
+    .hero .mark { margin: 6px 0 -4px; }
+    /* Section head goes vertical: filter row above, search+cart row below. */
+    .section-head { padding: 10px 20px; flex-direction: column; align-items: stretch; gap: 10px; }
+    .section-head > div:first-child { flex-wrap: wrap; gap: 10px; }
+    .section-head .filters { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    .section-head .filters button { white-space: nowrap; flex-shrink: 0; }
+    .section-head .right { width: 100%; flex-wrap: wrap; }
+    .section-head .right .search { flex: 1; min-width: 140px; width: auto; }
     .grid-wrap { padding: 0 20px; }
     .band { padding: 40px 20px; }
-    .footer-band { padding: 40px 20px 20px; }
-    .section-head .right .search { width: 100%; }
+    .footer-band { padding: 40px 20px 20px; grid-template-columns: 1fr; gap: 24px; }
+    .band .line.mono { font-size: 15px; }
+    /* Cart drawer becomes a full-screen sheet. */
+    .cart-drawer { width: 100%; }
+    .cart-drawer .item { grid-template-columns: 56px 1fr auto; }
+    .cart-drawer .item .img { width: 56px; height: 56px; }
+    /* Ticker gets smaller. */
+    .ticker { font-size: 10px; }
+    .ticker .lead, .ticker .tab { padding: 0 10px; }
+  }
+  @media (max-width: 500px) {
+    .hero { padding: 24px 16px 0; }
+    .grid-wrap { padding: 0 16px; }
+    .band { padding: 32px 16px; }
+    .footer-band { padding: 32px 16px 18px; }
+    .modal-back { padding: 10px 8px; }
+    .modal .editor { padding: 18px 14px 22px; }
+    .modal .side { padding: 18px 14px 22px; }
+    .modal .editor .shortcode { font-size: 10.5px; padding: 10px 12px; }
+    .modal .editor .gallery .flip-btn { font-size: 9.5px; padding: 3px 8px; top: 8px; right: 8px; }
+    .modal .editor .marginalia { gap: 6px; font-size: 9px; }
+    .modal .editor .marginalia .pill { padding: 2px 6px; }
+    /* Side specs fit tighter on very narrow. */
+    .modal .side .specs { grid-template-columns: 100px 1fr; gap: 3px 10px; }
+    .modal .side .specs dt { font-size: 8.5px; }
+    .modal .side .specs dd { font-size: 12.5px; }
+    /* Ticker tab/lead smaller. */
+    .ticker { font-size: 9.5px; }
+    .ticker .lead, .ticker .tab { padding: 0 8px; gap: 6px; }
+    /* Sticky gallery — a bit less top offset since nav + ticker are tighter. */
+    .modal .editor .gallery { top: 12px; max-width: 100%; }
   }
 </style>
 </head>
