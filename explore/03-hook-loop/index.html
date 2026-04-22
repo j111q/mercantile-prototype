@@ -180,6 +180,7 @@
   .section-head .filters button .n { font-size: 10px; color: var(--slate-2); }
   .section-head .filters button.on .n { color: var(--slate-2); }
   .section-head .filters button:hover:not(.on) { color: var(--wp); background: var(--card); }
+  .section-head .filters-m { display: none; }
 
   .section-head .right { display:flex; gap: 10px; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
   .section-head .right .search {
@@ -874,12 +875,23 @@
     .hero .meta-strip { font-size: 8.5px; gap: 2px 10px; }
     .hero .mark { font-size: clamp(56px, 13vw, 110px); margin: 22px 0 -4px; }
     .hero .rail-row { font-size: 10px; gap: 14px 20px; }
-    /* Section head goes vertical: filter row above, search+cart row below. */
-    .section-head { padding: 10px 20px; flex-direction: column; align-items: stretch; gap: 10px; }
-    .section-head > div:first-child { flex-wrap: wrap; gap: 10px; }
-    .section-head .filters { flex: 1 1 100%; flex-wrap: wrap; gap: 6px; border: 0 !important; background: transparent !important; padding: 0; min-width: 0; }
-    .section-head .filters button { border: 1px solid var(--rule) !important; border-radius: 4px; background: var(--paper-2); white-space: nowrap; flex: 0 0 auto; }
-    .section-head .filters button.on { border-color: var(--ink) !important; background: var(--ink) !important; color: #fff !important; }
+    /* Section head on mobile: full-width dropdown on top, search+cart below. */
+    .section-head { padding: 10px 20px; flex-direction: column; align-items: stretch; gap: 8px; }
+    .section-head > div:first-child { width: 100%; gap: 0; }
+    .section-head .label { display: none; }
+    .section-head .filters { display: none; }
+    .section-head .filters-m {
+      display: block; width: 100%; box-sizing: border-box;
+      padding: 12px 36px 12px 14px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      color: var(--wp); background-color: var(--paper-2);
+      border: 1px solid var(--rule); border-radius: 0;
+      -webkit-appearance: none; -moz-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%233858e9' stroke-width='1.5' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat; background-position: right 14px center;
+      cursor: pointer;
+    }
+    .section-head .filters-m:focus { outline: none; border-color: var(--wp); }
     .section-head .right { width: 100%; flex-wrap: wrap; }
     .section-head .right .search { flex: 1; min-width: 140px; width: auto; }
     .grid-wrap { padding: 0 20px; }
@@ -1590,6 +1602,12 @@ function App() {
             <button className={cat==='drinkware'?'on':''} onClick={() => setCat('drinkware')}>Drinkware <span className="n">{counts.drinkware}</span></button>
             <button className={cat==='accessories'?'on':''} onClick={() => setCat('accessories')}>Accessories <span className="n">{counts.accessories}</span></button>
           </div>
+          <select className="filters-m" value={cat} onChange={e => setCat(e.target.value)} aria-label="Filter by category">
+            <option value="all">All · {counts.all}</option>
+            <option value="apparel">Apparel · {counts.apparel}</option>
+            <option value="drinkware">Drinkware · {counts.drinkware}</option>
+            <option value="accessories">Accessories · {counts.accessories}</option>
+          </select>
         </div>
         <div className="right">
           <input className="search" placeholder="grep products…" value={q} onChange={e => setQ(e.target.value)}/>
