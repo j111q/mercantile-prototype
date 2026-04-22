@@ -6,7 +6,7 @@
 <title>Mercantile — wordpress.org</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
@@ -373,10 +373,17 @@
   .modal .editor .permalink .k { color: var(--wp); }
   .modal .editor .permalink b { color: var(--ink); }
   .modal .editor h1 {
-    font-family: 'UnifrakturCook', serif; font-weight: 700;
-    font-size: clamp(36px, 4.5vw, 52px);
-    line-height: 0.95; margin: 0 0 12px;
-    text-wrap: balance; letter-spacing: -0.005em;
+    font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.15; margin: 0 0 14px;
+    text-wrap: balance; letter-spacing: -0.02em;
+    /* Input-field styling — this is the editable post title. */
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 12px 14px;
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
   }
   .modal .editor .blurb {
     font-family: 'Newsreader', serif; font-size: 17px; line-height: 1.45;
@@ -407,12 +414,13 @@
     color: var(--slate); letter-spacing: 0.05em;
   }
   .modal .editor .gallery .flip-btn {
-    position: absolute; bottom: 10px; right: 12px;
+    position: absolute; top: 10px; right: 12px;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     color: var(--ink); padding: 4px 10px; background: #ffd4e1;
     border: 1px solid var(--ink); border-radius: 2px;
     cursor: pointer; letter-spacing: 0.04em;
     transition: background 0.15s, color 0.15s;
+    z-index: 2;
   }
   .modal .editor .gallery .flip-btn:hover { background: var(--wp); color: #fff; }
 
