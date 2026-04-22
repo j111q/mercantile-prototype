@@ -1015,7 +1015,7 @@ function Cell({ p, idx, onOpen }) {
     <div className="cell" style={{'--i': idx}} onClick={() => onOpen(p.id)}>
       <span className="idx">{String(idx+1).padStart(3,'0')} / {sku(p.id)}</span>
       <span className="price-tag">${p.price}</span>
-      <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>
+      <div className="img" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f6f7f7', fg: '#3858e9' })}}/>
       <div style={{position:'relative', marginTop:-2}}>
         <span className="stamp" style={{position:'absolute', right: 0, top: -22}}>{stamp}</span>
       </div>
@@ -1087,7 +1087,7 @@ function HLGallery({ p }) {
       <span className="frame-label"><b>fig. {figNum}</b> · {p.cat}</span>
       {list.length > 0
         ? <img className="gimg" src={list[i]} alt="" key={i}/>
-        : <div className="gfallback" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f3f2ec', fg: '#3858e9' })}}/>}
+        : <div className="gfallback" dangerouslySetInnerHTML={{__html: window.MERCANTILE_ART(p.id, { bg: '#f6f7f7', fg: '#3858e9' })}}/>}
       {list.length > 1
         ? <button className="flip-btn" onClick={flip} aria-label="Next image">see more · {i+1}/{list.length}</button>
         : <span className="dims">1600 × 1000px</span>}
