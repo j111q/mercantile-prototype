@@ -131,6 +131,21 @@
   .p3 .rows .row + .row { border-top: 1px dashed #dcdcde; }
   .p3 .rows .row .k { color: #646970; }
 
+  /* Divider row between the hero and the three smaller tiles. */
+  .dirs-divider {
+    grid-column: 1 / -1;
+    background: #fff;
+    padding: 16px 32px;
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #8a8a93;
+  }
+  .dirs-divider::before,
+  .dirs-divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(0,0,0,0.1);
+  }
+
   .open { font-size: 13px; font-family: ui-monospace, monospace; color: var(--wp); }
   .dir:hover .open { text-decoration: underline; }
 
@@ -210,6 +225,8 @@
         </div>
       </div>
     </a>
+
+    <div class="dirs-divider"><span>Other explorations</span></div>
 
     <a class="dir" href="https://j111q.github.io/mercantile-prototype/" target="_blank" rel="noopener">
       <div class="num">DIRECTION 00 · EXISTING</div>
