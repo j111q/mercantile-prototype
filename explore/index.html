@@ -15,10 +15,33 @@
   header h1 { font-family: 'EB Garamond', serif; font-size: 48px; font-weight: 500; margin: 0; letter-spacing: -0.02em; line-height: 1.05; }
   header p { max-width: 720px; font-size: 14px; line-height: 1.7; color: #555; margin: 0; }
   header .wp { color: var(--wp); }
-  .dirs { display:grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); }
+  .dirs { display:grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); }
   .dir { background: #fff; padding: 32px; min-height: 520px; display:flex; flex-direction:column; gap: 20px; text-decoration:none; color:inherit; position:relative; overflow:hidden; transition: transform 0.3s cubic-bezier(.2,.9,.3,1.2); }
   .dir:hover { z-index: 2; }
   .dir:hover .preview { transform: translateY(-6px) rotate(-1deg); }
+
+  /* Featured / front-runner tile — spans the full row, laid out horizontally. */
+  .dir.hero { grid-column: 1 / -1; flex-direction: row; gap: 48px; align-items: stretch; min-height: 460px; }
+  .dir.hero .copy { flex: 1 1 42%; display: flex; flex-direction: column; gap: 18px; justify-content: center; }
+  .dir.hero .copy h2 { font-size: 56px; }
+  .dir.hero .copy p { font-size: 15px; max-width: 48ch; }
+  .dir.hero .preview { flex: 1 1 58%; margin-top: 0; aspect-ratio: auto; }
+  .dir.hero .num { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .front-runner {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 8px;
+    background: #fff6a8; color: #1d2327;
+    border: 1px solid #1d2327; border-radius: 2px;
+    font-weight: 700;
+  }
+  /* Up-scale the p3 preview inside the hero tile */
+  .dir.hero .p3 .title { font-size: 80px; }
+  .dir.hero .p3 .body { padding: 20px 22px 14px; }
+  .dir.hero .p3 .kicker { font-size: 10px; margin-bottom: 10px; }
+  .dir.hero .p3 .head { height: 26px; font-size: 10px; padding: 0 12px; }
+  .dir.hero .p3 .rows { font-size: 10.5px; }
+  .dir.hero .p3 .pill { font-size: 9px; padding: 2px 7px; }
   .num { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; color: #888; }
   .dir h2 { font-family: 'EB Garamond', serif; font-size: 34px; font-weight: 500; margin: 0; letter-spacing: -0.02em; line-height:1; }
   .dir .tag { font-family: ui-monospace, monospace; font-size: 11px; color: #666; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -74,13 +97,22 @@
 
   footer { padding: 40px 64px; font-size: 12px; color: #888; font-family: ui-monospace, monospace; }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1200px) {
     .dirs { grid-template-columns: repeat(2, 1fr); }
+    .dir.hero { flex-direction: column; gap: 24px; min-height: 540px; }
+    .dir.hero .copy { flex: none; }
+    .dir.hero .preview { flex: none; aspect-ratio: 16/9; }
+    .dir.hero .copy h2 { font-size: 44px; }
+    .dir.hero .p3 .title { font-size: 64px; }
   }
   @media (max-width: 700px) {
     .dirs { grid-template-columns: 1fr; }
     header { padding: 32px; flex-direction:column; gap: 16px; }
     header h1 { font-size: 36px; }
+    .dir.hero { gap: 20px; }
+    .dir.hero .copy h2 { font-size: 34px; }
+    .dir.hero .preview { aspect-ratio: 4/3; }
+    .dir.hero .p3 .title { font-size: 48px; }
   }
 </style>
 </head>
@@ -94,6 +126,36 @@
       <strong>03 &mdash; Hook &amp; Loop.</strong> Dense &amp; text-forward. wp-admin as inspiration — tickers, serif headlines, typographic textures. Avant-garde.</p>
   </header>
   <div class="dirs">
+
+    <a class="dir hero" href="03-hook-loop/index.html" target="_blank" rel="noopener">
+      <div class="copy">
+        <div class="num">DIRECTION 03 <span class="front-runner">◆ Front-runner</span></div>
+        <h2>Hook &amp; Loop</h2>
+        <div class="tag">Dense · text-based · avant-garde</div>
+        <p>wp-admin as muse. Tickers, serif headlines, typographic textures. A shop that reads like a directory. Positive early reception — currently the strongest signal.</p>
+        <span class="open">→ open</span>
+      </div>
+      <div class="preview p3">
+        <div class="head">
+          <span><span class="dot"></span><b>MERCANTILE</b> · live</span>
+          <span><b>cart</b> 0 · <b>v</b> 2.1.0</span>
+        </div>
+        <div class="body">
+          <div class="kicker">26 products · 3 categories · GPLv2</div>
+          <h3 class="title">Mercantile<span class="period">.</span></h3>
+          <div class="pills">
+            <span class="pill blue">highlighted</span>
+            <span class="pill">indexed</span>
+            <span class="pill pink">in stock</span>
+          </div>
+          <div class="rows">
+            <div class="row"><span class="k">editor</span><span><b>wapuu</b></span></div>
+            <div class="row"><span class="k">hooks fired</span><span><b>847</b></span></div>
+            <div class="row"><span class="k">runtime</span><span><b>PHP 8.3</b></span></div>
+          </div>
+        </div>
+      </div>
+    </a>
 
     <a class="dir" href="https://j111q.github.io/mercantile-prototype/" target="_blank" rel="noopener">
       <div class="num">DIRECTION 00 · EXISTING</div>
@@ -135,34 +197,6 @@
       <div class="preview p2">
         <div class="huge">code is<br/><em>proof.</em></div>
         <img class="p2-product" src="../wp-content/uploads/2025/04/Sweatpants_Front.webp@w=600" alt=""/>
-      </div>
-      <span class="open">→ open</span>
-    </a>
-
-    <a class="dir" href="03-hook-loop/index.html" target="_blank" rel="noopener">
-      <div class="num">DIRECTION 03</div>
-      <h2>Hook &amp; Loop</h2>
-      <div class="tag">Dense · text-based · avant-garde</div>
-      <p>wp-admin as muse. Tickers, serif headlines, typographic textures. A shop that reads like a directory.</p>
-      <div class="preview p3">
-        <div class="head">
-          <span><span class="dot"></span><b>MERCANTILE</b> · live</span>
-          <span><b>cart</b> 0 · <b>v</b> 2.1.0</span>
-        </div>
-        <div class="body">
-          <div class="kicker">26 products · 3 categories · GPLv2</div>
-          <h3 class="title">Mercantile<span class="period">.</span></h3>
-          <div class="pills">
-            <span class="pill blue">highlighted</span>
-            <span class="pill">indexed</span>
-            <span class="pill pink">in stock</span>
-          </div>
-          <div class="rows">
-            <div class="row"><span class="k">editor</span><span><b>wapuu</b></span></div>
-            <div class="row"><span class="k">hooks fired</span><span><b>847</b></span></div>
-            <div class="row"><span class="k">runtime</span><span><b>PHP 8.3</b></span></div>
-          </div>
-        </div>
       </div>
       <span class="open">→ open</span>
     </a>
