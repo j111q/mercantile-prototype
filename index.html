@@ -269,40 +269,43 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"h
 <style>
   #mercantile-explore-cta {
     position: fixed; top: 16px; left: 16px; z-index: 99999;
-    display: inline-flex; align-items: center; gap: 8px;
+    display: inline-flex; align-items: center; gap: 10px;
+    max-width: calc(100vw - 32px);
     padding: 10px 14px;
-    background: #3858e9; color: #fff;
+    background: #fff6a8; color: #1d2327;
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.35;
     text-decoration: none;
     border: 1px solid #1d2327; border-radius: 4px;
     box-shadow: 0 4px 14px rgba(29,35,39,0.18);
     transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   }
   #mercantile-explore-cta::before {
-    content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-    background: #fff6a8; box-shadow: 0 0 0 0 rgba(255,246,168,0.8);
+    content: ''; flex: 0 0 auto;
+    display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+    background: #d63638; box-shadow: 0 0 0 0 rgba(214,54,56,0.7);
     animation: mc-pulse 2s infinite;
   }
+  #mercantile-explore-cta .cta-arrow { font-weight: 700; }
   #mercantile-explore-cta:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(29,35,39,0.24);
-    background: #1d2327;
+    background: #ffe478;
   }
   @keyframes mc-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(255,246,168,0.8); }
-    70%  { box-shadow: 0 0 0 8px rgba(255,246,168,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,246,168,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(214,54,56,0.7); }
+    70%  { box-shadow: 0 0 0 9px rgba(214,54,56,0); }
+    100% { box-shadow: 0 0 0 0 rgba(214,54,56,0); }
   }
   @media (max-width: 600px) {
-    #mercantile-explore-cta { top: 10px; left: 10px; padding: 8px 12px; font-size: 11px; }
+    #mercantile-explore-cta { top: 10px; left: 10px; padding: 8px 12px; font-size: 11px; gap: 8px; }
   }
   @media (prefers-reduced-motion: reduce) {
     #mercantile-explore-cta::before { animation: none; }
     #mercantile-explore-cta { transition: none; }
   }
 </style>
-<a id="mercantile-explore-cta" href="explore/" title="Opens the four design directions">See new explorations →</a>
+<a id="mercantile-explore-cta" href="explore/" title="Opens the four design directions">This is a tweaked version of the current store. See new explorations <span class="cta-arrow">→</span></a>
 	
 <div class="wp-site-blocks"><header class="wp-block-template-part">
 <div class="wp-block-group has-heading-background-color has-background is-content-justification-right is-nowrap is-layout-flex wp-container-core-group-is-layout-d7766e8d wp-block-group-is-layout-flex" style="margin-top:0;margin-bottom:0"><form><div class="currency-switcher-holder" style="line-height: 1.5; "><select name="currency" onchange="this.form.submit()" style="padding: 2px; border: 1px solid; border-radius: 3px; border-color: #000000; font-size: 14px; color: #FFFFFF; background-color: transparent; "><option value="USD" >&#036; USD</option><option value="AFN" >&#x60b; AFN</option><option value="ALL" >L ALL</option><option value="DZD" >&#x62f;.&#x62c; DZD</option><option value="AOA" >Kz AOA</option><option value="ARS" >&#036; ARS</option><option value="AMD" >AMD</option><option value="AWG" >Afl. AWG</option><option value="AUD" >&#036; AUD</option><option value="AZN" >&#8380; AZN</option><option value="BSD" >&#036; BSD</option><option value="BDT" >&#2547;&nbsp; BDT</option><option value="BBD" >&#036; BBD</option><option value="BYN" >Br BYN</option><option value="BZD" >&#036; BZD</option><option value="BMD" >&#036; BMD</option><option value="BOB" >Bs. BOB</option><option value="BAM" >KM BAM</option><option value="BWP" >P BWP</option><option value="BRL" >&#082;&#036; BRL</option><option value="BND" >&#036; BND</option><option value="MMK" >Ks MMK</option><option value="BIF" >Fr BIF</option><option value="KHR" >&#x17db; KHR</option><option value="CAD" >&#036; CAD</option><option value="CVE" >&#036; CVE</option><option value="KYD" >&#036; KYD</option><option value="CLP" >&#036; CLP</option><option value="CNY" >&yen; CNY</option><option value="COP" >&#036; COP</option><option value="KMF" >Fr KMF</option><option value="CDF" >Fr CDF</option><option value="CRC" >&#x20a1; CRC</option><option value="CZK" >&#075;&#269; CZK</option><option value="DKK" >kr. DKK</option><option value="DJF" >Fr DJF</option><option value="DOP" >RD&#036; DOP</option><option value="EGP" >EGP</option><option value="ETB" >Br ETB</option><option value="EUR" >&euro; EUR</option><option value="FKP" >&pound; FKP</option><option value="FJD" >&#036; FJD</option><option value="GMD" >D GMD</option><option value="GEL" >&#x20be; GEL</option><option value="GIP" >&pound; GIP</option><option value="GTQ" >Q GTQ</option><option value="GNF" >Fr GNF</option><option value="GYD" >&#036; GYD</option><option value="HTG" >G HTG</option><option value="HNL" >L HNL</option><option value="HKD" >&#036; HKD</option><option value="HUF" >&#070;&#116; HUF</option><option value="ISK" >kr. ISK</option><option value="INR" >&#8377; INR</option><option value="IDR" >Rp IDR</option><option value="ILS" >&#8362; ILS</option><option value="JMD" >&#036; JMD</option><option value="JPY" >&yen; JPY</option><option value="KZT" >&#8376; KZT</option><option value="KES" >KSh KES</option><option value="KGS" >&#x441;&#x43e;&#x43c; KGS</option><option value="LAK" >&#8365; LAK</option><option value="LBP" >&#x644;.&#x644; LBP</option><option value="LSL" >L LSL</option><option value="LRD" >&#036; LRD</option><option value="MOP" >P MOP</option><option value="MKD" >&#x434;&#x435;&#x43d; MKD</option><option value="MGA" >Ar MGA</option><option value="MWK" >MK MWK</option><option value="MYR" >&#082;&#077; MYR</option><option value="MVR" >.&#x783; MVR</option><option value="MUR" >&#x20a8; MUR</option><option value="MXN" >&#036; MXN</option><option value="MDL" >MDL</option><option value="MNT" >&#x20ae; MNT</option><option value="MAD" >&#x62f;.&#x645;. MAD</option><option value="MZN" >MT MZN</option><option value="NAD" >N&#036; NAD</option><option value="NPR" >&#8360; NPR</option><option value="TWD" >&#078;&#084;&#036; TWD</option><option value="NZD" >&#036; NZD</option><option value="NIO" >C&#036; NIO</option><option value="NGN" >&#8358; NGN</option><option value="NOK" >&#107;&#114; NOK</option><option value="PKR" >&#8360; PKR</option><option value="PAB" >B/. PAB</option><option value="PGK" >K PGK</option><option value="PYG" >&#8370; PYG</option><option value="PHP" >&#8369; PHP</option><option value="PLN" >&#122;&#322; PLN</option><option value="GBP" >&pound; GBP</option><option value="QAR" >&#x631;.&#x642; QAR</option><option value="RON" >lei RON</option><option value="RUB" >&#8381; RUB</option><option value="RWF" >Fr RWF</option><option value="SHP" >&pound; SHP</option><option value="WST" >T WST</option><option value="SAR" >&#x631;.&#x633; SAR</option><option value="RSD" >&#1088;&#1089;&#1076; RSD</option><option value="SCR" >&#x20a8; SCR</option><option value="SGD" selected>&#036; SGD</option><option value="PEN" >S/ PEN</option><option value="SBD" >&#036; SBD</option><option value="SOS" >Sh SOS</option><option value="ZAR" >&#082; ZAR</option><option value="KRW" >&#8361; KRW</option><option value="LKR" >&#xdbb;&#xdd4; LKR</option><option value="SRD" >&#036; SRD</option><option value="SZL" >E SZL</option><option value="SEK" >&#107;&#114; SEK</option><option value="CHF" >CHF</option><option value="TJS" >&#x405;&#x41c; TJS</option><option value="TZS" >Sh TZS</option><option value="THB" >&#3647; THB</option><option value="TOP" >T&#036; TOP</option><option value="TTD" >&#036; TTD</option><option value="TRY" >&#8378; TRY</option><option value="UGX" >UGX</option><option value="UAH" >&#8372; UAH</option><option value="AED" >&#x62f;.&#x625; AED</option><option value="UYU" >&#036; UYU</option><option value="UZS" >UZS</option><option value="VUV" >Vt VUV</option><option value="VND" >&#8363; VND</option><option value="XOF" >CFA XOF</option><option value="YER" >&#xfdfc; YER</option><option value="ZMW" >ZK ZMW</option></select></div></form>
