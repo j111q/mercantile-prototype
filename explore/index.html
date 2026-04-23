@@ -111,7 +111,7 @@
   }
   .p3 .head b { color: #ecebe4; font-weight: 600; }
   .p3 .head .dot { display:inline-block; width: 5px; height: 5px; border-radius: 50%; background: #1f8f3a; margin-right: 6px; vertical-align: middle; }
-  .p3 .body { flex: 1; padding: 14px 14px 10px; display:flex; flex-direction:column; }
+  .p3 .body { flex: 1; padding: 22px 26px 16px; display:flex; flex-direction:column; }
   .p3 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: #646970; text-transform: uppercase; margin-bottom: 8px; }
   .p3 .title { font-family: 'UnifrakturCook', serif; font-weight: 700; font-size: 52px; line-height: 0.88; margin: 0 0 8px; letter-spacing: -0.005em; color: #1d2327; }
   .p3 .title .period { color: var(--wp); }
@@ -119,6 +119,28 @@
   .p3 .pill { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; color: #1d2327; padding: 1px 6px; border: 1px solid #c3c4c7; border-radius: 2px; background: #f6f7f7; }
   .p3 .pill.blue { background: #e2e8ff; border-color: #c5d0ff; }
   .p3 .pill.pink { background: #ffd4e1; border-color: #ffb5c9; }
+  /* dense textural stream — visually fills the middle of the tile */
+  .p3 .stream {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px; line-height: 1.55;
+    color: #50575e;
+    margin: 6px 0 10px;
+    padding: 8px 0;
+    border-top: 1px dashed #c3c4c7;
+    border-bottom: 1px dashed #c3c4c7;
+    display: flex; flex-direction: column; gap: 1px;
+    overflow: hidden;
+  }
+  .p3 .stream .srow { display: flex; gap: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .p3 .stream .srow .k {
+    font-weight: 700; color: #646970;
+    width: 44px; flex-shrink: 0; letter-spacing: 0.04em;
+  }
+  .p3 .stream .srow .t { overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+  .p3 .stream .srow.ord .k { color: #3858e9; }
+  .p3 .stream .srow.wap .k { color: #d94090; }
+  .p3 .stream .srow.fct .k { color: #4a8d36; }
+  .p3 .stream .srow b { color: #1d2327; font-weight: 600; }
   .p3 .rows { display:flex; flex-direction:column; margin-top: auto; border-top: 1px solid #c3c4c7; padding-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #1d2327; }
   .p3 .rows .row { display:flex; justify-content: space-between; padding: 1.5px 0; }
   .p3 .rows .row + .row { border-top: 1px dashed #dcdcde; }
@@ -186,6 +208,14 @@
             <span class="pill blue">highlighted</span>
             <span class="pill">indexed</span>
             <span class="pill pink">in stock</span>
+          </div>
+          <div class="stream">
+            <div class="srow ord"><span class="k">ORDER</span><span class="t">#10823 · <b>tee-03-ink</b> × 2 → Brooklyn, NY</span></div>
+            <div class="srow wap"><span class="k">WAPUU</span><span class="t">pushed to main. everybody wave.</span></div>
+            <div class="srow"><span class="k">CODE</span><span class="t">$wpdb-&gt;prefix · post_type="merch"</span></div>
+            <div class="srow ord"><span class="k">ORDER</span><span class="t">#10822 · <b>cozy-mug</b> × 1 → Lisbon, PT</span></div>
+            <div class="srow fct"><span class="k">FACT</span><span class="t">code is poetry. merch is proof.</span></div>
+            <div class="srow wap"><span class="k">WAPUU</span><span class="t">the tie-dye hoodie is my favorite.</span></div>
           </div>
           <div class="rows">
             <div class="row"><span class="k">editor</span><span><b>wapuu</b></span></div>
