@@ -50,22 +50,7 @@
     padding: 10px 14px;
     background: #fff6a8; color: #1d2327;
     border: 1.5px solid #1d2327;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.18), 0 2px 5px rgba(0,0,0,0.12);
-    transform: rotate(-3deg);
-    transition: transform 0.25s cubic-bezier(.2,.9,.3,1.2), box-shadow 0.25s ease;
     pointer-events: none;
-  }
-  .post-it-badge::before {
-    /* tiny strip of 'tape' at the top — a lighter overlay */
-    content: ''; position: absolute; top: -6px; left: 50%;
-    width: 28px; height: 8px;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(29,35,39,0.2);
-    transform: translateX(-50%) rotate(4deg);
-  }
-  .dir.hero:hover .post-it-badge {
-    transform: rotate(-5deg) translateY(-3px);
-    box-shadow: 0 14px 24px rgba(0,0,0,0.22), 0 3px 7px rgba(0,0,0,0.14);
   }
   /* Up-scale the p3 preview inside the hero tile */
   .dir.hero .p3 .title { font-size: 80px; }
