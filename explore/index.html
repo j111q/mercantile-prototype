@@ -21,10 +21,10 @@
   header p { max-width: 720px; font-size: 14px; line-height: 1.7; color: #555; margin: 0; }
   header .wp { color: var(--wp); }
 
-  /* Skimmable 3-column summary — number | direction | description. */
+  /* Skimmable summary: num | direction | description | (badge slot on the right). */
   .summary {
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto minmax(0, 48ch) 1fr;
     column-gap: 28px; row-gap: 12px;
     font-size: 14px; line-height: 1.55;
     margin: 4px 0 0;
@@ -41,21 +41,21 @@
     white-space: nowrap;
   }
   .summary .sum-desc { color: #555; }
-  .summary .sum-row.current .sum-title::after {
-    content: '◆ Front-runner';
-    display: inline-block;
-    margin-left: 10px;
+  .summary .sum-badge {
+    grid-column: 4;
+    justify-self: end; align-self: baseline;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 2px 6px;
+    padding: 3px 7px;
     background: #fff6a8; color: #1d2327;
     border: 1px solid #1d2327; border-radius: 2px;
-    vertical-align: 0.15em;
+    white-space: nowrap;
   }
   @media (max-width: 700px) {
     .summary { grid-template-columns: auto 1fr; column-gap: 16px; row-gap: 4px; }
     .summary .sum-desc { grid-column: 1 / -1; padding-bottom: 10px; }
+    .summary .sum-badge { grid-column: 1 / -1; justify-self: start; margin-top: 2px; margin-bottom: 4px; }
     .summary .sum-title { white-space: normal; }
   }
   .dirs { display:grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; background: rgba(0,0,0,0.08); max-width: var(--page-max); margin: 32px auto; box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
@@ -238,6 +238,7 @@
         <div class="sum-num">03</div>
         <div class="sum-title">Hook &amp; Loop</div>
         <div class="sum-desc">Dense &amp; text-forward. wp-admin as inspiration — tickers, serif headlines, typographic textures. Avant-garde.</div>
+        <div class="sum-badge">◆ Front-runner</div>
       </div>
     </div>
   </header>
