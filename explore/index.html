@@ -32,15 +32,17 @@
   }
   .summary .sum-row { display: contents; }
   .summary .sum-num {
+    grid-column: 1;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 12px; letter-spacing: 0.14em; color: #888;
     text-align: right;
   }
   .summary .sum-title {
+    grid-column: 2;
     font-weight: 600; color: var(--ink);
     white-space: nowrap;
   }
-  .summary .sum-desc { color: #555; }
+  .summary .sum-desc { grid-column: 3; color: #555; }
   .summary .sum-badge {
     grid-column: 4;
     justify-self: end; align-self: baseline;
