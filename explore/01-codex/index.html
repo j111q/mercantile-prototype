@@ -421,7 +421,7 @@ function PDP({ id, cart, toast }) {
   const [added, setAdded] = useState(false);
   if (!p) return <div style={{padding:80}}><a href="#/shop" className="serif" style={{fontSize:32}}>← back to shop</a></div>;
   const isApparel = p.cat === 'apparel';
-  const sizes = isApparel ? ['XS','S','M','L','XL','XXL'] : null;
+  const sizes = isApparel ? ['XS','S','M','L','XL','XXL','3XL'] : null;
   const add = () => {
     cart.add(p, sizes ? size : '—');
     setAdded(true);

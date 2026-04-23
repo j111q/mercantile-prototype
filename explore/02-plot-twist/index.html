@@ -550,7 +550,7 @@ function PDP({ id, onAdd }) {
   const lastLabel = useRef('');
   if (!p) return <div className="pdp"><a className="back" href="#/shop">← back</a><h1 className="serif" style={{fontSize:40}}>Can't find that one.</h1></div>;
   const apparel = p.cat === 'apparel';
-  const sizes = apparel ? ['XS','S','M','L','XL','XXL'] : null;
+  const sizes = apparel ? ['XS','S','M','L','XL','XXL','3XL'] : null;
   const add = () => {
     if (state !== 'idle') return;
     setLabel(pickNextLabel(LOADING_LABELS_LONG, lastLabel));

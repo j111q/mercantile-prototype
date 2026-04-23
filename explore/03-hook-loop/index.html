@@ -1413,7 +1413,7 @@ function ProductModal({ id, onClose, onAdd }) {
   }, [onClose]);
   if (!p) return null;
   const apparel = p.cat === 'apparel';
-  const sizes = apparel ? ['XS','S','M','L','XL','XXL'] : null;
+  const sizes = apparel ? ['XS','S','M','L','XL','XXL','3XL'] : null;
   const related = window.MERCANTILE_CATALOG.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 5);
   const add = () => {
     if (state !== 'idle') return;
