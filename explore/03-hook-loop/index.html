@@ -821,12 +821,19 @@
     font-size: 10px; color: var(--slate-2); margin-top: 4px;
   }
 
-  /* ========== CHECKOUT VIEW ========== */
+  /* ============================================================
+     CHECKOUT — page chrome around the WooCommerce Checkout Block.
+     The .wc-block-* class names mirror the actual WP block markup
+     (woocommerce/checkout, woocommerce/checkout-shipping-address,
+     etc.) so a theme could ship this 1:1 with the real blocks.
+     ============================================================ */
   .checkout-view {
     background: var(--paper);
     min-height: calc(100vh - 28px);
     display: flex; flex-direction: column;
   }
+
+  /* page chrome — breadcrumb (NOT a block) */
   .checkout-view .ckhead {
     border-bottom: 1px solid var(--rule);
     padding: 16px var(--gutter);
@@ -842,6 +849,7 @@
   .checkout-view .ckhead .meta { display: flex; gap: 16px; align-items: center; color: var(--slate-2); }
   .checkout-view .ckhead .meta b { color: var(--ink); }
 
+  /* page chrome — step nav (NOT a block; H&L flourish) */
   .checkout-view .step-nav {
     display: flex; gap: 0; border-bottom: 1px solid var(--rule);
     padding: 0 var(--gutter); background: var(--paper);
@@ -859,90 +867,154 @@
   .checkout-view .step-nav .step.now .n { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .checkout-view .step-nav .step.done { color: var(--slate); }
 
-  .checkout-view .grid {
+  /* ---- WooCommerce Checkout Block proper ---- */
+  .wc-block-checkout { flex: 1; display: flex; flex-direction: column; }
+  .wc-block-checkout__form {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 380px;
-    gap: 0;
     padding: 0 var(--gutter);
   }
-  .checkout-view .form {
+
+  /* left column: woocommerce/checkout-fields-block */
+  .wc-block-checkout__main {
     padding: 32px 36px 48px 0;
     border-right: 1px solid var(--rule);
   }
-  .checkout-view .form fieldset {
-    border: 0; margin: 0 0 28px; padding: 0;
+
+  /* each child block uses .wc-block-components-checkout-step */
+  .wc-block-components-checkout-step {
+    padding: 0 0 28px;
+    border-bottom: 1px dashed var(--rule);
+    margin-bottom: 28px;
   }
-  .checkout-view .form legend {
+  .wc-block-checkout__main > .wc-block-components-checkout-step:last-of-type {
+    border-bottom: 0;
+  }
+  .wc-block-components-checkout-step__heading {
+    margin-bottom: 14px;
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  }
+  .wc-block-components-checkout-step__title {
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate);
-    padding: 0; margin-bottom: 14px;
-    display: flex; align-items: baseline; gap: 8px;
+    margin: 0; font-weight: 600;
   }
-  .checkout-view .form legend::before {
-    content: '§'; color: var(--wp); font-weight: 700;
+  .wc-block-components-checkout-step__title::before { content: '§ '; color: var(--wp); font-weight: 700; }
+  .wc-block-components-checkout-step__description {
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 13px;
+    color: var(--slate-2); font-weight: 400;
   }
-  .checkout-view .form legend small {
-    font-size: 9px; color: var(--slate-2); text-transform: none; letter-spacing: 0.04em; font-style: italic;
+
+  /* form fields — woocommerce/components/text-input */
+  .wc-block-components-form-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;
   }
-  .checkout-view .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
-  .checkout-view .form .row.three { grid-template-columns: 2fr 1fr 1fr; }
-  .checkout-view .form .field { display: flex; flex-direction: column; gap: 4px; }
-  .checkout-view .form .field.full { grid-column: 1 / -1; }
-  .checkout-view .form .field label {
+  .wc-block-components-form-row.three-up { grid-template-columns: 2fr 1fr 1fr; }
+  .wc-block-components-text-input { display: flex; flex-direction: column; gap: 4px; }
+  .wc-block-components-text-input--full { grid-column: 1 / -1; }
+  .wc-block-components-text-input label {
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-2);
   }
-  .checkout-view .form .field input,
-  .checkout-view .form .field select {
+  .wc-block-components-text-input label small {
+    text-transform: none; letter-spacing: 0; font-style: italic;
+    font-size: 9px; color: var(--slate-2); margin-left: 4px;
+  }
+  .wc-block-components-text-input input,
+  .wc-block-components-text-input select,
+  .wc-block-components-text-input textarea {
     border: 1px solid var(--rule); background: #fff;
     padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
     color: var(--ink); border-radius: 0; line-height: 1.4;
+    box-sizing: border-box; width: 100%;
   }
-  .checkout-view .form .field input:focus,
-  .checkout-view .form .field select:focus {
-    outline: none; border-color: var(--wp); background: #fff;
-    box-shadow: 0 0 0 1px var(--wp);
+  .wc-block-components-text-input--note textarea {
+    resize: vertical; min-height: 64px; font-family: 'Newsreader', serif; font-size: 14px;
   }
-  .checkout-view .form .field input::placeholder { color: var(--slate-2); }
-  .checkout-view .form .place {
+  .wc-block-components-text-input input::placeholder { color: var(--slate-2); }
+  .wc-block-components-text-input input:focus,
+  .wc-block-components-text-input select:focus,
+  .wc-block-components-text-input textarea:focus {
+    outline: none; border-color: var(--wp); box-shadow: 0 0 0 1px var(--wp);
+  }
+
+  /* radio control — woocommerce/components/radio-control (shipping methods) */
+  .wc-block-components-radio-control { display: flex; flex-direction: column; gap: 8px; }
+  .wc-block-components-radio-control__option {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center;
+    padding: 12px 14px;
+    border: 1px solid var(--rule); background: #fff;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink);
+  }
+  .wc-block-components-radio-control__option--checked {
+    border-color: var(--wp); box-shadow: 0 0 0 1px var(--wp); background: var(--paper-2);
+  }
+  .wc-block-components-radio-control__option input[type="radio"] { margin: 0; accent-color: var(--wp); }
+  .wc-block-components-radio-control__option-content small {
+    display: block; color: var(--slate-2); font-size: 10px; margin-top: 2px;
+    letter-spacing: 0.04em;
+  }
+  .wc-block-components-radio-control__option-price { color: var(--ink); font-weight: 600; }
+
+  /* terms — woocommerce/checkout-terms-block */
+  .wc-block-checkout-terms-block label {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
+    line-height: 1.55; cursor: pointer;
+  }
+  .wc-block-checkout-terms-block input[type="checkbox"] { margin-top: 2px; accent-color: var(--wp); flex-shrink: 0; }
+  .wc-block-checkout-terms-block a { color: var(--wp); border-bottom: 1px dashed var(--wp); }
+
+  /* place-order button — woocommerce/checkout-actions-block */
+  .wc-block-components-checkout-place-order-button {
     width: 100%; padding: 16px;
     background: var(--ink); color: var(--paper);
     border: 1px solid var(--ink);
     font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
     cursor: pointer; transition: 0.15s;
-    margin-top: 8px;
   }
-  .checkout-view .form .place:hover { background: var(--wp); border-color: var(--wp); }
-  .checkout-view .form .terms {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: var(--slate-2); margin-top: 12px; line-height: 1.6;
-    text-align: center;
-  }
+  .wc-block-components-checkout-place-order-button:hover { background: var(--wp); border-color: var(--wp); }
+  .wc-block-components-checkout-place-order-button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .checkout-view .summary {
+  /* order-note disclosure — H&L styling on the woocommerce/checkout-order-note-block */
+  .wc-block-checkout-order-note-block .ordernote-toggle {
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--wp);
+    border-bottom: 1px dashed var(--wp);
+  }
+  .wc-block-checkout-order-note-block .ordernote-content { margin-top: 10px; }
+
+  /* ---- right column: woocommerce/checkout-totals-block ---- */
+  .wc-block-checkout__sidebar {
     padding: 32px 0 32px 36px;
     position: sticky; top: 28px; align-self: start;
+    display: flex; flex-direction: column; gap: 20px;
   }
-  .checkout-view .summary h3 {
+  .wc-block-components-order-summary__heading {
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate);
-    margin: 0 0 14px;
+    margin: 0 0 14px; font-weight: 600;
   }
-  .checkout-view .summary h3::before { content: '§ '; color: var(--wp); font-weight: 700; }
-  .checkout-view .summary .items { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--rule); }
-  .checkout-view .summary .items li {
+  .wc-block-components-order-summary__heading::before { content: '§ '; color: var(--wp); font-weight: 700; }
+  .wc-block-components-order-summary__items {
+    list-style: none; margin: 0; padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .wc-block-components-order-summary-item {
     display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center;
-    padding: 10px 0; border-bottom: 1px solid var(--rule);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
   }
-  .checkout-view .summary .items .img {
+  .wc-block-components-order-summary-item__image {
     width: 44px; height: 44px; border: 1px solid var(--rule); background: var(--paper-2);
     display: flex; align-items: center; justify-content: center; overflow: hidden;
     position: relative;
   }
-  .checkout-view .summary .items .img img { max-width: 90%; max-height: 90%; object-fit: contain; }
-  .checkout-view .summary .items .img .qty-bubble {
+  .wc-block-components-order-summary-item__image img { max-width: 90%; max-height: 90%; object-fit: contain; }
+  .wc-block-components-order-summary-item__quantity {
     position: absolute; top: -6px; right: -6px;
     width: 18px; height: 18px; border-radius: 50%;
     background: var(--ink); color: var(--paper);
@@ -950,35 +1022,96 @@
     display: flex; align-items: center; justify-content: center;
     border: 1.5px solid var(--paper);
   }
-  .checkout-view .summary .items .meta {
+  .wc-block-components-order-summary-item__description {
     font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink); line-height: 1.3;
   }
-  .checkout-view .summary .items .meta .k {
+  .wc-block-components-order-summary-item__variation {
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
     color: var(--slate); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em;
   }
-  .checkout-view .summary .items .price {
+  .wc-block-components-order-summary-item__total-price {
     font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink); font-weight: 600;
   }
-  .checkout-view .summary .rows {
-    font-family: 'JetBrains Mono', monospace; font-size: 12px; padding-top: 6px;
+
+  /* coupon — woocommerce/checkout-coupon-form-block (a Cart-Coupon variant) */
+  .wc-block-components-totals-coupon { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .wc-block-components-totals-coupon__button {
+    background: none; border: 0; padding: 0; cursor: pointer;
+    color: var(--wp); border-bottom: 1px dashed var(--wp);
+    font-family: inherit; font-size: inherit;
   }
-  .checkout-view .summary .rows .row {
+  .wc-block-components-totals-coupon__content { display: flex; gap: 8px; margin-top: 8px; }
+  .wc-block-components-totals-coupon__content input {
+    flex: 1; padding: 8px 10px; border: 1px solid var(--rule); background: #fff;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--ink); border-radius: 0;
+  }
+  .wc-block-components-totals-coupon__content input:focus { outline: none; border-color: var(--wp); }
+  .wc-block-components-totals-coupon__content button {
+    padding: 8px 14px; background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink); cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .wc-block-components-totals-coupon__content button:hover { background: var(--wp); border-color: var(--wp); }
+  .wc-block-components-totals-discount__coupon-list {
+    list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .wc-block-components-totals-discount__coupon-list li {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px; border: 1px dashed var(--wp); color: var(--wp);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .wc-block-components-totals-discount__coupon-list .remove { cursor: pointer; opacity: 0.7; background: none; border: 0; color: inherit; padding: 0; }
+  .wc-block-components-totals-discount__coupon-list .remove:hover { opacity: 1; }
+
+  /* totals — woocommerce/checkout-order-summary-totals-block + components/totals */
+  .wc-block-components-totals-wrapper {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    border-top: 1px solid var(--rule); padding-top: 8px;
+  }
+  .wc-block-components-totals-item {
     display: flex; justify-content: space-between; padding: 6px 0;
     color: var(--ink);
   }
-  .checkout-view .summary .rows .row .k { color: var(--slate); }
-  .checkout-view .summary .rows .row.total {
-    border-top: 1px solid var(--rule); margin-top: 6px; padding-top: 12px;
-    font-size: 14px; font-weight: 700;
+  .wc-block-components-totals-item__label { color: var(--slate); }
+  .wc-block-components-totals-item--discount .wc-block-components-totals-item__value { color: var(--wp); }
+  .wc-block-components-totals-footer-item {
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--rule); margin-top: 6px; padding: 12px 0 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
   }
-  .checkout-view .summary .edit {
-    display: inline-block; margin-top: 14px; font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; color: var(--wp);
-    border-bottom: 1px dashed var(--wp);
-  }
-  .checkout-view .summary .edit:hover { background: var(--wp); color: #fff; border-bottom: 0; }
 
+  /* slot/fill: ExperimentalOrderMeta — H&L injects the 'live ticker' flair here */
+  .wc-block-checkout-experimental-order-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate-2); border-top: 1px dashed var(--rule); padding-top: 12px;
+    letter-spacing: 0.04em; line-height: 1.7;
+  }
+  .wc-block-checkout-experimental-order-meta b { color: var(--ink); }
+  .wc-block-checkout-experimental-order-meta .stream-line { display: flex; gap: 8px; }
+  .wc-block-checkout-experimental-order-meta .stream-line .k { color: var(--wp); font-weight: 700; min-width: 56px; }
+
+  /* edit-cart link */
+  .wc-block-checkout__sidebar .edit-cart {
+    display: inline-block; align-self: flex-start;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--wp);
+    border-bottom: 1px dashed var(--wp); cursor: pointer;
+    background: none; border-top: 0; border-left: 0; border-right: 0; padding: 0;
+  }
+  .wc-block-checkout__sidebar .edit-cart:hover { background: var(--wp); color: #fff; border-bottom: 0; }
+
+  /* footer copy under the Place Order button */
+  .wc-block-checkout__footer-copy {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate-2); margin-top: 12px; line-height: 1.6;
+    text-align: center;
+  }
+  .wc-block-checkout__footer-copy a { color: var(--wp); border-bottom: 1px dashed var(--wp); }
+
+  /* empty state — woocommerce/cart-empty-block, themed */
   .checkout-view .ckempty {
     flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 16px; padding: 80px 20px;
@@ -1132,11 +1265,11 @@
     /* Toast: full-width-ish banner near bottom, centered text. */
     .toast { left: 16px; right: 16px; bottom: 16px; max-width: none; text-align: center; }
     /* Checkout: stack form & summary, summary first so users can confirm. */
-    .checkout-view .grid { grid-template-columns: 1fr; padding: 0 20px; }
-    .checkout-view .form { padding: 24px 0 32px; border-right: 0; border-top: 1px solid var(--rule); order: 2; }
-    .checkout-view .summary { padding: 24px 0; order: 1; position: static; border-bottom: 1px solid var(--rule); }
-    .checkout-view .form .row { grid-template-columns: 1fr; gap: 12px; }
-    .checkout-view .form .row.three { grid-template-columns: 1fr; }
+    .wc-block-checkout__form { grid-template-columns: 1fr; padding: 0 20px; }
+    .wc-block-checkout__main { padding: 24px 0 32px; border-right: 0; border-top: 1px solid var(--rule); order: 2; }
+    .wc-block-checkout__sidebar { padding: 24px 0; order: 1; position: static; border-bottom: 1px solid var(--rule); }
+    .wc-block-components-form-row { grid-template-columns: 1fr; gap: 12px; }
+    .wc-block-components-form-row.three-up { grid-template-columns: 1fr; }
     .checkout-view .step-nav { padding: 0 20px; overflow-x: auto; }
     .checkout-view .step-nav .step { padding: 12px 14px; flex-shrink: 0; }
     .order-view .body { padding: 40px 20px 60px; }
@@ -1447,8 +1580,33 @@ function CartDrawer({ open, onClose, cart }) {
   );
 }
 
-// ======== CHECKOUT ========
+// ============================================================
+// CHECKOUT — mirrors the WooCommerce Checkout Block (woocommerce/checkout)
+// Each <!-- block: woocommerce/checkout-* --> comment marks where the
+// real inner block would live; class names match the actual rendered
+// markup so a theme could ship this 1:1 with the live blocks.
+// ============================================================
+
+// woocommerce/cart-shipping-rates-block — flat-rate shipping options
+const SHIPPING_RATES = [
+  { id: 'standard',  label: 'Standard ground',     desc: '3–5 business days',           price: 8 },
+  { id: 'express',   label: 'Express',             desc: '2 business days',             price: 18 },
+  { id: 'overnight', label: 'Next-day air',        desc: 'arrives tomorrow if before 2pm PT', price: 32 },
+  { id: 'pickup',    label: 'Pick up in person',   desc: 'WordPress.com SF office',     price: 0 },
+];
+
+// woocommerce/checkout-coupon-form-block — prototype coupons
+function applyCouponRule(code, subtotal) {
+  const c = code.trim().toUpperCase();
+  if (!c) return null;
+  if (c === 'GPLV2')    return { code: c, amount: Math.min(10, subtotal),       label: 'GPLV2 · −$10' };
+  if (c === 'WAPUU')    return { code: c, amount: Math.round(subtotal * 0.15),  label: 'WAPUU · −15%' };
+  if (c === 'HOOKLOOP') return { code: c, amount: Math.round(subtotal * 0.20),  label: 'HOOKLOOP · −20%' };
+  return null;
+}
+
 function Checkout({ cart, openDrawer, onPlaceOrder }) {
+  // contact + address + payment fields
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [addr1, setAddr1] = useState('');
@@ -1460,17 +1618,50 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
   const [exp, setExp] = useState('');
   const [cvc, setCvc] = useState('');
 
+  // canonical block state — shipping method, coupon, order note, terms
+  const [shippingId, setShippingId] = useState('standard');
+  const [couponOpen, setCouponOpen] = useState(false);
+  const [couponInput, setCouponInput] = useState('');
+  const [couponError, setCouponError] = useState('');
+  const [appliedCoupons, setAppliedCoupons] = useState([]);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [orderNote, setOrderNote] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
+
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const empty = cart.items.length === 0;
-  const shipping = empty ? 0 : 8;
-  const tax = Math.round(cart.total * 0.0875);
-  const total = cart.total + shipping + tax;
+  const rate = SHIPPING_RATES.find(r => r.id === shippingId) || SHIPPING_RATES[0];
+  const shipping = empty ? 0 : rate.price;
+  const discount = appliedCoupons.reduce((s, c) => s + c.amount, 0);
+  const taxable = Math.max(0, cart.total - discount);
+  const tax = Math.round(taxable * 0.0875);
+  const total = Math.max(0, cart.total - discount) + shipping + tax;
+
+  const onApplyCoupon = (e) => {
+    e.preventDefault();
+    const found = applyCouponRule(couponInput, cart.total);
+    if (!found) {
+      setCouponError('that code isn\'t in the registry');
+      setTimeout(() => setCouponError(''), 2000);
+      return;
+    }
+    if (appliedCoupons.find(c => c.code === found.code)) {
+      setCouponInput('');
+      return;
+    }
+    setAppliedCoupons(prev => [...prev, found]);
+    setCouponInput('');
+  };
+  const removeCoupon = (code) => setAppliedCoupons(prev => prev.filter(c => c.code !== code));
 
   const submit = (e) => {
     e.preventDefault();
-    const fd = { email, name, addr1, addr2, city, postcode, country };
-    onPlaceOrder(fd, { subtotal: cart.total, shipping, tax, total });
+    const fd = { email, name, addr1, addr2, city, postcode, country, orderNote, shippingMethod: rate.label };
+    onPlaceOrder(fd, {
+      subtotal: cart.total, discount, shipping, tax, total,
+      coupons: appliedCoupons.map(c => c.code),
+    });
   };
 
   if (empty) {
@@ -1480,6 +1671,7 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
           <div className="crumb"><a href="#/">← shop</a><b>/</b>checkout</div>
           <div className="meta"><span>secure</span><span><b>GPLv2</b></span></div>
         </div>
+        {/* block: woocommerce/cart-empty-block — themed for Hook & Loop */}
         <div className="ckempty">
           <div className="frak">Empty<span style={{color:'var(--wp)'}}>.</span></div>
           <p>Nothing to check out — the cart is on standby.</p>
@@ -1491,6 +1683,7 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
 
   return (
     <div className="checkout-view">
+      {/* page chrome */}
       <div className="ckhead">
         <div className="crumb"><a href="#/">← shop</a><b>/</b>checkout</div>
         <div className="meta">
@@ -1499,122 +1692,260 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
           <span>est. ship · <b>1–2 business days</b></span>
         </div>
       </div>
-
       <div className="step-nav">
         <div className="step done"><span className="n">01</span><span>cart</span></div>
         <div className="step now"><span className="n">02</span><span>details</span></div>
         <div className="step"><span className="n">03</span><span>confirm</span></div>
       </div>
 
-      <div className="grid">
-        <form className="form" onSubmit={submit}>
-          <fieldset>
-            <legend>contact <small>so we can send your receipt</small></legend>
-            <div className="row">
-              <div className="field full">
-                <label htmlFor="ck-email">email</label>
-                <input id="ck-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@wordpress.org"/>
-              </div>
-            </div>
-          </fieldset>
+      {/* block: woocommerce/checkout */}
+      <div className="wc-block-checkout">
+        <form className="wc-block-checkout__form" onSubmit={submit}>
 
-          <fieldset>
-            <legend>ship to <small>a real human will pack this</small></legend>
-            <div className="row">
-              <div className="field full">
-                <label htmlFor="ck-name">full name</label>
-                <input id="ck-name" required value={name} onChange={e => setName(e.target.value)} placeholder="Wapuu McTheme"/>
-              </div>
-            </div>
-            <div className="row">
-              <div className="field full">
-                <label htmlFor="ck-addr1">street address</label>
-                <input id="ck-addr1" required value={addr1} onChange={e => setAddr1(e.target.value)} placeholder="29 W. 30th Wapuu Lane"/>
-              </div>
-            </div>
-            <div className="row">
-              <div className="field full">
-                <label htmlFor="ck-addr2">apt / suite <small style={{textTransform:'none',letterSpacing:0,color:'var(--slate-2)',fontSize:9,fontStyle:'italic'}}>optional</small></label>
-                <input id="ck-addr2" value={addr2} onChange={e => setAddr2(e.target.value)} placeholder="apt 8.3"/>
-              </div>
-            </div>
-            <div className="row three">
-              <div className="field">
-                <label htmlFor="ck-city">city</label>
-                <input id="ck-city" required value={city} onChange={e => setCity(e.target.value)} placeholder="San Francisco"/>
-              </div>
-              <div className="field">
-                <label htmlFor="ck-postcode">postcode</label>
-                <input id="ck-postcode" required value={postcode} onChange={e => setPostcode(e.target.value)} placeholder="94102"/>
-              </div>
-              <div className="field">
-                <label htmlFor="ck-country">country</label>
-                <select id="ck-country" value={country} onChange={e => setCountry(e.target.value)}>
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>United Kingdom</option>
-                  <option>Australia</option>
-                  <option>Germany</option>
-                  <option>Japan</option>
-                  <option>Singapore</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
+          {/* ===== left column: woocommerce/checkout-fields-block ===== */}
+          <div className="wc-block-checkout__main">
 
-          <fieldset>
-            <legend>payment <small>this is a prototype — don't enter a real card</small></legend>
-            <div className="row">
-              <div className="field full">
-                <label htmlFor="ck-card">card number</label>
-                <input id="ck-card" required value={card} onChange={e => setCard(e.target.value)} placeholder="4242 4242 4242 4242" autoComplete="off"/>
+            {/* block: woocommerce/checkout-contact-information-block */}
+            <div className="wc-block-checkout-contact-information-block wc-block-components-checkout-step">
+              <div className="wc-block-components-checkout-step__heading">
+                <h2 className="wc-block-components-checkout-step__title">Contact</h2>
+                <span className="wc-block-components-checkout-step__description">so we can send your receipt</span>
+              </div>
+              <div className="wc-block-components-form-row">
+                <div className="wc-block-components-text-input wc-block-components-text-input--full">
+                  <label htmlFor="ck-email">Email</label>
+                  <input id="ck-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@wordpress.org"/>
+                </div>
               </div>
             </div>
-            <div className="row">
-              <div className="field">
-                <label htmlFor="ck-exp">expiry</label>
-                <input id="ck-exp" required value={exp} onChange={e => setExp(e.target.value)} placeholder="04/29"/>
+
+            {/* block: woocommerce/checkout-shipping-address-block */}
+            <div className="wc-block-checkout-shipping-address-block wc-block-components-checkout-step">
+              <div className="wc-block-components-checkout-step__heading">
+                <h2 className="wc-block-components-checkout-step__title">Shipping address</h2>
+                <span className="wc-block-components-checkout-step__description">a real human will pack this</span>
               </div>
-              <div className="field">
-                <label htmlFor="ck-cvc">cvc</label>
-                <input id="ck-cvc" required value={cvc} onChange={e => setCvc(e.target.value)} placeholder="123"/>
+              <div className="wc-block-components-form-row">
+                <div className="wc-block-components-text-input wc-block-components-text-input--full">
+                  <label htmlFor="ck-name">Full name</label>
+                  <input id="ck-name" required value={name} onChange={e => setName(e.target.value)} placeholder="Wapuu McTheme"/>
+                </div>
+              </div>
+              <div className="wc-block-components-form-row">
+                <div className="wc-block-components-text-input wc-block-components-text-input--full">
+                  <label htmlFor="ck-addr1">Street address</label>
+                  <input id="ck-addr1" required value={addr1} onChange={e => setAddr1(e.target.value)} placeholder="29 W. 30th Wapuu Lane"/>
+                </div>
+              </div>
+              <div className="wc-block-components-form-row">
+                <div className="wc-block-components-text-input wc-block-components-text-input--full">
+                  <label htmlFor="ck-addr2">Apt / suite <small>optional</small></label>
+                  <input id="ck-addr2" value={addr2} onChange={e => setAddr2(e.target.value)} placeholder="apt 8.3"/>
+                </div>
+              </div>
+              <div className="wc-block-components-form-row three-up">
+                <div className="wc-block-components-text-input">
+                  <label htmlFor="ck-city">City</label>
+                  <input id="ck-city" required value={city} onChange={e => setCity(e.target.value)} placeholder="San Francisco"/>
+                </div>
+                <div className="wc-block-components-text-input">
+                  <label htmlFor="ck-postcode">Postcode</label>
+                  <input id="ck-postcode" required value={postcode} onChange={e => setPostcode(e.target.value)} placeholder="94102"/>
+                </div>
+                <div className="wc-block-components-text-input">
+                  <label htmlFor="ck-country">Country</label>
+                  <select id="ck-country" value={country} onChange={e => setCountry(e.target.value)}>
+                    <option>United States</option><option>Canada</option><option>United Kingdom</option>
+                    <option>Australia</option><option>Germany</option><option>Japan</option>
+                    <option>Singapore</option><option>Other</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </fieldset>
 
-          <button type="submit" className="place">place order · ${total} →</button>
-          <div className="terms">by placing your order you agree to the <a href="#" style={{color:'var(--wp)',borderBottom:'1px dashed var(--wp)'}}>terms</a>. shipped under <b>GPLv2</b>. returns within 30 days.</div>
-        </form>
+            {/* block: woocommerce/checkout-shipping-method-block */}
+            <div className="wc-block-checkout-shipping-method-block wc-block-components-checkout-step">
+              <div className="wc-block-components-checkout-step__heading">
+                <h2 className="wc-block-components-checkout-step__title">Shipping method</h2>
+                <span className="wc-block-components-checkout-step__description">how fast?</span>
+              </div>
+              <div className="wc-block-components-radio-control" role="radiogroup">
+                {SHIPPING_RATES.map(r => (
+                  <label
+                    key={r.id}
+                    className={`wc-block-components-radio-control__option${shippingId === r.id ? ' wc-block-components-radio-control__option--checked' : ''}`}
+                  >
+                    <input type="radio" name="shipping" value={r.id} checked={shippingId === r.id} onChange={() => setShippingId(r.id)}/>
+                    <span className="wc-block-components-radio-control__option-content">
+                      {r.label}
+                      <small>{r.desc}</small>
+                    </span>
+                    <span className="wc-block-components-radio-control__option-price">{r.price === 0 ? 'free' : `$${r.price}`}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
-        <aside className="summary">
-          <h3>Order</h3>
-          <ul className="items">
-            {cart.items.map(it => {
-              const imgs = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[it.id]) || [];
-              return (
-                <li key={it.key}>
-                  <div className="img">
-                    {imgs[0] && <img src={imgs[0]} alt=""/>}
-                    <span className="qty-bubble">{it.qty}</span>
+            {/* block: woocommerce/checkout-payment-block */}
+            <div className="wc-block-checkout-payment-block wc-block-components-checkout-step">
+              <div className="wc-block-components-checkout-step__heading">
+                <h2 className="wc-block-components-checkout-step__title">Payment</h2>
+                <span className="wc-block-components-checkout-step__description">prototype — don't use a real card</span>
+              </div>
+              <div className="wc-block-components-form-row">
+                <div className="wc-block-components-text-input wc-block-components-text-input--full">
+                  <label htmlFor="ck-card">Card number</label>
+                  <input id="ck-card" required value={card} onChange={e => setCard(e.target.value)} placeholder="4242 4242 4242 4242" autoComplete="off"/>
+                </div>
+              </div>
+              <div className="wc-block-components-form-row">
+                <div className="wc-block-components-text-input">
+                  <label htmlFor="ck-exp">Expiry</label>
+                  <input id="ck-exp" required value={exp} onChange={e => setExp(e.target.value)} placeholder="04/29"/>
+                </div>
+                <div className="wc-block-components-text-input">
+                  <label htmlFor="ck-cvc">CVC</label>
+                  <input id="ck-cvc" required value={cvc} onChange={e => setCvc(e.target.value)} placeholder="123"/>
+                </div>
+              </div>
+            </div>
+
+            {/* block: woocommerce/checkout-order-note-block */}
+            <div className="wc-block-checkout-order-note-block wc-block-components-checkout-step">
+              {!noteOpen ? (
+                <button type="button" className="ordernote-toggle" onClick={() => setNoteOpen(true)}>
+                  add a note for the packer →
+                </button>
+              ) : (
+                <div className="ordernote-content">
+                  <div className="wc-block-components-checkout-step__heading">
+                    <h2 className="wc-block-components-checkout-step__title">Order note</h2>
+                    <span className="wc-block-components-checkout-step__description">we read every one</span>
                   </div>
-                  <div className="meta">
-                    {it.name}
-                    <span className="k">size {it.size}</span>
+                  <div className="wc-block-components-text-input wc-block-components-text-input--note">
+                    <label htmlFor="ck-note">Note <small>optional</small></label>
+                    <textarea id="ck-note" rows={3} value={orderNote} onChange={e => setOrderNote(e.target.value)} placeholder="leave a wapuu sticker if you have one — totally fine if you don't"/>
                   </div>
-                  <div className="price">${(it.qty * it.price).toFixed(0)}</div>
-                </li>
-              );
-            })}
-          </ul>
-          <div className="rows">
-            <div className="row"><span className="k">subtotal</span><span>${cart.total}</span></div>
-            <div className="row"><span className="k">shipping</span><span>${shipping}</span></div>
-            <div className="row"><span className="k">tax</span><span>${tax}</span></div>
-            <div className="row total"><span>total</span><span>${total}</span></div>
+                </div>
+              )}
+            </div>
+
+            {/* block: woocommerce/checkout-terms-block */}
+            <div className="wc-block-checkout-terms-block wc-block-components-checkout-step">
+              <label>
+                <input type="checkbox" checked={agreeTerms} onChange={e => setAgreeTerms(e.target.checked)}/>
+                <span>I agree to the <a href="#" onClick={e => e.preventDefault()}>terms</a> and accept that this merch ships under <b>GPLv2</b>. Returns within 30 days.</span>
+              </label>
+            </div>
+
+            {/* block: woocommerce/checkout-actions-block */}
+            <div className="wc-block-checkout-actions-block">
+              <button
+                type="submit"
+                className="wc-block-components-checkout-place-order-button"
+                disabled={!agreeTerms}
+              >place order · ${total} →</button>
+              <div className="wc-block-checkout__footer-copy">
+                packed by a human · <b>GPLv2</b> · <a href="#" onClick={e => e.preventDefault()}>refund policy</a>
+              </div>
+            </div>
           </div>
-          <a className="edit" href="#" onClick={e => { e.preventDefault(); openDrawer(); }}>edit cart →</a>
-        </aside>
+
+          {/* ===== right column: woocommerce/checkout-totals-block ===== */}
+          <aside className="wc-block-checkout__sidebar">
+
+            {/* block: woocommerce/checkout-order-summary-block */}
+            <div className="wc-block-components-order-summary">
+              <h3 className="wc-block-components-order-summary__heading">Order</h3>
+              <ul className="wc-block-components-order-summary__items">
+                {cart.items.map(it => {
+                  const imgs = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[it.id]) || [];
+                  return (
+                    <li key={it.key} className="wc-block-components-order-summary-item">
+                      <div className="wc-block-components-order-summary-item__image">
+                        {imgs[0] && <img src={imgs[0]} alt=""/>}
+                        <span className="wc-block-components-order-summary-item__quantity">{it.qty}</span>
+                      </div>
+                      <div className="wc-block-components-order-summary-item__description">
+                        {it.name}
+                        <span className="wc-block-components-order-summary-item__variation">size {it.size}</span>
+                      </div>
+                      <div className="wc-block-components-order-summary-item__total-price">${(it.qty * it.price).toFixed(0)}</div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* block: woocommerce/checkout-coupon-form-block */}
+            <div className="wc-block-components-totals-coupon">
+              {!couponOpen ? (
+                <button type="button" className="wc-block-components-totals-coupon__button" onClick={() => setCouponOpen(true)}>
+                  got a coupon? →
+                </button>
+              ) : (
+                <>
+                  <div className="wc-block-components-totals-coupon__content">
+                    <input
+                      value={couponInput}
+                      onChange={e => setCouponInput(e.target.value)}
+                      placeholder="GPLV2"
+                      onKeyDown={e => { if (e.key === 'Enter') onApplyCoupon(e); }}
+                      aria-label="Coupon code"
+                    />
+                    <button type="button" onClick={onApplyCoupon}>apply</button>
+                  </div>
+                  {couponError && <div style={{color:'var(--accent)',fontSize:10,marginTop:6,letterSpacing:'0.04em'}}>{couponError}</div>}
+                </>
+              )}
+              {appliedCoupons.length > 0 && (
+                <ul className="wc-block-components-totals-discount__coupon-list">
+                  {appliedCoupons.map(c => (
+                    <li key={c.code}>
+                      {c.label}
+                      <button type="button" className="remove" onClick={() => removeCoupon(c.code)} aria-label={`Remove ${c.code}`}>×</button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* block: woocommerce/checkout-order-summary-totals-block */}
+            <div className="wc-block-components-totals-wrapper">
+              <div className="wc-block-components-totals-item">
+                <span className="wc-block-components-totals-item__label">Subtotal</span>
+                <span className="wc-block-components-totals-item__value">${cart.total}</span>
+              </div>
+              {discount > 0 && (
+                <div className="wc-block-components-totals-item wc-block-components-totals-item--discount">
+                  <span className="wc-block-components-totals-item__label">Discount</span>
+                  <span className="wc-block-components-totals-item__value">−${discount}</span>
+                </div>
+              )}
+              <div className="wc-block-components-totals-item">
+                <span className="wc-block-components-totals-item__label">Shipping</span>
+                <span className="wc-block-components-totals-item__value">{shipping === 0 ? 'free' : `$${shipping}`}</span>
+              </div>
+              <div className="wc-block-components-totals-item">
+                <span className="wc-block-components-totals-item__label">Tax</span>
+                <span className="wc-block-components-totals-item__value">${tax}</span>
+              </div>
+              <div className="wc-block-components-totals-footer-item">
+                <span>Total</span>
+                <span>${total}</span>
+              </div>
+            </div>
+
+            {/* slot: ExperimentalOrderMeta — H&L theme injects this via <Fill> */}
+            <div className="wc-block-checkout-experimental-order-meta">
+              <div className="stream-line"><span className="k">HOOKS</span><span>fired · <b>847</b></span></div>
+              <div className="stream-line"><span className="k">RUNTIME</span><span><b>PHP 8.3</b> · WP <b>6.7</b></span></div>
+              <div className="stream-line"><span className="k">PACKED BY</span><span><b>a human</b> · in San Francisco</span></div>
+            </div>
+
+            <button type="button" className="edit-cart" onClick={openDrawer}>edit cart →</button>
+          </aside>
+        </form>
       </div>
     </div>
   );
@@ -1661,6 +1992,8 @@ function OrderComplete({ order }) {
           <div className="rline small"><span>placed</span><span>{new Date(order.placedAt).toLocaleString()}</span></div>
           <div className="rline small"><span>ship to</span><span>{order.name || '—'}</span></div>
           <div className="rline small"><span></span><span>{[order.addr1, order.city, order.postcode, order.country].filter(Boolean).join(', ')}</span></div>
+          {order.shippingMethod && <div className="rline small"><span>via</span><span>{order.shippingMethod}</span></div>}
+          {order.orderNote && <div className="rline small"><span>note</span><span style={{maxWidth:'60%',textAlign:'right',whiteSpace:'normal'}}>"{order.orderNote}"</span></div>}
           <div className="sep"></div>
           {order.items.map(it => (
             <div className="rline" key={it.key}>
@@ -1670,6 +2003,9 @@ function OrderComplete({ order }) {
           ))}
           <div className="sep"></div>
           <div className="rline small"><span>subtotal</span><span>${order.subtotal}</span></div>
+          {order.discount > 0 && (
+            <div className="rline small"><span>discount {order.coupons && order.coupons.length ? `(${order.coupons.join(', ')})` : ''}</span><span>−${order.discount}</span></div>
+          )}
           <div className="rline small"><span>shipping</span><span>${order.shipping}</span></div>
           <div className="rline small"><span>tax</span><span>${order.tax}</span></div>
           <div className="rline total"><span>total</span><span>${order.total}</span></div>
