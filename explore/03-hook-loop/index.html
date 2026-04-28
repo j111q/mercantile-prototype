@@ -692,7 +692,12 @@
   .toast.on { opacity: 1; transform: translateY(0); }
   .toast .ok { color: #7bda7b; margin-right: 6px; }
 
-  /* ========== CART DRAWER ========== */
+  /* ============================================================
+     CART DRAWER — drawer chrome around the WooCommerce Mini Cart
+     Contents block (woocommerce/mini-cart-contents). The drawer
+     itself is custom (slide-out from right); the contents inside
+     mirror the real woocommerce/mini-cart-contents inner blocks.
+     ============================================================ */
   .cart-backdrop {
     position: fixed; inset: 0; z-index: 100;
     background: rgba(0,0,0,0.45);
@@ -711,112 +716,136 @@
     font-family: 'JetBrains Mono', monospace;
   }
   .cart-drawer.on { transform: translateX(0); }
+
+  /* block: woocommerce/mini-cart-contents */
+  .wc-block-mini-cart__contents {
+    flex: 1; min-height: 0;
+    display: flex; flex-direction: column;
+  }
+
+  /* drawer header — page chrome (close button is drawer-only) */
   .cart-drawer header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 16px 20px;
     border-bottom: 1px solid var(--rule);
     background: var(--paper-2);
   }
-  .cart-drawer header h3 {
+  .wc-block-mini-cart__title {
     margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 600;
     font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--ink);
   }
-  .cart-drawer header h3 .n { color: var(--slate); font-weight: 400; margin-left: 4px; }
+  .wc-block-mini-cart__title-amount { color: var(--slate); font-weight: 400; margin-left: 4px; }
   .cart-drawer header .close {
     width: 28px; height: 28px; border: 1px solid var(--rule); background: transparent;
     font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer;
   }
   .cart-drawer header .close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  .cart-drawer .items { flex: 1; overflow-y: auto; padding: 4px 20px; }
-  .cart-drawer .item {
+  /* block: woocommerce/mini-cart-items-block */
+  .wc-block-mini-cart-items { flex: 1; overflow-y: auto; padding: 4px 20px; }
+
+  /* block: woocommerce/mini-cart-products-table-block — line items */
+  .wc-block-cart-items__row {
     display: grid; grid-template-columns: 68px 1fr auto; gap: 12px;
     padding: 14px 0; border-bottom: 1px dashed var(--rule);
     align-items: start;
   }
-  .cart-drawer .item:last-child { border-bottom: 0; }
-  .cart-drawer .item .img {
+  .wc-block-cart-items__row:last-child { border-bottom: 0; }
+  .wc-block-cart-item__image {
     width: 68px; height: 68px; background: #fff;
     border: 1px solid var(--rule); border-radius: 2px;
     display: flex; align-items: center; justify-content: center; padding: 6px;
   }
-  .cart-drawer .item .img img { max-width: 100%; max-height: 100%; object-fit: contain; }
-  .cart-drawer .item .meta h4 {
+  .wc-block-cart-item__image img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .wc-block-cart-item__product .wc-block-components-product-name {
     font-family: 'Newsreader', serif; font-size: 15px; font-weight: 500;
     margin: 0 0 4px; line-height: 1.2; color: var(--ink); text-wrap: balance;
+    display: block;
   }
-  .cart-drawer .item .meta .k {
+  .wc-block-cart-item__product .wc-block-components-product-metadata {
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     color: var(--slate); letter-spacing: 0.06em; text-transform: uppercase;
+    display: block;
   }
-  .cart-drawer .item .qty { display: inline-flex; align-items: center; gap: 0; margin: 8px 0 0; border: 1px solid var(--rule); }
-  .cart-drawer .item .qty button {
+
+  /* component: quantity selector */
+  .wc-block-components-quantity-selector {
+    display: inline-flex; align-items: center; gap: 0; margin: 8px 0 0; border: 1px solid var(--rule);
+  }
+  .wc-block-components-quantity-selector__button {
     width: 24px; height: 22px; background: transparent;
     font-family: 'JetBrains Mono', monospace; font-size: 14px;
     color: var(--ink); cursor: pointer; line-height: 1;
   }
-  .cart-drawer .item .qty button:hover { background: var(--ink); color: var(--paper); }
-  .cart-drawer .item .qty .n {
+  .wc-block-components-quantity-selector__button:hover { background: var(--ink); color: var(--paper); }
+  .wc-block-components-quantity-selector__count {
     font-family: 'JetBrains Mono', monospace; font-size: 12px;
     min-width: 22px; padding: 0 4px; text-align: center;
     border-left: 1px solid var(--rule); border-right: 1px solid var(--rule);
     line-height: 22px;
   }
-  .cart-drawer .item .rm {
+
+  .wc-block-cart-item__remove-link {
     display: inline-block; margin-top: 8px;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     color: var(--slate-2); background: transparent; border: 0; padding: 0;
     text-decoration: underline; cursor: pointer;
   }
-  .cart-drawer .item .rm:hover { color: var(--accent); }
-  .cart-drawer .item .price {
+  .wc-block-cart-item__remove-link:hover { color: var(--accent); }
+  .wc-block-cart-item__total {
     font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
     color: var(--ink); text-align: right; white-space: nowrap;
   }
+  .wc-block-cart-item__total .wc-block-components-product-price { display: inline; }
 
-  .cart-drawer .empty {
+  /* block: woocommerce/empty-mini-cart-contents-block */
+  .wp-block-woocommerce-empty-mini-cart-contents-block {
     flex: 1; padding: 60px 24px; display: flex; flex-direction: column;
     align-items: center; justify-content: center; text-align: center;
     color: var(--slate);
   }
-  .cart-drawer .empty .frak {
+  .wp-block-woocommerce-empty-mini-cart-contents-block .frak {
     font-family: 'UnifrakturCook', serif; font-size: 64px;
     color: var(--slate-2); line-height: 1; margin-bottom: 16px;
   }
-  .cart-drawer .empty p { font-family: 'Newsreader', serif; font-style: italic; font-size: 16px; margin: 0 0 18px; }
-  .cart-drawer .empty button {
+  .wp-block-woocommerce-empty-mini-cart-contents-block p {
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 16px; margin: 0 0 18px;
+  }
+  .wp-block-woocommerce-empty-mini-cart-contents-block button {
     padding: 10px 16px; background: var(--ink); color: var(--paper);
     border: 1px solid var(--ink); font-family: 'JetBrains Mono', monospace;
     font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
     cursor: pointer;
   }
 
-  .cart-drawer footer {
+  /* block: woocommerce/mini-cart-footer-block */
+  .wc-block-mini-cart__footer {
     padding: 18px 20px 20px;
     border-top: 1px solid var(--rule);
     background: var(--paper-2);
     display: flex; flex-direction: column; gap: 8px;
   }
-  .cart-drawer footer .row {
+  .wc-block-mini-cart__footer .row {
     display: flex; justify-content: space-between;
     font-family: 'JetBrains Mono', monospace; font-size: 12px;
     color: var(--ink);
   }
-  .cart-drawer footer .row .k { color: var(--slate); }
-  .cart-drawer footer .row.total {
+  .wc-block-mini-cart__footer .row .k { color: var(--slate); }
+  .wc-block-mini-cart__footer .row.total {
     font-size: 15px; font-weight: 700;
     padding-top: 8px; margin-top: 4px; border-top: 1px solid var(--rule);
   }
-  .cart-drawer footer .checkout {
+  /* block: woocommerce/mini-cart-checkout-button-block */
+  .wc-block-mini-cart__button.wc-block-mini-cart__button--checkout {
     width: 100%; margin-top: 8px; padding: 12px;
     background: var(--wp); color: #fff; border: 1px solid var(--wp-d);
     font-family: 'JetBrains Mono', monospace; font-size: 12px;
     font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
     cursor: pointer;
   }
-  .cart-drawer footer .checkout:hover { background: var(--wp-d); }
-  .cart-drawer footer .fine {
+  .wc-block-mini-cart__button.wc-block-mini-cart__button--checkout:hover { background: var(--wp-d); }
+  .wc-block-mini-cart__footer .fine {
     text-align: center; font-family: 'JetBrains Mono', monospace;
     font-size: 10px; color: var(--slate-2); margin-top: 4px;
   }
@@ -1301,8 +1330,8 @@
     .band .line.mono { font-size: 15px; }
     /* Cart drawer becomes a full-screen sheet. */
     .cart-drawer { width: 100%; }
-    .cart-drawer .item { grid-template-columns: 56px 1fr auto; }
-    .cart-drawer .item .img { width: 56px; height: 56px; }
+    .wc-block-cart-items__row { grid-template-columns: 56px 1fr auto; }
+    .wc-block-cart-item__image { width: 56px; height: 56px; }
     /* Toast: full-width-ish banner near bottom, centered text. */
     .toast { left: 16px; right: 16px; bottom: 16px; max-width: none; text-align: center; }
     /* Checkout: stack form & summary, summary first so users can confirm. */
@@ -1573,49 +1602,65 @@ function CartDrawer({ open, onClose, cart }) {
     <>
       <div className={`cart-backdrop ${open ? 'on' : ''}`} onClick={onClose}/>
       <aside className={`cart-drawer ${open ? 'on' : ''}`} aria-hidden={!open}>
-        <header>
-          <h3>cart<span className="n">· {cart.count} item{cart.count === 1 ? '' : 's'}</span></h3>
-          <button className="close" onClick={onClose} aria-label="Close cart">×</button>
-        </header>
-        {empty ? (
-          <div className="empty">
-            <div className="frak">Empty.</div>
-            <p>Nothing here yet — the catalog is waiting.</p>
-            <button onClick={onClose}>keep shopping</button>
-          </div>
-        ) : (
-          <>
-            <div className="items">
-              {cart.items.map(it => {
-                const imgs = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[it.id]) || [];
-                return (
-                  <div key={it.key} className="item">
-                    <div className="img">{imgs[0] && <img src={imgs[0]} alt=""/>}</div>
-                    <div className="meta">
-                      <h4>{it.name}</h4>
-                      <div className="k">size {it.size} · ${it.price} ea</div>
-                      <div className="qty">
-                        <button onClick={() => cart.setQty(it.key, it.qty - 1)} aria-label="Decrease">−</button>
-                        <span className="n">{it.qty}</span>
-                        <button onClick={() => cart.setQty(it.key, it.qty + 1)} aria-label="Increase">+</button>
-                      </div>
-                      <br/>
-                      <button className="rm" onClick={() => cart.remove(it.key)}>remove</button>
-                    </div>
-                    <div className="price">${(it.qty * it.price).toFixed(0)}</div>
-                  </div>
-                );
-              })}
+        {/* block: woocommerce/mini-cart-contents */}
+        <div className="wc-block-mini-cart__contents">
+          {/* drawer header — page chrome (close button is drawer-only, not a Woo block) */}
+          <header>
+            <h3 className="wc-block-mini-cart__title">
+              <span className="wc-block-mini-cart__title-text">cart</span>
+              <span className="wc-block-mini-cart__title-amount">· {cart.count} item{cart.count === 1 ? '' : 's'}</span>
+            </h3>
+            <button className="close" onClick={onClose} aria-label="Close cart">×</button>
+          </header>
+
+          {empty ? (
+            /* block: woocommerce/empty-mini-cart-contents-block */
+            <div className="wp-block-woocommerce-empty-mini-cart-contents-block">
+              <div className="frak">Empty.</div>
+              <p>Nothing here yet — the catalog is waiting.</p>
+              <button onClick={onClose}>keep shopping</button>
             </div>
-            <footer>
-              <div className="row"><span className="k">subtotal</span><span>${cart.total}</span></div>
-              <div className="row"><span className="k">shipping</span><span>calc at checkout</span></div>
-              <div className="row total"><span>total</span><span>${cart.total}</span></div>
-              <button className="checkout" onClick={() => { onClose(); location.hash = '/checkout'; }}>proceed to checkout →</button>
-              <div className="fine">ships worldwide · profits to the WordPress Foundation · 14-day defect window</div>
-            </footer>
-          </>
-        )}
+          ) : (
+            <>
+              {/* block: woocommerce/mini-cart-items-block */}
+              <div className="wc-block-mini-cart-items">
+                {cart.items.map(it => {
+                  const imgs = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[it.id]) || [];
+                  return (
+                    /* block: woocommerce/mini-cart-products-table-block — line item row */
+                    <div key={it.key} className="wc-block-cart-items__row">
+                      <div className="wc-block-cart-item__image">{imgs[0] && <img src={imgs[0]} alt=""/>}</div>
+                      <div className="wc-block-cart-item__product">
+                        <span className="wc-block-components-product-name">{it.name}</span>
+                        <span className="wc-block-components-product-metadata">size {it.size} · ${it.price} ea</span>
+                        <div className="wc-block-components-quantity-selector">
+                          <button className="wc-block-components-quantity-selector__button" onClick={() => cart.setQty(it.key, it.qty - 1)} aria-label="Decrease">−</button>
+                          <span className="wc-block-components-quantity-selector__count">{it.qty}</span>
+                          <button className="wc-block-components-quantity-selector__button" onClick={() => cart.setQty(it.key, it.qty + 1)} aria-label="Increase">+</button>
+                        </div>
+                        <br/>
+                        <button className="wc-block-cart-item__remove-link" onClick={() => cart.remove(it.key)}>remove</button>
+                      </div>
+                      <div className="wc-block-cart-item__total">
+                        <span className="wc-block-components-product-price">${(it.qty * it.price).toFixed(0)}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* block: woocommerce/mini-cart-footer-block */}
+              <div className="wc-block-mini-cart__footer">
+                <div className="row"><span className="k">subtotal</span><span>${cart.total}</span></div>
+                <div className="row"><span className="k">shipping</span><span>calc at checkout</span></div>
+                <div className="row total"><span>total</span><span>${cart.total}</span></div>
+                {/* block: woocommerce/mini-cart-checkout-button-block */}
+                <button className="wc-block-mini-cart__button wc-block-mini-cart__button--checkout" onClick={() => { onClose(); location.hash = '/checkout'; }}>proceed to checkout →</button>
+                <div className="fine">ships worldwide · profits to the WordPress Foundation · 14-day defect window</div>
+              </div>
+            </>
+          )}
+        </div>
       </aside>
     </>
   );
