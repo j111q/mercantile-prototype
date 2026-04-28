@@ -821,6 +821,229 @@
     font-size: 10px; color: var(--slate-2); margin-top: 4px;
   }
 
+  /* ========== CHECKOUT VIEW ========== */
+  .checkout-view {
+    background: var(--paper);
+    min-height: calc(100vh - 28px);
+    display: flex; flex-direction: column;
+  }
+  .checkout-view .ckhead {
+    border-bottom: 1px solid var(--rule);
+    padding: 16px var(--gutter);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--paper-2);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .checkout-view .ckhead .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--slate-2); }
+  .checkout-view .ckhead .crumb a:hover { border-bottom-color: var(--wp); color: var(--wp); }
+  .checkout-view .ckhead .crumb b { color: var(--ink); margin: 0 8px; }
+  .checkout-view .ckhead .meta { display: flex; gap: 16px; align-items: center; color: var(--slate-2); }
+  .checkout-view .ckhead .meta b { color: var(--ink); }
+
+  .checkout-view .step-nav {
+    display: flex; gap: 0; border-bottom: 1px solid var(--rule);
+    padding: 0 var(--gutter); background: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  }
+  .checkout-view .step-nav .step {
+    padding: 14px 18px; color: var(--slate-2); display: flex; gap: 8px; align-items: baseline;
+    border-right: 1px solid var(--rule);
+  }
+  .checkout-view .step-nav .step .n {
+    color: var(--slate-2); font-size: 9px;
+    border: 1px solid var(--rule); padding: 1px 5px; border-radius: 1px;
+  }
+  .checkout-view .step-nav .step.now { color: var(--ink); }
+  .checkout-view .step-nav .step.now .n { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .checkout-view .step-nav .step.done { color: var(--slate); }
+
+  .checkout-view .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    padding: 0 var(--gutter);
+  }
+  .checkout-view .form {
+    padding: 32px 36px 48px 0;
+    border-right: 1px solid var(--rule);
+  }
+  .checkout-view .form fieldset {
+    border: 0; margin: 0 0 28px; padding: 0;
+  }
+  .checkout-view .form legend {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate);
+    padding: 0; margin-bottom: 14px;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .checkout-view .form legend::before {
+    content: '§'; color: var(--wp); font-weight: 700;
+  }
+  .checkout-view .form legend small {
+    font-size: 9px; color: var(--slate-2); text-transform: none; letter-spacing: 0.04em; font-style: italic;
+  }
+  .checkout-view .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+  .checkout-view .form .row.three { grid-template-columns: 2fr 1fr 1fr; }
+  .checkout-view .form .field { display: flex; flex-direction: column; gap: 4px; }
+  .checkout-view .form .field.full { grid-column: 1 / -1; }
+  .checkout-view .form .field label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-2);
+  }
+  .checkout-view .form .field input,
+  .checkout-view .form .field select {
+    border: 1px solid var(--rule); background: #fff;
+    padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color: var(--ink); border-radius: 0; line-height: 1.4;
+  }
+  .checkout-view .form .field input:focus,
+  .checkout-view .form .field select:focus {
+    outline: none; border-color: var(--wp); background: #fff;
+    box-shadow: 0 0 0 1px var(--wp);
+  }
+  .checkout-view .form .field input::placeholder { color: var(--slate-2); }
+  .checkout-view .form .place {
+    width: 100%; padding: 16px;
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: 0.15s;
+    margin-top: 8px;
+  }
+  .checkout-view .form .place:hover { background: var(--wp); border-color: var(--wp); }
+  .checkout-view .form .terms {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate-2); margin-top: 12px; line-height: 1.6;
+    text-align: center;
+  }
+
+  .checkout-view .summary {
+    padding: 32px 0 32px 36px;
+    position: sticky; top: 28px; align-self: start;
+  }
+  .checkout-view .summary h3 {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate);
+    margin: 0 0 14px;
+  }
+  .checkout-view .summary h3::before { content: '§ '; color: var(--wp); font-weight: 700; }
+  .checkout-view .summary .items { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--rule); }
+  .checkout-view .summary .items li {
+    display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid var(--rule);
+  }
+  .checkout-view .summary .items .img {
+    width: 44px; height: 44px; border: 1px solid var(--rule); background: var(--paper-2);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    position: relative;
+  }
+  .checkout-view .summary .items .img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+  .checkout-view .summary .items .img .qty-bubble {
+    position: absolute; top: -6px; right: -6px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid var(--paper);
+  }
+  .checkout-view .summary .items .meta {
+    font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink); line-height: 1.3;
+  }
+  .checkout-view .summary .items .meta .k {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--slate); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .checkout-view .summary .items .price {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink); font-weight: 600;
+  }
+  .checkout-view .summary .rows {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; padding-top: 6px;
+  }
+  .checkout-view .summary .rows .row {
+    display: flex; justify-content: space-between; padding: 6px 0;
+    color: var(--ink);
+  }
+  .checkout-view .summary .rows .row .k { color: var(--slate); }
+  .checkout-view .summary .rows .row.total {
+    border-top: 1px solid var(--rule); margin-top: 6px; padding-top: 12px;
+    font-size: 14px; font-weight: 700;
+  }
+  .checkout-view .summary .edit {
+    display: inline-block; margin-top: 14px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--wp);
+    border-bottom: 1px dashed var(--wp);
+  }
+  .checkout-view .summary .edit:hover { background: var(--wp); color: #fff; border-bottom: 0; }
+
+  .checkout-view .ckempty {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 80px 20px;
+  }
+  .checkout-view .ckempty .frak {
+    font-family: 'UnifrakturCook', serif; font-size: 96px; color: var(--ink); line-height: 1;
+  }
+  .checkout-view .ckempty p { font-family: 'Newsreader', serif; font-style: italic; font-size: 18px; margin: 0; }
+  .checkout-view .ckempty a {
+    border: 1px solid var(--ink); padding: 10px 20px; color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .checkout-view .ckempty a:hover { background: var(--ink); color: var(--paper); }
+
+  /* ========== ORDER COMPLETE ========== */
+  .order-view {
+    background: var(--paper); min-height: calc(100vh - 28px);
+    display: flex; flex-direction: column;
+  }
+  .order-view .ohead {
+    border-bottom: 1px solid var(--rule);
+    padding: 16px var(--gutter); background: var(--paper-2);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: baseline;
+  }
+  .order-view .ohead b { color: var(--ink); }
+  .order-view .body { padding: 60px var(--gutter) 80px; max-width: 880px; margin: 0 auto; width: 100%; }
+  .order-view .frak {
+    font-family: 'UnifrakturCook', serif; font-weight: 700;
+    font-size: clamp(80px, 12vw, 160px); line-height: 0.9; margin: 0;
+    color: var(--ink);
+  }
+  .order-view .frak .dot { color: var(--wp); }
+  .order-view .lead {
+    font-family: 'Newsreader', serif; font-size: 22px; font-style: italic;
+    color: var(--ink); margin: 16px 0 32px; max-width: 32em; line-height: 1.4;
+  }
+  .order-view .lead em { color: var(--wp); font-style: normal; font-weight: 500; }
+  .order-view .receipt {
+    border: 1px solid var(--ink); padding: 24px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7;
+    color: var(--ink); background: var(--paper-2);
+    max-width: 600px;
+  }
+  .order-view .receipt .rline { display: flex; justify-content: space-between; gap: 16px; }
+  .order-view .receipt .sep {
+    border-top: 1px dashed var(--rule); margin: 10px 0;
+  }
+  .order-view .receipt b { color: var(--ink); }
+  .order-view .receipt .small { color: var(--slate); font-size: 11px; }
+  .order-view .receipt .total { font-weight: 700; }
+  .order-view .next {
+    margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  }
+  .order-view .next a, .order-view .next button {
+    border: 1px solid var(--ink); padding: 12px 18px; color: var(--ink);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    cursor: pointer; background: transparent; transition: 0.15s;
+  }
+  .order-view .next a.primary { background: var(--ink); color: var(--paper); }
+  .order-view .next a:hover, .order-view .next button:hover { background: var(--wp); border-color: var(--wp); color: #fff; }
+
   /* ========== TWEAKS ========== */
   .tweaks {
     position: fixed; right: -360px; bottom: 20px; width: 320px;
@@ -908,6 +1131,15 @@
     .cart-drawer .item .img { width: 56px; height: 56px; }
     /* Toast: full-width-ish banner near bottom, centered text. */
     .toast { left: 16px; right: 16px; bottom: 16px; max-width: none; text-align: center; }
+    /* Checkout: stack form & summary, summary first so users can confirm. */
+    .checkout-view .grid { grid-template-columns: 1fr; padding: 0 20px; }
+    .checkout-view .form { padding: 24px 0 32px; border-right: 0; border-top: 1px solid var(--rule); order: 2; }
+    .checkout-view .summary { padding: 24px 0; order: 1; position: static; border-bottom: 1px solid var(--rule); }
+    .checkout-view .form .row { grid-template-columns: 1fr; gap: 12px; }
+    .checkout-view .form .row.three { grid-template-columns: 1fr; }
+    .checkout-view .step-nav { padding: 0 20px; overflow-x: auto; }
+    .checkout-view .step-nav .step { padding: 12px 14px; flex-shrink: 0; }
+    .order-view .body { padding: 40px 20px 60px; }
   }
   @media (max-width: 500px) {
     .hero { padding: 24px 16px 0; }
@@ -1205,13 +1437,253 @@ function CartDrawer({ open, onClose, cart }) {
               <div className="row"><span className="k">subtotal</span><span>${cart.total}</span></div>
               <div className="row"><span className="k">shipping</span><span>calc at checkout</span></div>
               <div className="row total"><span>total</span><span>${cart.total}</span></div>
-              <button className="checkout">proceed to checkout →</button>
+              <button className="checkout" onClick={() => { onClose(); location.hash = '/checkout'; }}>proceed to checkout →</button>
               <div className="fine">free returns · ships worldwide · packed by a human</div>
             </footer>
           </>
         )}
       </aside>
     </>
+  );
+}
+
+// ======== CHECKOUT ========
+function Checkout({ cart, openDrawer, onPlaceOrder }) {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [addr1, setAddr1] = useState('');
+  const [addr2, setAddr2] = useState('');
+  const [city, setCity] = useState('');
+  const [postcode, setPostcode] = useState('');
+  const [country, setCountry] = useState('United States');
+  const [card, setCard] = useState('');
+  const [exp, setExp] = useState('');
+  const [cvc, setCvc] = useState('');
+
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  const empty = cart.items.length === 0;
+  const shipping = empty ? 0 : 8;
+  const tax = Math.round(cart.total * 0.0875);
+  const total = cart.total + shipping + tax;
+
+  const submit = (e) => {
+    e.preventDefault();
+    const fd = { email, name, addr1, addr2, city, postcode, country };
+    onPlaceOrder(fd, { subtotal: cart.total, shipping, tax, total });
+  };
+
+  if (empty) {
+    return (
+      <div className="checkout-view">
+        <div className="ckhead">
+          <div className="crumb"><a href="#/">← shop</a><b>/</b>checkout</div>
+          <div className="meta"><span>secure</span><span><b>GPLv2</b></span></div>
+        </div>
+        <div className="ckempty">
+          <div className="frak">Empty<span style={{color:'var(--wp)'}}>.</span></div>
+          <p>Nothing to check out — the cart is on standby.</p>
+          <a href="#/">browse the catalog →</a>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="checkout-view">
+      <div className="ckhead">
+        <div className="crumb"><a href="#/">← shop</a><b>/</b>checkout</div>
+        <div className="meta">
+          <span>SSL · <b>secure</b></span>
+          <span>{cart.count} item{cart.count === 1 ? '' : 's'}</span>
+          <span>est. ship · <b>1–2 business days</b></span>
+        </div>
+      </div>
+
+      <div className="step-nav">
+        <div className="step done"><span className="n">01</span><span>cart</span></div>
+        <div className="step now"><span className="n">02</span><span>details</span></div>
+        <div className="step"><span className="n">03</span><span>confirm</span></div>
+      </div>
+
+      <div className="grid">
+        <form className="form" onSubmit={submit}>
+          <fieldset>
+            <legend>contact <small>so we can send your receipt</small></legend>
+            <div className="row">
+              <div className="field full">
+                <label htmlFor="ck-email">email</label>
+                <input id="ck-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@wordpress.org"/>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>ship to <small>a real human will pack this</small></legend>
+            <div className="row">
+              <div className="field full">
+                <label htmlFor="ck-name">full name</label>
+                <input id="ck-name" required value={name} onChange={e => setName(e.target.value)} placeholder="Wapuu McTheme"/>
+              </div>
+            </div>
+            <div className="row">
+              <div className="field full">
+                <label htmlFor="ck-addr1">street address</label>
+                <input id="ck-addr1" required value={addr1} onChange={e => setAddr1(e.target.value)} placeholder="29 W. 30th Wapuu Lane"/>
+              </div>
+            </div>
+            <div className="row">
+              <div className="field full">
+                <label htmlFor="ck-addr2">apt / suite <small style={{textTransform:'none',letterSpacing:0,color:'var(--slate-2)',fontSize:9,fontStyle:'italic'}}>optional</small></label>
+                <input id="ck-addr2" value={addr2} onChange={e => setAddr2(e.target.value)} placeholder="apt 8.3"/>
+              </div>
+            </div>
+            <div className="row three">
+              <div className="field">
+                <label htmlFor="ck-city">city</label>
+                <input id="ck-city" required value={city} onChange={e => setCity(e.target.value)} placeholder="San Francisco"/>
+              </div>
+              <div className="field">
+                <label htmlFor="ck-postcode">postcode</label>
+                <input id="ck-postcode" required value={postcode} onChange={e => setPostcode(e.target.value)} placeholder="94102"/>
+              </div>
+              <div className="field">
+                <label htmlFor="ck-country">country</label>
+                <select id="ck-country" value={country} onChange={e => setCountry(e.target.value)}>
+                  <option>United States</option>
+                  <option>Canada</option>
+                  <option>United Kingdom</option>
+                  <option>Australia</option>
+                  <option>Germany</option>
+                  <option>Japan</option>
+                  <option>Singapore</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>payment <small>this is a prototype — don't enter a real card</small></legend>
+            <div className="row">
+              <div className="field full">
+                <label htmlFor="ck-card">card number</label>
+                <input id="ck-card" required value={card} onChange={e => setCard(e.target.value)} placeholder="4242 4242 4242 4242" autoComplete="off"/>
+              </div>
+            </div>
+            <div className="row">
+              <div className="field">
+                <label htmlFor="ck-exp">expiry</label>
+                <input id="ck-exp" required value={exp} onChange={e => setExp(e.target.value)} placeholder="04/29"/>
+              </div>
+              <div className="field">
+                <label htmlFor="ck-cvc">cvc</label>
+                <input id="ck-cvc" required value={cvc} onChange={e => setCvc(e.target.value)} placeholder="123"/>
+              </div>
+            </div>
+          </fieldset>
+
+          <button type="submit" className="place">place order · ${total} →</button>
+          <div className="terms">by placing your order you agree to the <a href="#" style={{color:'var(--wp)',borderBottom:'1px dashed var(--wp)'}}>terms</a>. shipped under <b>GPLv2</b>. returns within 30 days.</div>
+        </form>
+
+        <aside className="summary">
+          <h3>Order</h3>
+          <ul className="items">
+            {cart.items.map(it => {
+              const imgs = (window.MERCANTILE_IMAGES && window.MERCANTILE_IMAGES[it.id]) || [];
+              return (
+                <li key={it.key}>
+                  <div className="img">
+                    {imgs[0] && <img src={imgs[0]} alt=""/>}
+                    <span className="qty-bubble">{it.qty}</span>
+                  </div>
+                  <div className="meta">
+                    {it.name}
+                    <span className="k">size {it.size}</span>
+                  </div>
+                  <div className="price">${(it.qty * it.price).toFixed(0)}</div>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="rows">
+            <div className="row"><span className="k">subtotal</span><span>${cart.total}</span></div>
+            <div className="row"><span className="k">shipping</span><span>${shipping}</span></div>
+            <div className="row"><span className="k">tax</span><span>${tax}</span></div>
+            <div className="row total"><span>total</span><span>${total}</span></div>
+          </div>
+          <a className="edit" href="#" onClick={e => { e.preventDefault(); openDrawer(); }}>edit cart →</a>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+// ======== ORDER COMPLETE ========
+function OrderComplete({ order }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    // little wapuu burst on confirmation
+    if (order) {
+      const x = window.innerWidth / 2;
+      const y = window.innerHeight / 3;
+      try { rainWapuus(x, y, 6); } catch(e) {}
+    }
+  }, [order && order.id]);
+
+  if (!order) {
+    return (
+      <div className="order-view">
+        <div className="ohead"><span>404 / order not found</span></div>
+        <div className="body">
+          <h1 className="frak">Hmm<span className="dot">.</span></h1>
+          <p className="lead">We couldn't find that order. <em>Maybe try the catalog again.</em></p>
+          <div className="next"><a className="primary" href="#/">← back to shop</a></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="order-view">
+      <div className="ohead">
+        <span><b>order</b> #{order.id}</span>
+        <span>placed <b>{new Date(order.placedAt).toLocaleString()}</b></span>
+        <span>status · <b>committed</b></span>
+      </div>
+      <div className="body">
+        <h1 className="frak">Committed<span className="dot">.</span></h1>
+        <p className="lead">Your order is in the queue. <em>A receipt is on its way to {order.email || 'your inbox'}.</em></p>
+
+        <div className="receipt">
+          <div className="rline"><b>MERCANTILE / ORDER</b><span>#{order.id}</span></div>
+          <div className="rline small"><span>placed</span><span>{new Date(order.placedAt).toLocaleString()}</span></div>
+          <div className="rline small"><span>ship to</span><span>{order.name || '—'}</span></div>
+          <div className="rline small"><span></span><span>{[order.addr1, order.city, order.postcode, order.country].filter(Boolean).join(', ')}</span></div>
+          <div className="sep"></div>
+          {order.items.map(it => (
+            <div className="rline" key={it.key}>
+              <span>{it.name} · size {it.size} × {it.qty}</span>
+              <span>${(it.qty * it.price).toFixed(0)}</span>
+            </div>
+          ))}
+          <div className="sep"></div>
+          <div className="rline small"><span>subtotal</span><span>${order.subtotal}</span></div>
+          <div className="rline small"><span>shipping</span><span>${order.shipping}</span></div>
+          <div className="rline small"><span>tax</span><span>${order.tax}</span></div>
+          <div className="rline total"><span>total</span><span>${order.total}</span></div>
+          <div className="sep"></div>
+          <div className="rline small"><span>thanks · packed by a human</span><span>GPLv2</span></div>
+        </div>
+
+        <div className="next">
+          <a className="primary" href="#/">← back to shop</a>
+          <button onClick={() => window.print()}>print receipt</button>
+          <a href="#" onClick={e => { e.preventDefault(); navigator.clipboard && navigator.clipboard.writeText('#' + order.id); }}>copy order #</a>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1540,6 +2012,8 @@ function useRoute() {
     const h = location.hash.slice(1) || '/';
     const parts = h.split('/').filter(Boolean);
     if (parts[0] === 'p') return { view: 'product', id: parts[1] };
+    if (parts[0] === 'checkout') return { view: 'checkout' };
+    if (parts[0] === 'order') return { view: 'order', id: parts[1] };
     return { view: 'list' };
   };
   const [r, setR] = useState(parse);
@@ -1559,11 +2033,28 @@ function App() {
   const [cat, setCat] = useState('all');
   const [toast, setToast] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [orders, setOrders] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('wpa_orders3') || '{}'); } catch { return {}; }
+  });
 
   const onAdd = (p, size) => {
     cart.add(p, size);
     setToast(`✓ ${p.name} — ${size} — committed`);
     setTimeout(() => setToast(''), 1600);
+  };
+
+  const placeOrder = (form, totals) => {
+    const id = String(10000 + Math.floor(Math.random() * 89999));
+    const snapshot = {
+      id, ...form, ...totals,
+      items: cart.items.slice(),
+      placedAt: new Date().toISOString(),
+    };
+    const next = { ...orders, [id]: snapshot };
+    setOrders(next);
+    localStorage.setItem('wpa_orders3', JSON.stringify(next));
+    cart.clear();
+    location.hash = '/order/' + id;
   };
 
   const items = useMemo(() => {
@@ -1599,6 +2090,12 @@ function App() {
   return (
     <>
       {t.showTerminal && <Ticker cart={cart} onCartClick={() => setDrawerOpen(true)}/>}
+      {route.view === 'checkout' ? (
+        <Checkout cart={cart} openDrawer={() => setDrawerOpen(true)} onPlaceOrder={placeOrder}/>
+      ) : route.view === 'order' ? (
+        <OrderComplete order={orders[route.id] || null}/>
+      ) : (
+      <>
       <Hero titleMode={t.titleMode} total={window.MERCANTILE_CATALOG.length}/>
 
       <div className="section-head" style={!t.showTerminal ? { top: 0 } : {}}>
@@ -1662,6 +2159,8 @@ function App() {
           <span>v2.1.0 · php 8.3 · build 8401</span>
         </div>
       </footer>
+      </>
+      )}
 
       {route.view === 'product' && <ProductModal id={route.id} onClose={close} onAdd={onAdd}/>}
       <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} cart={cart}/>
