@@ -873,7 +873,11 @@
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 380px;
-    padding: 0 var(--gutter);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+    width: 100%;
   }
 
   /* left column: woocommerce/checkout-fields-block */
@@ -1571,7 +1575,7 @@ function CartDrawer({ open, onClose, cart }) {
               <div className="row"><span className="k">shipping</span><span>calc at checkout</span></div>
               <div className="row total"><span>total</span><span>${cart.total}</span></div>
               <button className="checkout" onClick={() => { onClose(); location.hash = '/checkout'; }}>proceed to checkout →</button>
-              <div className="fine">free returns · ships worldwide · packed by a human</div>
+              <div className="fine">ships worldwide · profits to the WordPress Foundation · 14-day defect window</div>
             </footer>
           </>
         )}
@@ -1587,12 +1591,11 @@ function CartDrawer({ open, onClose, cart }) {
 // markup so a theme could ship this 1:1 with the live blocks.
 // ============================================================
 
-// woocommerce/cart-shipping-rates-block — flat-rate shipping options
+// woocommerce/cart-shipping-rates-block — rates from the real Mercantile (table-rate)
+// Domestic / International only; bulk orders contact mercantile@wordpress.org.
 const SHIPPING_RATES = [
-  { id: 'standard',  label: 'Standard ground',     desc: '3–5 business days',           price: 8 },
-  { id: 'express',   label: 'Express',             desc: '2 business days',             price: 18 },
-  { id: 'overnight', label: 'Next-day air',        desc: 'arrives tomorrow if before 2pm PT', price: 32 },
-  { id: 'pickup',    label: 'Pick up in person',   desc: 'WordPress.com SF office',     price: 0 },
+  { id: 'us-standard',   label: 'Standard (US)',           desc: '3–7 business days · tracking emailed',         price: 8 },
+  { id: 'intl-standard', label: 'International standard',  desc: '1–4 weeks · customs / duties may apply',       price: 24 },
 ];
 
 // woocommerce/checkout-coupon-form-block — prototype coupons
@@ -1619,7 +1622,7 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
   const [cvc, setCvc] = useState('');
 
   // canonical block state — shipping method, coupon, order note, terms
-  const [shippingId, setShippingId] = useState('standard');
+  const [shippingId, setShippingId] = useState('us-standard');
   const [couponOpen, setCouponOpen] = useState(false);
   const [couponInput, setCouponInput] = useState('');
   const [couponError, setCouponError] = useState('');
@@ -1790,7 +1793,7 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
             <div className="wc-block-checkout-payment-block wc-block-components-checkout-step">
               <div className="wc-block-components-checkout-step__heading">
                 <h2 className="wc-block-components-checkout-step__title">Payment</h2>
-                <span className="wc-block-components-checkout-step__description">prototype — don't use a real card</span>
+                <span className="wc-block-components-checkout-step__description">credit / debit · secured by Stripe · prototype, don't enter a real card</span>
               </div>
               <div className="wc-block-components-form-row">
                 <div className="wc-block-components-text-input wc-block-components-text-input--full">
@@ -1834,7 +1837,7 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
             <div className="wc-block-checkout-terms-block wc-block-components-checkout-step">
               <label>
                 <input type="checkbox" checked={agreeTerms} onChange={e => setAgreeTerms(e.target.checked)}/>
-                <span>I agree to the <a href="#" onClick={e => e.preventDefault()}>terms</a> and accept that this merch ships under <b>GPLv2</b>. Returns within 30 days.</span>
+                <span>I agree to the <a href="../../tos/" target="_blank" rel="noopener">Terms of Service</a> and acknowledge that all sales are final unless the item arrives defective or damaged. Issues to <a href="mailto:mercantile@wordpress.org">mercantile@wordpress.org</a> within 14 days of receiving your item. Shipping and credit card fees are non-refundable.</span>
               </label>
             </div>
 
@@ -1846,7 +1849,7 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
                 disabled={!agreeTerms}
               >place order · ${total} →</button>
               <div className="wc-block-checkout__footer-copy">
-                packed by a human · <b>GPLv2</b> · <a href="#" onClick={e => e.preventDefault()}>refund policy</a>
+                hosted by Automattic · all profits to the <b>WordPress Foundation</b> (501(c)(3)) · payments via <b>Stripe</b>
               </div>
             </div>
           </div>
@@ -1938,9 +1941,10 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
 
             {/* slot: ExperimentalOrderMeta — H&L theme injects this via <Fill> */}
             <div className="wc-block-checkout-experimental-order-meta">
-              <div className="stream-line"><span className="k">HOOKS</span><span>fired · <b>847</b></span></div>
-              <div className="stream-line"><span className="k">RUNTIME</span><span><b>PHP 8.3</b> · WP <b>6.7</b></span></div>
-              <div className="stream-line"><span className="k">PACKED BY</span><span><b>a human</b> · in San Francisco</span></div>
+              <div className="stream-line"><span className="k">HOSTED</span><span>by <b>Automattic</b> · since 2015</span></div>
+              <div className="stream-line"><span className="k">PROFITS</span><span>to the <b>WordPress Foundation</b> · 501(c)(3)</span></div>
+              <div className="stream-line"><span className="k">RUNTIME</span><span><b>PHP 8.3</b> · WP <b>6.7</b> · WC Blocks</span></div>
+              <div className="stream-line"><span className="k">PACKED BY</span><span><b>a human</b></span></div>
             </div>
 
             <button type="button" className="edit-cart" onClick={openDrawer}>edit cart →</button>
@@ -2010,7 +2014,7 @@ function OrderComplete({ order }) {
           <div className="rline small"><span>tax</span><span>${order.tax}</span></div>
           <div className="rline total"><span>total</span><span>${order.total}</span></div>
           <div className="sep"></div>
-          <div className="rline small"><span>thanks · packed by a human</span><span>GPLv2</span></div>
+          <div className="rline small"><span>thanks · packed by a human · profits to the WordPress Foundation</span><span>GPLv2</span></div>
         </div>
 
         <div className="next">
@@ -2066,7 +2070,7 @@ function Hero({ titleMode, total }) {
           <div className="kv"><span>ships from</span><b>San Francisco, CA</b></div>
           <div className="kv"><span>dispatch</span><b>1–2 business days</b></div>
           <div className="kv"><span>returns</span><b>within 30 days</b></div>
-          <div className="kv"><span>help</span><b>shop@wordpress.org</b></div>
+          <div className="kv"><span>help</span><b>mercantile@wordpress.org</b></div>
         </div>
       </div>
     </section>
@@ -2488,7 +2492,7 @@ function App() {
           <a>Contribute</a><br/>
           <a>News</a>
           <h4 style={{marginTop:18}}>Contact</h4>
-          <a>shop@wordpress.org</a>
+          <a>mercantile@wordpress.org</a>
         </div>
         <div className="bottom-row">
           <span>© 2003–2026 WordPress Foundation · <b>GPLv2</b></span>
