@@ -1956,6 +1956,33 @@ function Checkout({ cart, openDrawer, onPlaceOrder }) {
 }
 
 // ======== ORDER COMPLETE ========
+// Prefilled sample order — visit #/order/demo (or /sample) to view the
+// confirmation chrome without going through the full checkout flow.
+const SAMPLE_ORDER = {
+  id: '28471',
+  email: 'wapuu@wordpress.org',
+  name: 'Wapuu McTheme',
+  addr1: '29 W. 30th Wapuu Lane',
+  addr2: 'apt 8.3',
+  city: 'San Francisco',
+  postcode: '94102',
+  country: 'United States',
+  shippingMethod: 'Standard (US)',
+  orderNote: 'leave a wapuu sticker if you have one',
+  items: [
+    { key: 'i-love-wp-tee@M', id: 'i-love-wp-tee',  name: 'I ♥ WP T-Shirt',         price: 25, size: 'M', qty: 2 },
+    { key: 'cozy-mug@—',  id: 'cozy-mug',       name: 'Cozy Collection Ceramic Mug', price: 18, size: '—', qty: 1 },
+    { key: 'wapuu-patch@—', id: 'wapuu-patch', name: 'Wapuu Iron-On Patch',          price: 9,  size: '—', qty: 1 },
+  ],
+  subtotal: 77,
+  discount: 15,
+  coupons: ['HOOKLOOP'],
+  shipping: 8,
+  tax: 5,
+  total: 75,
+  placedAt: '2026-04-28T06:42:00.000Z',
+};
+
 function OrderComplete({ order }) {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -2433,7 +2460,7 @@ function App() {
       {route.view === 'checkout' ? (
         <Checkout cart={cart} openDrawer={() => setDrawerOpen(true)} onPlaceOrder={placeOrder}/>
       ) : route.view === 'order' ? (
-        <OrderComplete order={orders[route.id] || null}/>
+        <OrderComplete order={orders[route.id] || ((route.id === 'demo' || route.id === 'sample') ? SAMPLE_ORDER : null)}/>
       ) : (
       <>
       <Hero titleMode={t.titleMode} total={window.MERCANTILE_CATALOG.length}/>
