@@ -833,8 +833,8 @@
     display: flex; flex-direction: column;
   }
 
-  /* page chrome — breadcrumb (NOT a block) */
-  .checkout-view .ckhead {
+  /* page chrome — breadcrumb (NOT a block; shared by checkout + order pages) */
+  .ckhead {
     border-bottom: 1px solid var(--rule);
     padding: 16px var(--gutter);
     display: flex; justify-content: space-between; align-items: center;
@@ -843,29 +843,29 @@
     background: var(--paper-2);
     flex-wrap: wrap; gap: 8px;
   }
-  .checkout-view .ckhead .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--slate-2); }
-  .checkout-view .ckhead .crumb a:hover { border-bottom-color: var(--wp); color: var(--wp); }
-  .checkout-view .ckhead .crumb b { color: var(--ink); margin: 0 8px; }
-  .checkout-view .ckhead .meta { display: flex; gap: 16px; align-items: center; color: var(--slate-2); }
-  .checkout-view .ckhead .meta b { color: var(--ink); }
+  .ckhead .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--slate-2); }
+  .ckhead .crumb a:hover { border-bottom-color: var(--wp); color: var(--wp); }
+  .ckhead .crumb b { color: var(--ink); margin: 0 8px; }
+  .ckhead .meta { display: flex; gap: 16px; align-items: center; color: var(--slate-2); flex-wrap: wrap; }
+  .ckhead .meta b { color: var(--ink); }
 
-  /* page chrome — step nav (NOT a block; H&L flourish) */
-  .checkout-view .step-nav {
+  /* page chrome — step nav (NOT a block; H&L flourish; shared) */
+  .step-nav {
     display: flex; gap: 0; border-bottom: 1px solid var(--rule);
     padding: 0 var(--gutter); background: var(--paper);
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
   }
-  .checkout-view .step-nav .step {
+  .step-nav .step {
     padding: 14px 18px; color: var(--slate-2); display: flex; gap: 8px; align-items: baseline;
     border-right: 1px solid var(--rule);
   }
-  .checkout-view .step-nav .step .n {
+  .step-nav .step .n {
     color: var(--slate-2); font-size: 9px;
     border: 1px solid var(--rule); padding: 1px 5px; border-radius: 1px;
   }
-  .checkout-view .step-nav .step.now { color: var(--ink); }
-  .checkout-view .step-nav .step.now .n { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .checkout-view .step-nav .step.done { color: var(--slate); }
+  .step-nav .step.now { color: var(--ink); }
+  .step-nav .step.now .n { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .step-nav .step.done { color: var(--slate); }
 
   /* ---- WooCommerce Checkout Block proper ---- */
   .wc-block-checkout { flex: 1; display: flex; flex-direction: column; }
@@ -1131,44 +1131,81 @@
   }
   .checkout-view .ckempty a:hover { background: var(--ink); color: var(--paper); }
 
-  /* ========== ORDER COMPLETE ========== */
+  /* ============================================================
+     ORDER RECEIVED — page chrome around the WooCommerce
+     Order Confirmation Block (woocommerce/order-confirmation,
+     introduced 2024). Class names mirror the real block markup.
+     ============================================================ */
   .order-view {
     background: var(--paper); min-height: calc(100vh - 28px);
     display: flex; flex-direction: column;
   }
-  .order-view .ohead {
-    border-bottom: 1px solid var(--rule);
-    padding: 16px var(--gutter); background: var(--paper-2);
-    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--slate);
-    letter-spacing: 0.06em; text-transform: uppercase;
-    display: flex; gap: 16px; flex-wrap: wrap; align-items: baseline;
+  .order-view .body {
+    padding: 60px var(--gutter) 80px; max-width: 880px; margin: 0 auto; width: 100%;
   }
-  .order-view .ohead b { color: var(--ink); }
-  .order-view .body { padding: 60px var(--gutter) 80px; max-width: 880px; margin: 0 auto; width: 100%; }
-  .order-view .frak {
+
+  /* block: woocommerce/order-confirmation */
+  .wc-block-order-confirmation { display: flex; flex-direction: column; gap: 36px; }
+
+  /* block: woocommerce/order-confirmation-status (the big 'Committed.' headline + lead) */
+  .wc-block-order-confirmation-status .frak {
     font-family: 'UnifrakturCook', serif; font-weight: 700;
     font-size: clamp(80px, 12vw, 160px); line-height: 0.9; margin: 0;
     color: var(--ink);
   }
-  .order-view .frak .dot { color: var(--wp); }
-  .order-view .lead {
+  .wc-block-order-confirmation-status .frak .dot { color: var(--wp); }
+  .wc-block-order-confirmation-status .lead {
     font-family: 'Newsreader', serif; font-size: 22px; font-style: italic;
-    color: var(--ink); margin: 16px 0 32px; max-width: 32em; line-height: 1.4;
+    color: var(--ink); margin: 16px 0 0; max-width: 32em; line-height: 1.4;
   }
-  .order-view .lead em { color: var(--wp); font-style: normal; font-weight: 500; }
-  .order-view .receipt {
+  .wc-block-order-confirmation-status .lead em { color: var(--wp); font-style: normal; font-weight: 500; }
+
+  /* receipt visual that wraps summary + address + totals + additional-information */
+  .wc-block-order-confirmation .receipt {
     border: 1px solid var(--ink); padding: 24px;
     font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7;
     color: var(--ink); background: var(--paper-2);
     max-width: 600px;
+    display: flex; flex-direction: column;
   }
-  .order-view .receipt .rline { display: flex; justify-content: space-between; gap: 16px; }
-  .order-view .receipt .sep {
-    border-top: 1px dashed var(--rule); margin: 10px 0;
+  .wc-block-order-confirmation .receipt > * + * {
+    border-top: 1px dashed var(--rule); margin-top: 12px; padding-top: 12px;
   }
-  .order-view .receipt b { color: var(--ink); }
-  .order-view .receipt .small { color: var(--slate); font-size: 11px; }
-  .order-view .receipt .total { font-weight: 700; }
+
+  /* shared row layout used inside the inner blocks */
+  .wc-block-order-confirmation .rline { display: flex; justify-content: space-between; gap: 16px; }
+  .wc-block-order-confirmation .rline.small { color: var(--slate); font-size: 11px; }
+  .wc-block-order-confirmation .rline.small b { color: var(--ink); }
+  .wc-block-order-confirmation .rline b { color: var(--ink); }
+
+  /* block: woocommerce/order-confirmation-summary (order #, placed, status) */
+  .wc-block-order-confirmation-summary { display: flex; flex-direction: column; gap: 4px; }
+
+  /* block: woocommerce/order-confirmation-shipping-address */
+  .wc-block-order-confirmation-shipping-address { display: flex; flex-direction: column; gap: 4px; }
+  .wc-block-order-confirmation-shipping-address .rline.addr { color: var(--ink); font-size: 11px; }
+
+  /* block: woocommerce/order-confirmation-totals (line items + totals) */
+  .wc-block-order-confirmation-totals { display: flex; flex-direction: column; gap: 4px; }
+  .wc-block-order-confirmation-totals .rline.total {
+    font-weight: 700; font-size: 14px; padding-top: 12px;
+    border-top: 1px solid var(--ink); margin-top: 6px;
+  }
+  .wc-block-order-confirmation-totals .rline.discount { color: var(--wp); font-size: 11px; }
+
+  /* block: woocommerce/order-confirmation-additional-information (order note) */
+  .wc-block-order-confirmation-additional-information {
+    color: var(--slate); font-size: 11px; font-style: italic;
+  }
+  .wc-block-order-confirmation-additional-information .note { color: var(--ink); }
+
+  /* H&L flair — closing receipt line, not part of any real block */
+  .wc-block-order-confirmation .receipt-thanks {
+    color: var(--slate); font-size: 11px;
+    display: flex; justify-content: space-between; gap: 16px;
+  }
+
+  /* page chrome: actions row (NOT a block) */
   .order-view .next {
     margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap;
     font-family: 'JetBrains Mono', monospace; font-size: 12px;
@@ -1274,8 +1311,8 @@
     .wc-block-checkout__sidebar { padding: 24px 0; order: 1; position: static; border-bottom: 1px solid var(--rule); }
     .wc-block-components-form-row { grid-template-columns: 1fr; gap: 12px; }
     .wc-block-components-form-row.three-up { grid-template-columns: 1fr; }
-    .checkout-view .step-nav { padding: 0 20px; overflow-x: auto; }
-    .checkout-view .step-nav .step { padding: 12px 14px; flex-shrink: 0; }
+    .step-nav { padding: 0 20px; overflow-x: auto; }
+    .step-nav .step { padding: 12px 14px; flex-shrink: 0; }
     .order-view .body { padding: 40px 20px 60px; }
   }
   @media (max-width: 500px) {
@@ -1997,53 +2034,103 @@ function OrderComplete({ order }) {
   if (!order) {
     return (
       <div className="order-view">
-        <div className="ohead"><span>404 / order not found</span></div>
+        <div className="ckhead">
+          <div className="crumb"><a href="#/">← shop</a><b>/</b>order not found</div>
+          <div className="meta"><span>404</span></div>
+        </div>
         <div className="body">
-          <h1 className="frak">Hmm<span className="dot">.</span></h1>
-          <p className="lead">We couldn't find that order. <em>Maybe try the catalog again.</em></p>
+          <div className="wc-block-order-confirmation">
+            <div className="wc-block-order-confirmation-status">
+              <h1 className="frak">Hmm<span className="dot">.</span></h1>
+              <p className="lead">We couldn't find that order. <em>Maybe try the catalog again.</em></p>
+            </div>
+          </div>
           <div className="next"><a className="primary" href="#/">← back to shop</a></div>
         </div>
       </div>
     );
   }
 
+  const placedAt = new Date(order.placedAt);
+
   return (
     <div className="order-view">
-      <div className="ohead">
-        <span><b>order</b> #{order.id}</span>
-        <span>placed <b>{new Date(order.placedAt).toLocaleString()}</b></span>
-        <span>status · <b>committed</b></span>
+      {/* page chrome — breadcrumb + meta strip (NOT a block) */}
+      <div className="ckhead">
+        <div className="crumb"><a href="#/">← shop</a><b>/</b>order #{order.id}</div>
+        <div className="meta">
+          <span>status · <b>committed</b></span>
+          <span>{order.items.length} item{order.items.length === 1 ? '' : 's'}</span>
+          <span>total · <b>${order.total}</b></span>
+        </div>
       </div>
-      <div className="body">
-        <h1 className="frak">Committed<span className="dot">.</span></h1>
-        <p className="lead">Your order is in the queue. <em>A receipt is on its way to {order.email || 'your inbox'}.</em></p>
 
-        <div className="receipt">
-          <div className="rline"><b>MERCANTILE / ORDER</b><span>#{order.id}</span></div>
-          <div className="rline small"><span>placed</span><span>{new Date(order.placedAt).toLocaleString()}</span></div>
-          <div className="rline small"><span>ship to</span><span>{order.name || '—'}</span></div>
-          <div className="rline small"><span></span><span>{[order.addr1, order.city, order.postcode, order.country].filter(Boolean).join(', ')}</span></div>
-          {order.shippingMethod && <div className="rline small"><span>via</span><span>{order.shippingMethod}</span></div>}
-          {order.orderNote && <div className="rline small"><span>note</span><span style={{maxWidth:'60%',textAlign:'right',whiteSpace:'normal'}}>"{order.orderNote}"</span></div>}
-          <div className="sep"></div>
-          {order.items.map(it => (
-            <div className="rline" key={it.key}>
-              <span>{it.name} · size {it.size} × {it.qty}</span>
-              <span>${(it.qty * it.price).toFixed(0)}</span>
+      {/* page chrome — step nav (03 confirm now) */}
+      <div className="step-nav">
+        <div className="step done"><span className="n">01</span><span>cart</span></div>
+        <div className="step done"><span className="n">02</span><span>details</span></div>
+        <div className="step now"><span className="n">03</span><span>confirm</span></div>
+      </div>
+
+      <div className="body">
+        {/* block: woocommerce/order-confirmation */}
+        <div className="wc-block-order-confirmation">
+
+          {/* block: woocommerce/order-confirmation-status */}
+          <div className="wc-block-order-confirmation-status">
+            <h1 className="frak">Committed<span className="dot">.</span></h1>
+            <p className="lead">Your order is in the queue. <em>A receipt is on its way to {order.email || 'your inbox'}.</em></p>
+          </div>
+
+          <div className="receipt">
+
+            {/* block: woocommerce/order-confirmation-summary */}
+            <div className="wc-block-order-confirmation-summary">
+              <div className="rline"><b>MERCANTILE / ORDER</b><span>#{order.id}</span></div>
+              <div className="rline small"><span>placed</span><span>{placedAt.toLocaleString()}</span></div>
+              <div className="rline small"><span>status</span><span><b>committed</b></span></div>
             </div>
-          ))}
-          <div className="sep"></div>
-          <div className="rline small"><span>subtotal</span><span>${order.subtotal}</span></div>
-          {order.discount > 0 && (
-            <div className="rline small"><span>discount {order.coupons && order.coupons.length ? `(${order.coupons.join(', ')})` : ''}</span><span>−${order.discount}</span></div>
-          )}
-          <div className="rline small"><span>shipping</span><span>${order.shipping}</span></div>
-          <div className="rline small"><span>tax</span><span>${order.tax}</span></div>
-          <div className="rline total"><span>total</span><span>${order.total}</span></div>
-          <div className="sep"></div>
-          <div className="rline small"><span>thanks · packed by a human · profits to the WordPress Foundation</span><span>GPLv2</span></div>
+
+            {/* block: woocommerce/order-confirmation-shipping-address */}
+            <div className="wc-block-order-confirmation-shipping-address">
+              <div className="rline small"><span>ship to</span><span><b>{order.name || '—'}</b></span></div>
+              <div className="rline small addr"><span></span><span style={{maxWidth:'60%',textAlign:'right',whiteSpace:'normal'}}>{[order.addr1, order.addr2, order.city, order.postcode, order.country].filter(Boolean).join(', ')}</span></div>
+              {order.shippingMethod && <div className="rline small"><span>via</span><span><b>{order.shippingMethod}</b></span></div>}
+            </div>
+
+            {/* block: woocommerce/order-confirmation-totals (line items + totals) */}
+            <div className="wc-block-order-confirmation-totals">
+              {order.items.map(it => (
+                <div className="rline" key={it.key}>
+                  <span>{it.name} · size {it.size} × {it.qty}</span>
+                  <span>${(it.qty * it.price).toFixed(0)}</span>
+                </div>
+              ))}
+              <div className="rline small" style={{paddingTop: '8px', borderTop: '1px dashed var(--rule)', marginTop: '4px'}}><span>subtotal</span><span><b>${order.subtotal}</b></span></div>
+              {order.discount > 0 && (
+                <div className="rline small discount"><span>discount {order.coupons && order.coupons.length ? `(${order.coupons.join(', ')})` : ''}</span><span>−${order.discount}</span></div>
+              )}
+              <div className="rline small"><span>shipping</span><span><b>${order.shipping}</b></span></div>
+              <div className="rline small"><span>tax</span><span><b>${order.tax}</b></span></div>
+              <div className="rline total"><span>total</span><span>${order.total}</span></div>
+            </div>
+
+            {/* block: woocommerce/order-confirmation-additional-information (order note) */}
+            {order.orderNote && (
+              <div className="wc-block-order-confirmation-additional-information">
+                <div className="rline small"><span>note</span><span className="note" style={{maxWidth:'60%',textAlign:'right',whiteSpace:'normal'}}>"{order.orderNote}"</span></div>
+              </div>
+            )}
+
+            {/* H&L flair — not a real Woo block */}
+            <div className="receipt-thanks">
+              <span>thanks · packed by a human · profits to the WordPress Foundation</span>
+              <span>GPLv2</span>
+            </div>
+          </div>
         </div>
 
+        {/* page chrome: actions */}
         <div className="next">
           <a className="primary" href="#/">← back to shop</a>
           <button onClick={() => window.print()}>print receipt</button>
